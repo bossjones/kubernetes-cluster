@@ -43,6 +43,13 @@ EOF
     # set node-ip
     sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR" /etc/default/kubelet
     sudo systemctl restart kubelet
+    sudo systemctl enable kubelet
+    sudo apt-get -y install python-minimal python-apt
+    sudo apt-get install -y \
+              bash-completion \
+              curl \
+              git \
+              vim
 SCRIPT
 
 $configureMaster = <<-SCRIPT

@@ -131,6 +131,9 @@
       task: tools
       bossjones__user: vagrant
       bossjones__group: vagrant
+      boss__tools__install_docker_tools: True
+      boss__tools__install_kube_tools: True
+      boss__tools__install_rust_tools: True
       tags:
         - boss-ansible-role-tools
 

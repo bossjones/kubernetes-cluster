@@ -117,6 +117,15 @@ Vagrant.configure("2") do |config|
             config.vm.hostname = opts[:name]
             config.vm.network :private_network, ip: opts[:eth1]
 
+            config.vm.provider "virtualbox" do |v|
+
+                v.name = opts[:name]
+                v.customize ["modifyvm", :id, "--groups", "/Ballerina Development"]
+                v.customize ["modifyvm", :id, "--memory", opts[:mem]]
+                v.customize ["modifyvm", :id, "--cpus", opts[:cpu]]
+
+            end
+
             hostname_with_hyenalab_tld = "#{opts[:hostname]}.bosslab.com"
 
             aliases = [hostname_with_hyenalab_tld, opts[:hostname]]
@@ -130,15 +139,6 @@ Vagrant.configure("2") do |config|
                 config.hostmanager.ignore_private_ip = false
                 config.hostmanager.include_offline = true
                 config.hostmanager.aliases = aliases
-            end
-
-            config.vm.provider "virtualbox" do |v|
-
-                v.name = opts[:name]
-                v.customize ["modifyvm", :id, "--groups", "/Ballerina Development"]
-                v.customize ["modifyvm", :id, "--memory", opts[:mem]]
-                v.customize ["modifyvm", :id, "--cpus", opts[:cpu]]
-
             end
 
             # we cannot use this because we can't install the docker version we want - https://github.com/hashicorp/vagrant/issues/4871

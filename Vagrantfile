@@ -18,6 +18,7 @@ $configureBox = <<-SCRIPT
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     add-apt-repository "deb https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable"
     apt-get update && apt-get install -y docker-ce=$(apt-cache madison docker-ce | grep 17.03 | head -1 | awk '{print $3}')
+    apt-mark hold docker-ce
 
     # run docker commands as vagrant user (sudo not required)
     usermod -aG docker vagrant
@@ -51,6 +52,30 @@ EOF
               git \
               vim
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python-six python-pip
+
+    modprobe ip_vs_wrr
+    modprobe ip_vs_rr
+    modprobe ip_vs_sh
+    modprobe ip_vs
+    modprobe nf_conntrack_ipv4
+    modprobe bridge
+    modprobe br_netfilter
+
+    cat <<EOF >/etc/modules-load.d/k8s_ip_vs.conf
+    ip_vs_wrr
+    ip_vs_rr
+    ip_vs_sh
+    ip_vs
+    nf_conntrack_ipv4
+EOF
+
+    cat <<EOF >/etc/modules-load.d/k8s_bridge.conf
+    bridge
+EOF
+
+    cat <<EOF >/etc/modules-load.d/k8s_br_netfilter.conf
+    br_netfilter
+EOF
 SCRIPT
 
 $configureMaster = <<-SCRIPT
@@ -89,6 +114,8 @@ $configureNode = <<-SCRIPT
     apt-get install -y sshpass
     sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.205.10:/etc/kubeadm_join_cmd.sh .
     sh ./kubeadm_join_cmd.sh
+    # sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.205.10:/home/vagrant/.kube/config /etc/kubernetes/admin.conf
+    # sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.205.10:/home/vagrant/.kube/config /home/vagrant/.kube/config
 SCRIPT
 
 Vagrant.configure(2) do |config|

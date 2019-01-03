@@ -225,6 +225,9 @@ run-ansible-perf: run-ansible-tuning
 run-ansible-tools:
 	@ansible-playbook -i inventory.ini playbooks/vagrant_tools.yml -f 10 -v
 
+run-ansible-modprobe:
+	@ansible-playbook -i inventory.ini playbooks/vagrant_modprode.yml -f 10 -v
+
 run-ansible-goss:
 	@ansible-playbook -i inventory.ini tools.yml -v -f 10 --tags goss
 

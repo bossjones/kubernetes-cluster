@@ -7,19 +7,16 @@
   gather_facts: True
   become: yes
   become_method: sudo
-  vars:
-    bossjones__user: vagrant
-    bossjones__group: vagrant
-    timezone: 'America/New_York'
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
     - role: boss-ansible-role-tools
       task: tools
+      timezone: 'America/New_York'
       bossjones__user: vagrant
       bossjones__group: vagrant
       boss__tools__install_docker_tools: True
       boss__tools__install_kube_tools: True
-      boss__tools__install_rust_tools: True
+      boss__tools__install_rust_tools: False
       tags:
         - boss-ansible-role-tools

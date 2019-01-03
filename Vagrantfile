@@ -50,6 +50,7 @@ EOF
               curl \
               git \
               vim
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python-six python-pip
 SCRIPT
 
 $configureMaster = <<-SCRIPT

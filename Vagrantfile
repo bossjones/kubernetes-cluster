@@ -2,33 +2,33 @@
 # vi: set ft=ruby :
 
 servers = [
-    {
-        :name => "k8s-head",
-        :type => "master",
-        :box => "ubuntu/xenial64",
-        # :box_version => "20180831.0.0",
-        :eth1 => "192.168.205.10",
-        :mem => "2048",
-        :cpu => "2"
-    },
-    {
-        :name => "k8s-node-1",
-        :type => "node",
-        :box => "ubuntu/xenial64",
-        # :box_version => "20180831.0.0",
-        :eth1 => "192.168.205.11",
-        :mem => "2048",
-        :cpu => "2"
-    },
-    {
-        :name => "k8s-node-2",
-        :type => "node",
-        :box => "ubuntu/xenial64",
-        # :box_version => "20180831.0.0",
-        :eth1 => "192.168.205.12",
-        :mem => "2048",
-        :cpu => "2"
-    }
+  {
+    name: 'k8s-head',
+    type: 'master',
+    box: 'ubuntu/xenial64',
+    # :box_version => "20180831.0.0",
+    eth1: '192.168.205.10',
+    mem: '2048',
+    cpu: '2'
+  },
+  {
+    name: 'k8s-node-1',
+    type: 'node',
+    box: 'ubuntu/xenial64',
+    # :box_version => "20180831.0.0",
+    eth1: '192.168.205.11',
+    mem: '2048',
+    cpu: '2'
+  },
+  {
+    name: 'k8s-node-2',
+    type: 'node',
+    box: 'ubuntu/xenial64',
+    # :box_version => "20180831.0.0",
+    eth1: '192.168.205.12',
+    mem: '2048',
+    cpu: '2'
+  }
 ]
 
 # This script to install k8s using kubeadm will get executed after a box is provisioned
@@ -106,54 +106,48 @@ $configureNode = <<-SCRIPT
     sh ./kubeadm_join_cmd.sh
 SCRIPT
 
-Vagrant.configure("2") do |config|
+Vagrant.configure('2') do |config|
+  servers.each do |opts|
+    config.vm.define opts[:name] do |config|
+      config.ssh.insert_key = false
 
-    servers.each do |opts|
-        config.vm.define opts[:name] do |config|
-            config.ssh.insert_key = false
+      config.vm.box = opts[:box]
+      # config.vm.box_version = opts[:box_version]
+      config.vm.hostname = opts[:name]
+      config.vm.network :private_network, ip: opts[:eth1]
 
-            config.vm.box = opts[:box]
-            # config.vm.box_version = opts[:box_version]
-            config.vm.hostname = opts[:name]
-            config.vm.network :private_network, ip: opts[:eth1]
+      config.vm.provider 'virtualbox' do |v|
+        v.name = opts[:name]
+        v.customize ['modifyvm', :id, '--groups', '/Ballerina Development']
+        v.customize ['modifyvm', :id, '--memory', opts[:mem]]
+        v.customize ['modifyvm', :id, '--cpus', opts[:cpu]]
+      end
 
-            config.vm.provider "virtualbox" do |v|
+      hostname_with_hyenalab_tld = "#{opts[:hostname]}.bosslab.com"
 
-                v.name = opts[:name]
-                v.customize ["modifyvm", :id, "--groups", "/Ballerina Development"]
-                v.customize ["modifyvm", :id, "--memory", opts[:mem]]
-                v.customize ["modifyvm", :id, "--cpus", opts[:cpu]]
+      aliases = [hostname_with_hyenalab_tld, opts[:hostname]]
 
-            end
+      if Vagrant.has_plugin?('vagrant-hostsupdater')
+        config.vm.hostsupdater.aliases = aliases
+      elsif Vagrant.has_plugin?('vagrant-hostmanager')
+        config.vm.hostmanager.enabled = true
+        config.vm.hostmanager.manage_host = true
+        config.vm.hostmanager.manage_guests = true
+        config.vm.hostmanager.ignore_private_ip = false
+        config.vm.hostmanager.include_offline = true
+        config.vm.hostmanager.aliases = aliases
+      end
 
-            hostname_with_hyenalab_tld = "#{opts[:hostname]}.bosslab.com"
+      # we cannot use this because we can't install the docker version we want - https://github.com/hashicorp/vagrant/issues/4871
+      # config.vm.provision "docker"
 
-            aliases = [hostname_with_hyenalab_tld, opts[:hostname]]
+      config.vm.provision 'shell', inline: $configureBox
 
-            if Vagrant.has_plugin?('vagrant-hostsupdater')
-                config.hostsupdater.aliases = aliases
-            elsif Vagrant.has_plugin?('vagrant-hostmanager')
-                config.hostmanager.enabled = true
-                config.hostmanager.manage_host = true
-                config.hostmanager.manage_guests = true
-                config.hostmanager.ignore_private_ip = false
-                config.hostmanager.include_offline = true
-                config.hostmanager.aliases = aliases
-            end
-
-            # we cannot use this because we can't install the docker version we want - https://github.com/hashicorp/vagrant/issues/4871
-            #config.vm.provision "docker"
-
-            config.vm.provision "shell", inline: $configureBox
-
-            if opts[:type] == "master"
-                config.vm.provision "shell", inline: $configureMaster
-            else
-                config.vm.provision "shell", inline: $configureNode
-            end
-
-        end
-
+      if opts[:type] == 'master'
+        config.vm.provision 'shell', inline: $configureMaster
+      else
+        config.vm.provision 'shell', inline: $configureNode
+      end
     end
-
+  end
 end

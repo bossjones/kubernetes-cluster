@@ -108,13 +108,13 @@ SCRIPT
 
 Vagrant.configure('2') do |config|
   servers.each do |opts|
-    config.vm.define opts[:name] do |config|
+    config.vm.define opts[:name] do |vm_config|
       config.ssh.insert_key = false
 
-      config.vm.box = opts[:box]
+      vm_config.vm.box = opts[:box]
       # config.vm.box_version = opts[:box_version]
-      config.vm.hostname = opts[:name]
-      config.vm.network :private_network, ip: opts[:eth1]
+      vm_config.vm.hostname = opts[:name]
+      vm_config.vm.network :private_network, ip: opts[:eth1]
 
       config.vm.provider 'virtualbox' do |v|
         v.name = opts[:name]
@@ -123,30 +123,34 @@ Vagrant.configure('2') do |config|
         v.customize ['modifyvm', :id, '--cpus', opts[:cpu]]
       end
 
-      hostname_with_hyenalab_tld = "#{opts[:hostname]}.bosslab.com"
+      puts "the value of config is '%s'" % [config]
+      puts "the value of vm_config is '%s'" % [vm_config]
 
-      aliases = [hostname_with_hyenalab_tld, opts[:hostname]]
+      hostname_with_hyenalab_tld = "#{opts[:name]}.bosslab.com"
+      puts "the value of hostname_with_hyenalab_tld is '%s'" % [hostname_with_hyenalab_tld]
+
+      aliases = [hostname_with_hyenalab_tld, opts[:name]]
 
       if Vagrant.has_plugin?('vagrant-hostsupdater')
-        config.hostsupdater.aliases = aliases
+        vm_config.hostsupdater.aliases = aliases
       elsif Vagrant.has_plugin?('vagrant-hostmanager')
-        config.hostmanager.enabled = true
-        config.hostmanager.manage_host = true
-        config.hostmanager.manage_guests = true
-        config.hostmanager.ignore_private_ip = false
-        config.hostmanager.include_offline = true
-        config.hostmanager.aliases = aliases
+        vm_config.hostmanager.enabled = true
+        vm_config.hostmanager.manage_host = true
+        vm_config.hostmanager.manage_guests = true
+        vm_config.hostmanager.ignore_private_ip = false
+        vm_config.hostmanager.include_offline = true
+        vm_config.hostmanager.aliases = aliases
       end
 
       # we cannot use this because we can't install the docker version we want - https://github.com/hashicorp/vagrant/issues/4871
       # config.vm.provision "docker"
 
-      config.vm.provision 'shell', inline: $configureBox
+      vm_config.vm.provision 'shell', inline: $configureBox
 
       if opts[:type] == 'master'
-        config.vm.provision 'shell', inline: $configureMaster
+        vm_config.vm.provision 'shell', inline: $configureMaster
       else
-        config.vm.provision 'shell', inline: $configureNode
+        vm_config.vm.provision 'shell', inline: $configureNode
       end
     end
   end

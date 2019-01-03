@@ -8,7 +8,6 @@ config_yml = YAML.load_file(File.open(__dir__ + '/vagrant-config.yml'))
 
 NON_ROOT_USER = 'vagrant'.freeze
 
-
 # This script to install k8s using kubeadm will get executed after a box is provisioned
 $configureBox = <<-SCRIPT
 
@@ -101,30 +100,32 @@ Vagrant.configure(2) do |config|
       vm_config.vbguest.auto_update = false
 
       vm_config.vm.box = settings[:box]
+
       # config.vm.box_version = settings[:box_version]
-      vm_config.vm.hostname = settings[:name]
-      vm_config.vm.network :private_network, ip: settings[:eth1]
+      vm_config.vm.network 'private_network', ip: settings[:eth1]
+
+      vm_config.vm.hostname = settings[:hostname]
 
       config.vm.provider 'virtualbox' do |v|
         # make sure that the name makes sense when seen in the vbox GUI
-        v.name = settings[:name]
+        v.name = settings[:hostname]
 
         v.gui = false
-        v.name = settings[:name]
         v.customize ['modifyvm', :id, '--groups', '/Ballerina Development']
         v.customize ['modifyvm', :id, '--memory', settings[:mem]]
         v.customize ['modifyvm', :id, '--cpus', settings[:cpu]]
       end
 
-      hostname_with_hyenalab_tld = "#{settings[:name]}.bosslab.com"
+      hostname_with_hyenalab_tld = "#{settings[:hostname]}.bosslab.com"
 
-      aliases = [hostname_with_hyenalab_tld, settings[:name]]
+      aliases = [hostname_with_hyenalab_tld, settings[:hostname]]
 
       if Vagrant.has_plugin?('vagrant-hostsupdater')
-        puts "IM HERE BABY"
+        puts 'IM HERE BABY'
+        config.hostsupdater.aliases = aliases
         vm_config.hostsupdater.aliases = aliases
-    elsif Vagrant.has_plugin?('vagrant-hostmanager')
-        puts "IM HERE HONEY"
+      elsif Vagrant.has_plugin?('vagrant-hostmanager')
+        puts 'IM HERE HONEY'
         vm_config.hostmanager.enabled = true
         vm_config.hostmanager.manage_host = true
         vm_config.hostmanager.manage_guests = true

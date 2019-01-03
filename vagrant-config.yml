@@ -1,6 +1,6 @@
 # https://gist.github.com/gnarf/b103e77f37236ca72d8e
 # SOURCE: \cat roles/*/vagrant-config.yml | pbcopy
-:servers:
+:vms:
   k8s-head:
     :name: "k8s-head"
     :type: 'master'

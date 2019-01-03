@@ -2,6 +2,7 @@
 # SOURCE: \cat roles/*/vagrant-config.yml | pbcopy
 :vms:
   k8s-head:
+    :hostname: "k8s-head"
     :name: "k8s-head"
     :type: 'master'
     :box: 'ubuntu/xenial64'
@@ -10,6 +11,7 @@
     :mem: '2048'
     :cpu: '2'
   k8s-node-1:
+    :hostname: 'k8s-node-1'
     :name: 'k8s-node-1'
     :type: 'node'
     :box: 'ubuntu/xenial64'
@@ -19,6 +21,7 @@
     :cpu: '2'
 
   k8s-node-2:
+    :hostname: 'k8s-node-2'
     :name: 'k8s-node-2'
     :type: 'node'
     :box: 'ubuntu/xenial64'

@@ -20,3 +20,43 @@
       boss__tools__install_rust_tools: False
       tags:
         - boss-ansible-role-tools
+    - role: boss-ansible-role-tools
+      task: kube
+      timezone: 'America/New_York'
+      bossjones__user: vagrant
+      bossjones__group: vagrant
+      boss__tools__install_docker_tools: True
+      boss__tools__install_kube_tools: True
+      boss__tools__install_rust_tools: False
+      tags:
+        - boss-ansible-role-tools
+    - role: boss-ansible-role-tools
+      task: docker
+      timezone: 'America/New_York'
+      bossjones__user: vagrant
+      bossjones__group: vagrant
+      boss__tools__install_docker_tools: True
+      boss__tools__install_kube_tools: True
+      boss__tools__install_rust_tools: False
+      tags:
+        - boss-ansible-role-tools
+    - role: boss-ansible-role-tools
+      task: glances
+      timezone: 'America/New_York'
+      bossjones__user: vagrant
+      bossjones__group: vagrant
+      boss__tools__install_docker_tools: True
+      boss__tools__install_kube_tools: True
+      boss__tools__install_rust_tools: False
+      tags:
+        - boss-ansible-role-tools
+    - role: boss-ansible-role-tools
+      task: rust
+      timezone: 'America/New_York'
+      bossjones__user: vagrant
+      bossjones__group: vagrant
+      boss__tools__install_docker_tools: True
+      boss__tools__install_kube_tools: True
+      boss__tools__install_rust_tools: False
+      tags:
+        - boss-ansible-role-tools

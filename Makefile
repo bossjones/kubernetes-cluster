@@ -623,3 +623,90 @@ show_venv_activate_cmd: ## ** Show activate command when finished
 # Pyenv initilization - 12/23/2018 -- END
 # SOURCE: https://github.com/MacHu-GWU/learn_datasette-project/blob/120b45363aa63bdffe2f1933cf2d4e20bb6cbdb8/make/python_env.mk
 ###########################################################
+
+
+dump:
+	kubectl cluster-info dump --all-namespaces --output-directory=./dump
+
+dump2:
+	kubectl cluster-info dump --all-namespaces --output-directory=./dump2
+
+# https://github.com/kubernetes/dashboard/wiki/Access-control#bearer-token
+get-secrets:
+	kubectl -n kube-system get secret
+
+addon-dashboard:
+	kubectl apply -f ./addon/dashboard/kubernetes-dashboard.yaml
+
+addon-heapster:
+	kubectl apply -f ./addon/heapster2/
+
+delete-heapster:
+	kubectl delete -f ./addon/heapster2/
+
+debug-heapster:
+	kubectl describe -f ./addon/heapster2/
+
+list-services:
+	kubectl get ingress,services -n=kube-system
+
+get-token:
+	@bash ./scripts/get-root-token.sh
+
+kube-proxy:
+	@bash ./scripts/kubectl-proxy.sh
+
+kubectl-proxy: kube-proxy
+
+get-token-copy:
+	@bash ./scripts/get-root-token.sh | pbcopy
+
+get-bearer-token: get-token
+
+# SOURCE: https://github.com/coreos/prometheus-operator/tree/7f34279e7c69124a80248cc54cadef93fd1b2387/contrib/kube-prometheus
+addon-prometheus-operator:
+	kubectl create -f ./addon/prometheus-operator/ || true
+	@echo
+	@echo "It can take a few seconds for the above 'create manifests' command to fully create the following resources, so verify the resources are ready before proceeding."
+	until kubectl get customresourcedefinitions servicemonitors.monitoring.coreos.com ; do date; sleep 1; echo ""; done
+	@echo
+	until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
+	@echo
+
+
+debug-prometheus-operator:
+	@echo
+	kubectl describe -f ./addon/prometheus-operator/
+
+delete-prometheus-operator:
+	kubectl delete -f ./addon/prometheus-operator || true
+
+
+open-dashboard:
+	./scripts/open-browser.py $(URL_PATH_DASHBOARD)
+
+open-whoami:
+	./scripts/open-browser.py $(URL_PATH_WHOAMI)
+
+open-echoserver:
+	./scripts/open-browser.py $(URL_PATH_ECHOSERVER)
+
+open-elasticsearch:
+	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH)
+
+open-kibana:
+	./scripts/open-browser.py $(URL_PATH_KIBANA)
+
+open-prometheus:
+	./scripts/open-browser.py $(URL_PATH_PROMETHEUS)
+
+open-grafana:
+	./scripts/open-browser.py $(URL_PATH_GRAFANA)
+
+open-alertmanager:
+	./scripts/open-browser.py $(URL_PATH_ALERTMANAGER)
+
+# open: open-mongo-express open-flask-app open-uwsgi-stats open-locust-master open-consul open-traefik open-traefik-api open-whoami
+open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager
+
+

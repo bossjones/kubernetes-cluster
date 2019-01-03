@@ -1,0 +1,2 @@
+export KUBECONFIG=~/.kube/config
+export KUBECONFIG=$KUBECONFIG:~/dev/bossjones/kubernetes-cluster/vagrant-admin.conf

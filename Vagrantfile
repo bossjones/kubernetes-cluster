@@ -6,7 +6,7 @@ servers = [
         :name => "k8s-head",
         :type => "master",
         :box => "ubuntu/xenial64",
-        :box_version => "20180831.0.0",
+        # :box_version => "20180831.0.0",
         :eth1 => "192.168.205.10",
         :mem => "2048",
         :cpu => "2"
@@ -15,7 +15,7 @@ servers = [
         :name => "k8s-node-1",
         :type => "node",
         :box => "ubuntu/xenial64",
-        :box_version => "20180831.0.0",
+        # :box_version => "20180831.0.0",
         :eth1 => "192.168.205.11",
         :mem => "2048",
         :cpu => "2"
@@ -24,7 +24,7 @@ servers = [
         :name => "k8s-node-2",
         :type => "node",
         :box => "ubuntu/xenial64",
-        :box_version => "20180831.0.0",
+        # :box_version => "20180831.0.0",
         :eth1 => "192.168.205.12",
         :mem => "2048",
         :cpu => "2"
@@ -93,6 +93,9 @@ $configureMaster = <<-SCRIPT
     # required for setting up password less ssh between guest VMs
     sudo sed -i "/^[^#]*PasswordAuthentication[[:space:]]no/c\PasswordAuthentication yes" /etc/ssh/sshd_config
     sudo service sshd restart
+    sudo cp -a /etc/kubernetes/admin.conf /vagrant/vagrant-admin.conf
+    echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' | sudo tee -a /root/.bashrc
+    echo 'export KUBECONFIG=/home/vagrant/.kube/config' | sudo tee -a /home/vagrant/.bashrc
 
 SCRIPT
 
@@ -107,16 +110,32 @@ Vagrant.configure("2") do |config|
 
     servers.each do |opts|
         config.vm.define opts[:name] do |config|
+            config.ssh.insert_key = false
 
             config.vm.box = opts[:box]
-            config.vm.box_version = opts[:box_version]
+            # config.vm.box_version = opts[:box_version]
             config.vm.hostname = opts[:name]
             config.vm.network :private_network, ip: opts[:eth1]
+
+            hostname_with_hyenalab_tld = "#{opts[:hostname]}.bosslab.com"
+
+            aliases = [hostname_with_hyenalab_tld, opts[:hostname]]
+
+            if Vagrant.has_plugin?('vagrant-hostsupdater')
+                config.hostsupdater.aliases = aliases
+            elsif Vagrant.has_plugin?('vagrant-hostmanager')
+                config.hostmanager.enabled = true
+                config.hostmanager.manage_host = true
+                config.hostmanager.manage_guests = true
+                config.hostmanager.ignore_private_ip = false
+                config.hostmanager.include_offline = true
+                config.hostmanager.aliases = aliases
+            end
 
             config.vm.provider "virtualbox" do |v|
 
                 v.name = opts[:name]
-            	 v.customize ["modifyvm", :id, "--groups", "/Ballerina Development"]
+                v.customize ["modifyvm", :id, "--groups", "/Ballerina Development"]
                 v.customize ["modifyvm", :id, "--memory", opts[:mem]]
                 v.customize ["modifyvm", :id, "--cpus", opts[:cpu]]
 
@@ -137,4 +156,4 @@ Vagrant.configure("2") do |config|
 
     end
 
-end 
+end

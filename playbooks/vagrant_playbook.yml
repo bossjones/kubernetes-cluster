@@ -7,10 +7,10 @@
   gather_facts: True
   become: yes
   become_method: sudo
-  # vars:
-  #   bossjones__user: vagrant
-  #   bossjones__group: vagrant
-  #   timezone: 'America/New_York'
+  vars:
+    bossjones__user: vagrant
+    bossjones__group: vagrant
+    timezone: 'America/New_York'
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:
@@ -133,7 +133,7 @@
       bossjones__group: vagrant
       boss__tools__install_docker_tools: True
       boss__tools__install_kube_tools: True
-      boss__tools__install_rust_tools: False
+      boss__tools__install_rust_tools: True
       tags:
         - boss-ansible-role-tools
 
@@ -398,7 +398,7 @@
       # Specify which subnets can send remote logs through the firewall
       # FIXME: https://blog.webernetz.net/2001db8-32-in-the-wild/
       # boss__rsyslogd__host_allow: [ '192.0.2.0/24', '2001:db8::/32' ]
-      boss__rsyslogd__rsyslog_host_allow: [ '192.168.1.1/16' ]
+      boss__rsyslogd__rsyslog_host_allow: [ '192.168.1.1/16', '172.16.0.0/16' ]
 
       # SOURCE: https://www.rsyslog.com/sending-messages-to-a-remote-syslog-server/
       # Mask log forwarding configuration defined elsewhere

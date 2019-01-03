@@ -128,14 +128,14 @@ Vagrant.configure('2') do |config|
       aliases = [hostname_with_hyenalab_tld, opts[:hostname]]
 
       if Vagrant.has_plugin?('vagrant-hostsupdater')
-        config.vm.hostsupdater.aliases = aliases
+        config.hostsupdater.aliases = aliases
       elsif Vagrant.has_plugin?('vagrant-hostmanager')
-        config.vm.hostmanager.enabled = true
-        config.vm.hostmanager.manage_host = true
-        config.vm.hostmanager.manage_guests = true
-        config.vm.hostmanager.ignore_private_ip = false
-        config.vm.hostmanager.include_offline = true
-        config.vm.hostmanager.aliases = aliases
+        config.hostmanager.enabled = true
+        config.hostmanager.manage_host = true
+        config.hostmanager.manage_guests = true
+        config.hostmanager.ignore_private_ip = false
+        config.hostmanager.include_offline = true
+        config.hostmanager.aliases = aliases
       end
 
       # we cannot use this because we can't install the docker version we want - https://github.com/hashicorp/vagrant/issues/4871

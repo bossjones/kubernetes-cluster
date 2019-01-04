@@ -65,3 +65,11 @@ echo https://172.17.8.101:`kubectl -n kube-system get svc kubernetes-dashboard -
 echo "install traefik ingress controller"
 kubectl apply -f /vagrant/addon/traefik-ingress/
 ```
+
+
+# Official CLI Order ( tested )
+---
+
+* make create-dashboard
+* make describe-dashboard
+* make debug-cluster

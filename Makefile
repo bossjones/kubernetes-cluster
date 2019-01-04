@@ -736,7 +736,7 @@ create-dashboard:
 	@echo $(shell kubectl -n kube-system describe secret `kubectl -n kube-system get secret|grep admin-token|cut -d " " -f1`|grep "token:"|tr -s " "|cut -d " " -f2)
 
 describe-dashboard:
-	kubectl describe -f ./dashboard/
+	kubectl describe -f ./dashboard/ | highlight
 
 debug-dashboard:
 	kubectl -n kube-system get pod -l k8s-app=kubernetes-dashboard --output=yaml | highlight

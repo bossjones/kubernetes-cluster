@@ -22,3 +22,4 @@ boto3
 botocore
 ansible-inventory-grapher
 ansible-playbook-grapher
+ara

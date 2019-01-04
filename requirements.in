@@ -23,3 +23,4 @@ botocore
 ansible-inventory-grapher
 ansible-playbook-grapher
 ara
+Pygments

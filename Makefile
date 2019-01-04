@@ -735,6 +735,9 @@ create-dashboard:
 	@echo ""
 	@echo $(shell kubectl -n kube-system describe secret `kubectl -n kube-system get secret|grep admin-token|cut -d " " -f1`|grep "token:"|tr -s " "|cut -d " " -f2)
 
+describe-dashboard:
+	kubectl describe -f ./dashboard/
+
 delete-dashboard:
 	kubectl delete -f ./dashboard/
 
@@ -754,4 +757,33 @@ debug-cluster:
 	@printf "=======================================\n"
 	@printf "$$GREEN kubectl -n kube-system get pods:$$NC\n"
 	@printf "=======================================\n"
-	kubectl -n kube-system get pods
+	kubectl -n kube-system get pods | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl get pods --all-namespaces:$$NC\n"
+	@printf "=======================================\n"
+	kubectl get pods --all-namespaces | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl get ingress,services -n=kube-system:$$NC\n"
+	@printf "=======================================\n"
+	kubectl get ingress,services -n=kube-system | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl -n kube-system get po -o wide --sort-by=.spec.nodeName:$$NC\n"
+	@printf "=======================================\n"
+	kubectl -n kube-system get po -o wide --sort-by=.spec.nodeName | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN list all services in a cluster and their nodeports:$$NC\n"
+	@printf "=======================================\n"
+	kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'
+
+
+# kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'
+# kubectl get no
+# kubectl get po -o wide

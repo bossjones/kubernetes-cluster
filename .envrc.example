@@ -1,3 +1,17 @@
+# -*- mode: sh; -*-
+# (rootdir)/.envrc : direnv configuration file
+# see https://direnv.net/
+# pyversion=$(head .python-version)
+# pvenv=$(head     .python-virtualenv)
+pyversion=2.7.14
+pvenv=bosslab-playbooks2
+
+use python ${pyversion}
+# Create the virtualenv if not yet done
+layout virtualenv ${pyversion} ${pvenv}
+# activate it
+layout activate ${pvenv}-${pyversion}
+
 export KUBECONFIG=~/.kube/config
 export KUBECONFIG=$KUBECONFIG:~/dev/bossjones/kubernetes-cluster/vagrant-admin.conf
 

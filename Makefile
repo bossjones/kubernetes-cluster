@@ -782,6 +782,18 @@ debug-cluster:
 	@printf "$$GREEN list all services in a cluster and their nodeports:$$NC\n"
 	@printf "=======================================\n"
 	kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl get pods -o wide --all-namespaces --show-all=true --show-labels=true --show-kind=true:$$NC\n"
+	@printf "=======================================\n"
+	kubectl get pods -o wide --all-namespaces --show-all=true --show-labels=true --show-kind=true | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl get nodes --no-headers | grep -v -w 'Ready':$$NC\n"
+	@printf "=======================================\n"
+	kubectl get nodes --no-headers | grep -v -w 'Ready' | highlight
 
 
 # kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'

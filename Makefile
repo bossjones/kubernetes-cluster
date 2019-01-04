@@ -738,6 +738,11 @@ create-dashboard:
 describe-dashboard:
 	kubectl describe -f ./dashboard/
 
+debug-dashboard:
+	kubectl -n kube-system get pod -l k8s-app=kubernetes-dashboard --output=yaml | highlight
+
+# kubernetes-dashboard
+
 delete-dashboard:
 	kubectl delete -f ./dashboard/
 
@@ -751,6 +756,10 @@ create-dashboard-admin:
 
 delete-dashboard-admin:
 	kubectl delete -f ./dashboard-admin/
+
+# install highlight
+# https://www.npmjs.com/package/cli-highlight
+# npm install -g highlight
 
 debug-cluster:
 	@printf "debug-cluster:\n"

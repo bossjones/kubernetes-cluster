@@ -94,8 +94,8 @@ $configureMaster = <<-SCRIPT
 
     # install Calico pod network addon
     export KUBECONFIG=/etc/kubernetes/admin.conf
-    kubectl apply -f https://raw.githubusercontent.com/ecomm-integration-ballerina/kubernetes-cluster/master/calico/rbac-kdd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/ecomm-integration-ballerina/kubernetes-cluster/master/calico/calico.yaml
+    kubectl apply -f https://raw.githubusercontent.com/bossjones/kubernetes-cluster/master/calico/rbac-kdd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/bossjones/kubernetes-cluster/master/calico/calico.yaml
 
     kubeadm token create --print-join-command >> /etc/kubeadm_join_cmd.sh
     chmod +x /etc/kubeadm_join_cmd.sh

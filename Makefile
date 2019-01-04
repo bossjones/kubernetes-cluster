@@ -634,28 +634,21 @@ show_venv_activate_cmd: ## ** Show activate command when finished
 # SOURCE: https://github.com/MacHu-GWU/learn_datasette-project/blob/120b45363aa63bdffe2f1933cf2d4e20bb6cbdb8/make/python_env.mk
 ###########################################################
 
+dump-color:
+	kubectl cluster-info dump --all-namespaces | highlight
 
-dump:
+dump-to-dir:
 	kubectl cluster-info dump --all-namespaces --output-directory=./dump
 
-dump2:
+dump2-to-dir:
 	kubectl cluster-info dump --all-namespaces --output-directory=./dump2
 
 # https://github.com/kubernetes/dashboard/wiki/Access-control#bearer-token
 get-secrets:
 	kubectl -n kube-system get secret
 
-addon-dashboard:
-	kubectl apply -f ./addon/dashboard/kubernetes-dashboard.yaml
-
-addon-heapster:
-	kubectl apply -f ./addon/heapster2/
-
-delete-heapster:
-	kubectl delete -f ./addon/heapster2/
-
-debug-heapster:
-	kubectl describe -f ./addon/heapster2/
+# addon-dashboard:
+# 	kubectl apply -f ./addon/dashboard/kubernetes-dashboard.yaml
 
 list-services:
 	kubectl get ingress,services -n=kube-system
@@ -721,6 +714,24 @@ open-alertmanager:
 
 # open: open-mongo-express open-flask-app open-uwsgi-stats open-locust-master open-consul open-traefik open-traefik-api open-whoami
 open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager
+
+create-heapster:
+	@printf "create-dashboard:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy heapster$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./heapster2/
+	@echo ""
+	@echo ""
+
+delete-heapster:
+	kubectl delete -f ./heapster2/
+
+describe-heapster:
+	kubectl describe -f ./heapster2/ | highlight
+
+debug-heapster: describe-heapster
+	kubectl -n kube-system get pod -l app=heapster --output=yaml | highlight
 
 create-dashboard:
 	@printf "create-dashboard:\n"
@@ -803,7 +814,20 @@ debug-cluster:
 	@printf "$$GREEN kubectl get nodes --no-headers | grep -v -w 'Ready':$$NC\n"
 	@printf "=======================================\n"
 	kubectl get nodes --no-headers | grep -v -w 'Ready' | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl advance pod status conditions:$$NC\n"
+	@printf "=======================================\n"
+	@$(MAKE) debug-pod-status
+	@echo ""
+	@echo ""
 
+# SOURCE: https://github.com/kubernetes/kubernetes/issues/49387
+debug-pod-status:
+	@kubectl get pods --all-namespaces -o json  | jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .state == false) ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
+
+get-pod-status: debug-pod-status
 
 # kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'
 # kubectl get no

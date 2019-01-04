@@ -241,7 +241,7 @@ run-ansible-master:
 run-ansible-timezone:
 	@ansible-playbook -i inventory.ini timezone.yml -v
 
-converge: up run-ansible
+converge: up run-ansible-modprobe run-ansible run-ansible-tools
 
 ping:
 	@ansible-playbook -v -i inventory.ini ping.yml -v

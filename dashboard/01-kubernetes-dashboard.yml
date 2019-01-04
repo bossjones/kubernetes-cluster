@@ -288,8 +288,8 @@ spec:
         k8s-app: kubernetes-dashboard
     spec:
       hostNetwork: true
-      nodeSelector:
-        kubernetes.io/hostname: "node1"
+      # nodeSelector:
+      #   kubernetes.io/hostname: "node1"
       containers:
       - name: kubernetes-dashboard
       # ORIG This one

@@ -722,4 +722,18 @@ open-alertmanager:
 # open: open-mongo-express open-flask-app open-uwsgi-stats open-locust-master open-consul open-traefik open-traefik-api open-whoami
 open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager
 
+create-dashboard:
+	@printf "create-dashboard:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy kubernetes dashboard$$NC\n"
+	@printf "$$GREEN create admin role token$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./dashboard/
+	@printf "=======================================\n"
+	@printf "$$GREEN the admin role token is:$$NC\n"
+	@printf "=======================================\n"
+	@echo ""
+	@echo $(shell kubectl -n kube-system describe secret `kubectl -n kube-system get secret|grep admin-token|cut -d " " -f1`|grep "token:"|tr -s " "|cut -d " " -f2)
 
+delete-dashboard:
+	kubectl delete -f ./dashboard/

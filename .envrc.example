@@ -4,3 +4,4 @@ export KUBECONFIG=$KUBECONFIG:~/dev/bossjones/kubernetes-cluster/vagrant-admin.c
 # Load environment variables that inform Ansible to use ARA regardless
 # of its location or python version
 source <(python -m ara.setup.env)
+

@@ -737,3 +737,21 @@ create-dashboard:
 
 delete-dashboard:
 	kubectl delete -f ./dashboard/
+
+create-dashboard-admin:
+	@printf "create-dashboard-admin:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN create cluster-admin role $$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./dashboard-admin/
+
+
+delete-dashboard-admin:
+	kubectl delete -f ./dashboard-admin/
+
+debug-cluster:
+	@printf "debug-cluster:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl -n kube-system get pods:$$NC\n"
+	@printf "=======================================\n"
+	kubectl -n kube-system get pods

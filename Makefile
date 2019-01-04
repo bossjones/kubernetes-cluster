@@ -10,6 +10,7 @@ DNSMASQ_DOMAIN         := hyenalab.home
 # URL_PATH_CONSUL        := 8500
 # URL_PATH_TRAEFIK       := 80
 # URL_PATH_TRAEFIK_API   := 8080
+URL_PATH_ARA              := "http://127.0.0.1:9191"
 URL_PATH_NETDATA_MASTER1  := "http://k8s-head.$(DNSMASQ_DOMAIN):19999"
 URL_PATH_NETDATA_WORKER1  := "http://k8s-node-1.$(DNSMASQ_DOMAIN):19999"
 URL_PATH_NETDATA_WORKER2  := "http://k8s-node-2.$(DNSMASQ_DOMAIN):19999"
@@ -340,6 +341,9 @@ pip-install-pygments:
 # open-netdata-node:
 # 	./scripts/open-browser.py $(URL_PATH_NETDATA_NODE)
 
+open-ara:
+	./scripts/open-browser.py $(URL_PATH_ARA)
+
 open-netdata-vagrant:
 	./scripts/open-browser.py $(URL_PATH_NETDATA_MASTER1)
 	./scripts/open-browser.py $(URL_PATH_NETDATA_WORKER1)
@@ -652,6 +656,9 @@ debug-heapster:
 
 list-services:
 	kubectl get ingress,services -n=kube-system
+
+start-ara:
+	@bash ./scripts/start-ara.sh
 
 get-token:
 	@bash ./scripts/get-root-token.sh

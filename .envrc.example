@@ -19,3 +19,6 @@ export KUBECONFIG=$KUBECONFIG:~/dev/bossjones/kubernetes-cluster/vagrant-admin.c
 # of its location or python version
 source <(python -m ara.setup.env)
 
+source <(kubectl completion bash)
+source <(helm completion bash)
+# source <(kubeadm completion bash)

@@ -5,6 +5,7 @@
 - hosts: servers
   name: install tools on all servers
   gather_facts: True
+  strategy: free
   become: yes
   become_method: sudo
   environment:

@@ -990,3 +990,43 @@ log:
 
 route:
 	ip route list
+
+generate-certs-traefik:
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-traefik/certs/tls.key -out ingress-traefik/certs/tls.crt -subj "/CN=*.scarlettlab.com"
+# kubectl -n traefik create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
+
+generate-htpasswd:
+	@htpasswd -nb ${_HTPASSWD_USER} ${_HTPASSWD_PASS}
+
+create-ingress-traefik:
+	@printf "create-ingress-traefik:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy ingress-traefik$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./ingress-traefik/
+	@echo ""
+	@echo ""
+	-kubectl -n kube-system create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
+
+# kubectl get pods --all-namespaces -l app=ingress-traefik --watch | highlight
+
+apply-ingress-traefik:
+	@printf "create-ingress-traefik:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy ingress-traefik$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./ingress-traefik/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=ingress-traefik --watch
+
+delete-ingress-traefik:
+	kubectl delete -f ./ingress-traefik/
+
+describe-ingress-traefik:
+	kubectl describe -f ./ingress-traefik/ | highlight
+
+debug-ingress-traefik: describe-ingress-traefik
+	kubectl -n kube-system get pod -l app=ingress-traefik --output=yaml | highlight
+
+# apk --no-cache add curl

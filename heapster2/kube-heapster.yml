@@ -1,5 +1,34 @@
 # generated via: helm get manifest heapster
 # NOTE: Created via a mixture of manually and with the aid of 'helm get manifest'
+# E0105 00:41:05.012572       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.10:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
+# E0105 00:41:05.016361       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.11:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
+# E0105 00:41:05.077137       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.12:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
+# W0105 00:41:25.061941       1 manager.go:152] Failed to get all responses in time (got 0/3)
+# E0105 00:42:05.081610       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.12:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
+# E0105 00:42:05.082859       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.10:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
+# E0105 00:42:05.084330       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.11:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
+# W0105 00:42:25.096540       1 manager.go:152] Failed to get all responses in time (got 0/3)
+---
+kind: ClusterRole
+metadata:
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:heapster
+rules:
+- apiGroups:
+  - ""
+  - extensions
+  resources:
+  - events
+  - namespaces
+  - nodes
+  - pods
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - update
 ---
 # Source: heapster/templates/serviceaccount.yaml
 apiVersion: v1
@@ -13,6 +42,8 @@ metadata:
   name: heapster
   namespace: kube-system
 ---
+# FIXME: kubectl create serviceaccount heapster --namespace=kube-system
+# FIXME: kubectl create clusterrolebinding heapster-role --clusterrole=system:heapster --serviceaccount=kube-system:heapster --namespace=heapster
 # Source: heapster/templates/heapster-crb.yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -51,11 +82,27 @@ rules:
   - get
 - apiGroups:
   - "extensions"
+  - "apps"
   resources:
   - deployments
   verbs:
+  - create
+  - delete
   - get
+  - list
+  - patch
   - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes/stats
+  verbs:
+  - get
+
+# - apiGroups: ["extensions", "apps"]
+#   resources: ["deployments"]
+#   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 # Source: heapster/templates/pod-nanny-rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1

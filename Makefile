@@ -716,13 +716,24 @@ open-alertmanager:
 open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager
 
 create-heapster:
-	@printf "create-dashboard:\n"
+	@printf "create-heapster:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy heapster$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./heapster2/
+	@echo ""
+	@echo ""
+	kubectl get pods --all-namespaces -l app=heapster --watch
+
+apply-heapster:
+	@printf "create-heapster:\n"
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy heapster$$NC\n"
 	@printf "=======================================\n"
 	kubectl apply -f ./heapster2/
 	@echo ""
 	@echo ""
+	kubectl get pods --all-namespaces -l app=heapster --watch
 
 delete-heapster:
 	kubectl delete -f ./heapster2/
@@ -734,6 +745,19 @@ debug-heapster: describe-heapster
 	kubectl -n kube-system get pod -l app=heapster --output=yaml | highlight
 
 create-dashboard:
+	@printf "create-dashboard:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy kubernetes dashboard$$NC\n"
+	@printf "$$GREEN create admin role token$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./dashboard/
+	@printf "=======================================\n"
+	@printf "$$GREEN the admin role token is:$$NC\n"
+	@printf "=======================================\n"
+	@echo ""
+	@echo $(shell kubectl -n kube-system describe secret `kubectl -n kube-system get secret|grep admin-token|cut -d " " -f1`|grep "token:"|tr -s " "|cut -d " " -f2)
+
+apply-dashboard:
 	@printf "create-dashboard:\n"
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy kubernetes dashboard$$NC\n"
@@ -764,6 +788,12 @@ create-dashboard-admin:
 	@printf "=======================================\n"
 	kubectl create -f ./dashboard-admin/
 
+apply-dashboard-admin:
+	@printf "apply-dashboard-admin:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN apply cluster-admin role $$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./dashboard-admin/
 
 delete-dashboard-admin:
 	kubectl delete -f ./dashboard-admin/
@@ -853,3 +883,10 @@ get-not-ready-pods:
 # kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'
 # kubectl get no
 # kubectl get po -o wide
+
+kail-no-calico:
+	kail --ns kube-system --ignore k8s-app=calico-node | ccze -A
+
+export:
+	-rm -rfv dump/
+	@bash ./scripts/kubectl-export.sh

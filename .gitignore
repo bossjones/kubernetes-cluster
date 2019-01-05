@@ -173,3 +173,4 @@ docs/_static/.gitkeep
 vault_password
 .envrc
 vagrant-admin.conf
+dump/

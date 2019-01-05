@@ -819,13 +819,13 @@ debug-cluster:
 	@printf "=======================================\n"
 	@printf "$$GREEN kubectl advance pod status conditions:$$NC\n"
 	@printf "=======================================\n"
-	@$(MAKE) debug-pod-status
+	kubectl get pods --all-namespaces -o json  | jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .state == false) ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
 	@echo ""
 	@echo ""
 	@printf "=======================================\n"
 	@printf "$$GREEN List all not-full-Ready pods:$$NC\n"
 	@printf "=======================================\n"
-	@$(MAKE) get-not-ready-pods
+	kubectl get po --all-namespaces | grep -vE '1/1|2/2|3/3' | highlight
 	@echo ""
 	@echo ""
 	@printf "=======================================\n"
@@ -835,6 +835,7 @@ debug-cluster:
 	@echo ""
 	@echo ""
 
+debug: debug-cluster
 
 # SOURCE: https://github.com/kubernetes/kubernetes/issues/49387
 debug-pod-status:

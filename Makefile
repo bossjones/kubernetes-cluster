@@ -723,7 +723,7 @@ create-heapster:
 	kubectl create -f ./heapster2/
 	@echo ""
 	@echo ""
-	kubectl get pods --all-namespaces -l app=heapster --watch
+# kubectl get pods --all-namespaces -l app=heapster --watch | highlight
 
 apply-heapster:
 	@printf "create-heapster:\n"
@@ -733,7 +733,7 @@ apply-heapster:
 	kubectl apply -f ./heapster2/
 	@echo ""
 	@echo ""
-	kubectl get pods --all-namespaces -l app=heapster --watch
+# kubectl get pods --all-namespaces -l app=heapster --watch
 
 delete-heapster:
 	kubectl delete -f ./heapster2/

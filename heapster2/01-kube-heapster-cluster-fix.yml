@@ -30,3 +30,4 @@ rules:
   - nodes/stats
   verbs:
   - get
+  - create

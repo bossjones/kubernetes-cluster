@@ -8,60 +8,7 @@
 # E0105 00:42:05.082859       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.10:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
 # E0105 00:42:05.084330       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.11:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
 # W0105 00:42:25.096540       1 manager.go:152] Failed to get all responses in time (got 0/3)
-# ---
-# kind: ClusterRole
-# metadata:
-#   labels:
-#     kubernetes.io/bootstrapping: rbac-defaults
-#   name: system:heapster
-# rules:
-# - apiGroups:
-#   - ""
-#   - extensions
-#   resources:
-#   - events
-#   - namespaces
-#   - nodes
-#   - pods
-#   - deployments
-#   verbs:
-#   - get
-#   - list
-#   - watch
-#   - update
-# NOTE: THIS IS NEW 12/4/2019
-# kind: ClusterRoleBinding
-# apiVersion: rbac.authorization.k8s.io/v1beta1
-# metadata:
-#   name: heapster
-#   labels:
-#     kubernetes.io/cluster-service: "true"
-# roleRef:
-#   apiGroup: rbac.authorization.k8s.io
-#   kind: ClusterRole
-#   name: system:heapster
-# subjects:
-# - kind: ServiceAccount
-#   name: heapster
-#   namespace: kube-system
-
-
 ##################################################################
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: heapster
-  labels:
-    app: heapster
-    kubernetes.io/cluster-service: "true"
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:heapster
-subjects:
-- kind: ServiceAccount
-  name: heapster
-  namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -79,6 +26,7 @@ rules:
   - watch
   - update
   - patch
+# "" indicates the core API group
 - apiGroups:
   - ""
   resources:
@@ -92,24 +40,9 @@ rules:
   - list
   - update
   - watch
-# rules:
-# - apiGroups:
-#   - ""
-#   - extensions
-#   resources:
-#   - events
-#   - namespaces
-#   - nodes
-#   - pods
-#   - deployments
-#   verbs:
-#   - get
-#   - list
-#   - watch
-#   - update
 ---
-kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
 metadata:
   name: heapster-additional
 roleRef:
@@ -140,12 +73,13 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
+  name: heapster
   labels:
     app: heapster
     chart: heapster-0.3.2
     heritage: Tiller
     release: heapster
-  name: heapster
+    kubernetes.io/cluster-service: "true"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -160,6 +94,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: heapster-pod-nanny
+  namespace: kube-system
   labels:
     app: heapster
     chart: heapster-0.3.2
@@ -170,8 +105,14 @@ rules:
   - ""
   resources:
   - pods
+  - nodes
+  - nodes/stats
+  - namespaces
   verbs:
   - get
+  - list
+  - watch
+  - create
 - apiGroups:
   - "extensions"
   - "apps"
@@ -185,23 +126,40 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - ""
-  resources:
-  - nodes/stats
-  verbs:
-  - get
+# - apiGroups:
+#   - ""
+#   resources:
+#   - nodes/stats
+#   verbs:
+#   - get
+#   - list
+#   - watch
 ---
 # Source: heapster/templates/pod-nanny-rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: heapster-pod-nanny
+  namespace: kube-system
   labels:
     app: heapster
     chart: heapster-0.3.2
     heritage: Tiller
     release: heapster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: heapster-pod-nanny
+subjects:
+- kind: ServiceAccount
+  name: heapster
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: heapster
+  namespace: kube-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

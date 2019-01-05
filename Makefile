@@ -890,3 +890,4 @@ kail-no-calico:
 export:
 	-rm -rfv dump/
 	@bash ./scripts/kubectl-export.sh
+	@kubectl cluster-info dump --all-namespaces --output-directory=./dump/json_exports

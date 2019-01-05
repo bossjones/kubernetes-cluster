@@ -43,7 +43,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: whoami.bosslab.com
+  - host: whoami.scarlettlab.com
     http:
       paths:
       - path: /

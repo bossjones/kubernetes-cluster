@@ -43,7 +43,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: kibana.bosslab.com
+  - host: kibana.scarlettlab.com
     http:
       paths:
       - path: /

@@ -2,7 +2,7 @@
 MAKEFLAGS += --warn-undefined-variables
 # .SHELLFLAGS := -eu -o pipefail
 
-DNSMASQ_DOMAIN         := hyenalab.home
+DNSMASQ_DOMAIN         := scarlettlab.com
 # URL_PATH_MONGO_EXPRESS := 8081
 # URL_PATH_FLASK_APP     := 8888
 # URL_PATH_UWSGI_STATS   := 9191
@@ -11,9 +11,9 @@ DNSMASQ_DOMAIN         := hyenalab.home
 # URL_PATH_TRAEFIK       := 80
 # URL_PATH_TRAEFIK_API   := 8080
 URL_PATH_ARA              := "http://127.0.0.1:9191"
-URL_PATH_NETDATA_MASTER1  := "http://k8s-head.$(DNSMASQ_DOMAIN):19999"
-URL_PATH_NETDATA_WORKER1  := "http://k8s-node-1.$(DNSMASQ_DOMAIN):19999"
-URL_PATH_NETDATA_WORKER2  := "http://k8s-node-2.$(DNSMASQ_DOMAIN):19999"
+URL_PATH_NETDATA_MASTER1  := "http://k8s-head.hyenalab.home:19999"
+URL_PATH_NETDATA_WORKER1  := "http://k8s-node-1.hyenalab.home:19999"
+URL_PATH_NETDATA_WORKER2  := "http://k8s-node-2.hyenalab.home:19999"
 
 URL_PATH_NETDATA_REGISTRY  := "http://rsyslogd-master-01.$(DNSMASQ_DOMAIN):19999"
 URL_PATH_NETDATA_NODE      := "http://rsyslogd-worker-01.$(DNSMASQ_DOMAIN):19999"

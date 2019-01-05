@@ -25,7 +25,7 @@ metadata:
     run: nginx
 spec:
   rules:
-  - host: echoserver.bosslab.com
+  - host: echoserver.scarlettlab.com
     http:
       paths:
       # - path: /echoserver

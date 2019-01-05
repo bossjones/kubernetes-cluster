@@ -34,7 +34,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: grafana.bosslab.com
+  - host: grafana.scarlettlab.com
     http:
       paths:
       - path: /

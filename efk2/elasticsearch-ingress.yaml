@@ -43,7 +43,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: elasticsearch.bosslab.com
+  - host: elasticsearch.scarlettlab.com
     http:
       paths:
       - path: /

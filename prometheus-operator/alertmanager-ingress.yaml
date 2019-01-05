@@ -34,7 +34,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: alertmanager.bosslab.com
+  - host: alertmanager.scarlettlab.com
     http:
       paths:
       - path: /

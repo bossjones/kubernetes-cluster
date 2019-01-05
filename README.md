@@ -73,3 +73,8 @@ kubectl apply -f /vagrant/addon/traefik-ingress/
 * make create-dashboard
 * make describe-dashboard
 * make debug-cluster
+
+
+# Git Issues to keep track of
+---
+* https://github.com/kubernetes/dashboard/issues/2723

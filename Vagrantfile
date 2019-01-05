@@ -42,7 +42,10 @@ EOF
     # ip of this box
     IP_ADDR=`ifconfig enp0s8 | grep Mask | awk '{print $2}'| cut -f2 -d:`
     # set node-ip
-    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR" /etc/default/kubelet
+    # FIXME: ORIG - 1/5/2018
+    # FIXME: sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR" /etc/default/kubelet
+    # NOTE: This is my modified version SOURCE: https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet-authentication-authorization/
+    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true" /etc/default/kubelet
     sudo systemctl restart kubelet
     sudo systemctl enable kubelet
     sudo apt-get -y install python-minimal python-apt
@@ -76,6 +79,7 @@ EOF
     cat <<EOF >/etc/modules-load.d/k8s_br_netfilter.conf
     br_netfilter
 EOF
+
 SCRIPT
 
 $configureMaster = <<-SCRIPT
@@ -106,6 +110,8 @@ $configureMaster = <<-SCRIPT
     sudo cp -a /etc/kubernetes/admin.conf /vagrant/vagrant-admin.conf
     echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' | sudo tee -a /root/.bashrc
     echo 'export KUBECONFIG=/home/vagrant/.kube/config' | sudo tee -a /home/vagrant/.bashrc
+    sudo /sbin/iptables -I INPUT 1 -p tcp --dport 10255 -j ACCEPT -m comment --comment "kube-apiserver"
+    sudo service iptables save
 
 SCRIPT
 
@@ -116,6 +122,10 @@ $configureNode = <<-SCRIPT
     sh ./kubeadm_join_cmd.sh
     # sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.205.10:/home/vagrant/.kube/config /etc/kubernetes/admin.conf
     # sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.205.10:/home/vagrant/.kube/config /home/vagrant/.kube/config
+    sudo /sbin/iptables -I INPUT 1 -p tcp --dport 10250 -j ACCEPT -m comment --comment "kubelet"
+    sudo /sbin/iptables -I INPUT 1 -i docker0 -j ACCEPT -m comment --comment "kube-proxy redirects"
+    sudo /sbin/iptables -I FORWARD 1 -o docker0 -j ACCEPT -m comment --comment "docker subnet"
+    sudo service iptables save
 SCRIPT
 
 Vagrant.configure(2) do |config|

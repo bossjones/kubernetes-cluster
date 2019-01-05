@@ -9,50 +9,108 @@
 # E0105 00:42:05.084330       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.11:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
 # W0105 00:42:25.096540       1 manager.go:152] Failed to get all responses in time (got 0/3)
 ##################################################################
+# kubectl get clusterroles system:heapster -o yaml
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRole
+# metadata:
+#   name: system:heapster
+# rules:
+# - apiGroups:
+#   - ""
+#   resources:
+#   - events
+#   - namespaces
+#   - nodes
+#   - pods
+#   verbs:
+#   - get
+#   - list
+#   - watch
+# - apiGroups:
+#   - extensions
+#   resources:
+#   - deployments
+#   verbs:
+#   - get
+#   - list
+#   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: heapster-additional
+  name: heapster
 rules:
 - apiGroups:
-  - extensions
-  - apps
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  # - get
+  # - list
+  # - watch
+  - '*'
+- apiGroups:
+  - "extensions"
+  - "apps"
   resources:
   - deployments
   verbs:
   - get
   - list
   - watch
-  - update
-  - patch
-# "" indicates the core API group
 - apiGroups:
   - ""
   resources:
   - events
-  - namespaces
   - nodes
+  - nodes/stats
+  - nodes/status
   - pods
-  - deployments
+  - pods/status
   verbs:
-  - get
-  - list
-  - update
-  - watch
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: heapster-additional
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: heapster-additional
-subjects:
-- kind: ServiceAccount
-  name: heapster
-  namespace: kube-system
+  # FIXME: can't figure it out for the moment, going for wildcard till then
+  # - get
+  - '*'
+# - apiGroups:
+#   - extensions
+#   - apps
+#   resources:
+#   - deployments
+#   verbs:
+#   - get
+#   - list
+#   - watch
+#   - update
+#   - patch
+# # "" indicates the core API group
+# - apiGroups:
+#   - ""
+#   resources:
+#   - events
+#   - namespaces
+#   - nodes
+#   - pods
+#   - deployments
+#   verbs:
+#   - get
+#   - list
+#   - update
+#   - watch
+# NOTE: DISABLED
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1beta1
+# kind: ClusterRoleBinding
+# metadata:
+#   name: heapster
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: heapster
+# subjects:
+# - kind: ServiceAccount
+#   name: heapster
+#   namespace: kube-system
 ---
 # Source: heapster/templates/serviceaccount.yaml
 apiVersion: v1

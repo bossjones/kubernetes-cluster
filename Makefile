@@ -800,7 +800,7 @@ delete-dashboard-admin:
 
 # install highlight
 # https://www.npmjs.com/package/cli-highlight
-# npm install -g highlight
+# npm install -g cli-highlight
 
 debug-cluster:
 	@printf "debug-cluster:\n"
@@ -892,5 +892,9 @@ kail-no-calico:
 
 export:
 	-rm -rfv dump/
+	-rm -rfv dump_json_exports/
 	@bash ./scripts/kubectl-export.sh
-	@kubectl cluster-info dump --all-namespaces --output-directory=./dump/json_exports
+	@kubectl cluster-info dump --all-namespaces --output-directory=./dump_json_exports
+
+log:
+	kail --ns kube-system --ignore k8s-app=calico-node | highlight

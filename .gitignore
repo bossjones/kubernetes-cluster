@@ -174,3 +174,4 @@ vault_password
 .envrc
 vagrant-admin.conf
 dump/
+dump_json_exports

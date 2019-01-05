@@ -8,16 +8,79 @@
 # E0105 00:42:05.082859       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.10:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
 # E0105 00:42:05.084330       1 manager.go:101] Error in scraping containers from kubelet_summary:192.168.205.11:10250: request failed - "403 Forbidden", response: "Forbidden (user=system:serviceaccount:kube-system:heapster, verb=get, resource=nodes, subresource=stats)"
 # W0105 00:42:25.096540       1 manager.go:152] Failed to get all responses in time (got 0/3)
+# ---
+# kind: ClusterRole
+# metadata:
+#   labels:
+#     kubernetes.io/bootstrapping: rbac-defaults
+#   name: system:heapster
+# rules:
+# - apiGroups:
+#   - ""
+#   - extensions
+#   resources:
+#   - events
+#   - namespaces
+#   - nodes
+#   - pods
+#   - deployments
+#   verbs:
+#   - get
+#   - list
+#   - watch
+#   - update
+# NOTE: THIS IS NEW 12/4/2019
+# kind: ClusterRoleBinding
+# apiVersion: rbac.authorization.k8s.io/v1beta1
+# metadata:
+#   name: heapster
+#   labels:
+#     kubernetes.io/cluster-service: "true"
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: system:heapster
+# subjects:
+# - kind: ServiceAccount
+#   name: heapster
+#   namespace: kube-system
+
+
+##################################################################
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: heapster
+  labels:
+    app: heapster
+    kubernetes.io/cluster-service: "true"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:heapster
+subjects:
+- kind: ServiceAccount
+  name: heapster
+  namespace: kube-system
 ---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  labels:
-    kubernetes.io/bootstrapping: rbac-defaults
-  name: system:heapster
+  name: heapster-additional
 rules:
 - apiGroups:
-  - ""
   - extensions
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- apiGroups:
+  - ""
   resources:
   - events
   - namespaces
@@ -27,20 +90,49 @@ rules:
   verbs:
   - get
   - list
-  - watch
   - update
+  - watch
+# rules:
+# - apiGroups:
+#   - ""
+#   - extensions
+#   resources:
+#   - events
+#   - namespaces
+#   - nodes
+#   - pods
+#   - deployments
+#   verbs:
+#   - get
+#   - list
+#   - watch
+#   - update
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: heapster-additional
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: heapster-additional
+subjects:
+- kind: ServiceAccount
+  name: heapster
+  namespace: kube-system
 ---
 # Source: heapster/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: heapster
+  namespace: kube-system
   labels:
     app: heapster
     chart: heapster-0.3.2
     heritage: Tiller
     release: heapster
-  name: heapster
-  namespace: kube-system
+    kubernetes.io/cluster-service: "true"
 ---
 # FIXME: kubectl create serviceaccount heapster --namespace=kube-system
 # FIXME: kubectl create clusterrolebinding heapster-role --clusterrole=system:heapster --serviceaccount=kube-system:heapster --namespace=heapster
@@ -99,10 +191,6 @@ rules:
   - nodes/stats
   verbs:
   - get
-
-# - apiGroups: ["extensions", "apps"]
-#   resources: ["deployments"]
-#   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 # Source: heapster/templates/pod-nanny-rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -130,6 +218,7 @@ metadata:
   name: heapster
   namespace: kube-system
   labels:
+    kubernetes.io/name: Heapster
     chart: "heapster-0.3.2"
     app: heapster
     heritage: "Tiller"
@@ -137,6 +226,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
+  # - port: 80
   - port: 8082
     targetPort: 8082
     protocol: TCP
@@ -163,6 +253,7 @@ spec:
 
       labels:
         app: heapster
+        k8s-app: heapster
     spec:
       serviceAccountName: heapster
       containers:

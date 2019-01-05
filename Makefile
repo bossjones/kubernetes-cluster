@@ -885,7 +885,10 @@ get-not-ready-pods:
 # kubectl get po -o wide
 
 kail-no-calico:
-	kail --ns kube-system --ignore k8s-app=calico-node | ccze -A
+	@printf "=======================================\n"
+	@printf "$$GREEN Add a big buffer to a pipe between two commands - https://stackoverflow.com/questions/8554568/add-a-big-buffer-to-a-pipe-between-two-commands:$$NC\n"
+	@printf "=======================================\n"
+	kail --ns kube-system --ignore k8s-app=calico-node | pv -pterbTCB 20k | ccze -A
 
 export:
 	-rm -rfv dump/

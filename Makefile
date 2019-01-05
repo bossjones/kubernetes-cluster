@@ -803,7 +803,7 @@ create-ingress-nginx:
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy ingress-nginx$$NC\n"
 	@printf "=======================================\n"
-	kubectl create -f ./ingress-nginx2/
+	kubectl create -f ./ingress-nginx/
 	@echo ""
 	@echo ""
 # kubectl get pods --all-namespaces -l app=ingress-nginx --watch | highlight
@@ -813,16 +813,16 @@ apply-ingress-nginx:
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy ingress-nginx$$NC\n"
 	@printf "=======================================\n"
-	kubectl apply -f ./ingress-nginx2/
+	kubectl apply -f ./ingress-nginx/
 	@echo ""
 	@echo ""
 # kubectl get pods --all-namespaces -l app=ingress-nginx --watch
 
 delete-ingress-nginx:
-	kubectl delete -f ./ingress-nginx2/
+	kubectl delete -f ./ingress-nginx/
 
 describe-ingress-nginx:
-	kubectl describe -f ./ingress-nginx2/ | highlight
+	kubectl describe -f ./ingress-nginx/ | highlight
 
 debug-ingress-nginx: describe-ingress-nginx
 	kubectl -n kube-system get pod -l app=ingress-nginx --output=yaml | highlight

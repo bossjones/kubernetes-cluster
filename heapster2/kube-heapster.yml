@@ -249,8 +249,10 @@ kind: Deployment
 metadata:
   name: heapster
   namespace: kube-system
+  # annotations:
+  #   {}
   annotations:
-    {}
+      seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
 
   labels:
     chart: "heapster-0.3.2"
@@ -258,8 +260,10 @@ spec:
   replicas: 1
   template:
     metadata:
+      # annotations:
+      #   {}
       annotations:
-        {}
+        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
 
       labels:
         app: heapster
@@ -268,7 +272,8 @@ spec:
       serviceAccountName: heapster
       containers:
       - name: heapster
-        image: "k8s.gcr.io/heapster:v1.5.2"
+        # DISABLED: 1/5/2018 # image: "k8s.gcr.io/heapster:v1.5.2"
+        image: "k8s.gcr.io/heapster-amd64:v1.5.4"
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8082
@@ -289,7 +294,8 @@ spec:
         command:
           - "/heapster"
           # - "--source=kubernetes.summary_api:''"
-          - "--source=kubernetes.summary_api:https://kubernetes.default:443?useServiceAccount=true&kubeletHttps=true&kubeletPort=10250&insecure=true"
+          # - "--source=kubernetes.summary_api:https://kubernetes.default:443?useServiceAccount=true&kubeletHttps=true&kubeletPort=10250&insecure=true"
+          - "--source=kubernetes.summary_api:''?useServiceAccount=true&kubeletHttps=true&kubeletPort=10250&insecure=true"
           # - "--sink=log"
           # - "--vmodule=*=2"
           # - "--api-server"

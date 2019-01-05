@@ -31,3 +31,16 @@ rules:
   verbs:
   - get
   - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: heapster-custom-fix
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: heapster-custom-fix
+subjects:
+- kind: ServiceAccount
+  name: heapster-custom-fix
+  namespace: kube-system

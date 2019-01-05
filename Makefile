@@ -822,12 +822,32 @@ debug-cluster:
 	@$(MAKE) debug-pod-status
 	@echo ""
 	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN List all not-full-Ready pods:$$NC\n"
+	@printf "=======================================\n"
+	@$(MAKE) get-not-ready-pods
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN List all pods without status 'Running':$$NC\n"
+	@printf "=======================================\n"
+	@kubectl get po --all-namespaces --field-selector status.phase!=Running | highlight
+	@echo ""
+	@echo ""
+
 
 # SOURCE: https://github.com/kubernetes/kubernetes/issues/49387
 debug-pod-status:
 	@kubectl get pods --all-namespaces -o json  | jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .state == false) ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
 
 get-pod-status: debug-pod-status
+
+show-all-pods-not-running:
+	@kubectl get pods --all-namespaces --field-selector=status.phase!=Running | highlight
+
+# SOURCE: https://github.com/kubernetes/kubernetes/issues/49387
+get-not-ready-pods:
+	@kubectl get po --all-namespaces | grep -vE '1/1|2/2|3/3' | highlight
 
 # kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join("|"))] | @csv'
 # kubectl get no

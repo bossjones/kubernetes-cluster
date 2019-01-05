@@ -13,8 +13,10 @@ metadata:
   # namespace: ingress-nginx
   namespace: kube-system
   labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
+    # app.kubernetes.io/name: ingress-nginx
+    # app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/name: nginx-ingress
+    app.kubernetes.io/part-of: nginx-ingress
 spec:
   type: NodePort
   ports:
@@ -27,5 +29,7 @@ spec:
       targetPort: 443
       protocol: TCP
   selector:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
+    # app.kubernetes.io/name: ingress-nginx
+    # app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/name: nginx-ingress
+    app.kubernetes.io/part-of: nginx-ingress

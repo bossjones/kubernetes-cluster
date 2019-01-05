@@ -798,6 +798,95 @@ apply-dashboard-admin:
 delete-dashboard-admin:
 	kubectl delete -f ./dashboard-admin/
 
+create-ingress-nginx:
+	@printf "create-ingress-nginx:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy ingress-nginx$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./ingress-nginx2/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=ingress-nginx --watch | highlight
+
+apply-ingress-nginx:
+	@printf "create-ingress-nginx:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy ingress-nginx$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./ingress-nginx2/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=ingress-nginx --watch
+
+delete-ingress-nginx:
+	kubectl delete -f ./ingress-nginx2/
+
+describe-ingress-nginx:
+	kubectl describe -f ./ingress-nginx2/ | highlight
+
+debug-ingress-nginx: describe-ingress-nginx
+	kubectl -n kube-system get pod -l app=ingress-nginx --output=yaml | highlight
+
+
+create-echoserver:
+	@printf "create-echoserver:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy echoserver$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./echoserver/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=echoserver --watch | highlight
+
+apply-echoserver:
+	@printf "create-echoserver:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy echoserver$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./echoserver/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=echoserver --watch
+
+delete-echoserver:
+	kubectl delete -f ./echoserver/
+
+describe-echoserver:
+	kubectl describe -f ./echoserver/ | highlight
+
+debug-echoserver: describe-echoserver
+	kubectl -n kube-system get pod -l app=echoserver --output=yaml | highlight
+
+
+create-npd:
+	@printf "create-npd:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy npd$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./npd/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=npd --watch | highlight
+
+apply-npd:
+	@printf "create-npd:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy npd$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./npd/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=npd --watch
+
+delete-npd:
+	kubectl delete -f ./npd/
+
+describe-npd:
+	kubectl describe -f ./npd/ | highlight
+
+debug-npd: describe-npd
+	kubectl -n kube-system get pod -l app=npd --output=yaml | highlight
+
 # install highlight
 # https://www.npmjs.com/package/cli-highlight
 # npm install -g cli-highlight
@@ -898,3 +987,6 @@ export:
 
 log:
 	kail --ns kube-system --ignore k8s-app=calico-node | highlight
+
+route:
+	ip route list

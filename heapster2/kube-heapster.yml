@@ -60,19 +60,19 @@ rules:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
-  - events
-  - nodes
-  - nodes/stats
-  - nodes/status
-  - pods
-  - pods/status
-  verbs:
-  # FIXME: can't figure it out for the moment, going for wildcard till then
-  # - get
-  - '*'
+# - apiGroups:
+#   - ""
+#   resources:
+#   - events
+#   - nodes
+#   - nodes/stats
+#   - nodes/status
+#   - pods
+#   - pods/status
+#   verbs:
+#   # FIXME: can't figure it out for the moment, going for wildcard till then
+#   # - get
+#   - '*'
 # - apiGroups:
 #   - extensions
 #   - apps

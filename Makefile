@@ -653,6 +653,9 @@ get-secrets:
 list-services:
 	kubectl get ingress,services -n=kube-system
 
+list-ingress:
+	@kubectl get ingress -n=kube-system -o yaml | highlight
+
 start-ara:
 	@bash ./scripts/start-ara.sh
 
@@ -1029,4 +1032,9 @@ describe-ingress-traefik:
 debug-ingress-traefik: describe-ingress-traefik
 	kubectl -n kube-system get pod -l app=ingress-traefik --output=yaml | highlight
 
+allow-scheduling-on-master:
+	kubectl taint node k8s-head node-role.kubernetes.io/master:NoSchedule-
+
 # apk --no-cache add curl
+# How to test traefik
+# curl -k -H "Authorization: Bearer $token" https://10.100.0.1/version

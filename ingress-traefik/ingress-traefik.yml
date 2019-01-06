@@ -155,6 +155,7 @@ data:
         [entryPoints.traefik.auth.basic]
         users = ["admin:$apr1$Ucncoj0y$..EGVyVbLUkmdL0X9/rGN/"]
 
+    # NOTE: Defining Kubernetes Ingress endpoint is done by defining publishService and it must contain values of namespace and name of Traefik service . In this case, that is traefik/traefik.
     [kubernetes]
       [kubernetes.ingressEndpoint]
         # publishedService = "traefik/traefik"
@@ -179,8 +180,8 @@ data:
 #  tls.crt: #cat cert | base64 -w0
 #  tls.key: #cat key | base64 -w0
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: traefik
   # namespace: traefik
@@ -199,8 +200,8 @@ spec:
     name: https
   type: LoadBalancer
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: traefik-dashboard
   # namespace: traefik
@@ -211,6 +212,7 @@ spec:
   ports:
   - port: 8080
     name: dashboard
+    targetPort: 8080
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -231,4 +233,5 @@ spec:
       - path: /
         backend:
           serviceName: traefik-dashboard
-          servicePort: 8080
+          # servicePort: 8080
+          servicePort: dashboard

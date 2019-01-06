@@ -1,0 +1,31 @@
+# STEP 3: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik-examples/cheese-ingress.yaml
+# Verification: kubectl get ingress -n=kube-system -o yaml | highlight
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cheese
+spec:
+  rules:
+  - host: stilton.scarlettlab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: stilton
+          servicePort: http
+  - host: cheddar.scarlettlab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: cheddar
+          servicePort: http
+  - host: wensleydale.scarlettlab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wensleydale
+          servicePort: http
+

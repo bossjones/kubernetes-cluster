@@ -1038,3 +1038,7 @@ allow-scheduling-on-master:
 # apk --no-cache add curl
 # How to test traefik
 # curl -k -H "Authorization: Bearer $token" https://10.100.0.1/version
+
+# NOTE: This is the ip of the master node
+add-etc-hosts-cheeses:
+	@echo "192.168.205.10 stilton.scarlettlab.com cheddar.scarlettlab.com wensleydale.scarlettlab.com" | sudo tee -a /etc/hosts

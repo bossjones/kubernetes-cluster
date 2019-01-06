@@ -19,6 +19,8 @@ kind: Ingress
 metadata:
   name: traefik-web-ui
   namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
   - host: traefik-ui.scarlettlab.com
@@ -28,3 +30,5 @@ spec:
         backend:
           serviceName: traefik-web-ui
           servicePort: web
+  tls:
+   - secretName: traefik-ui-tls-cert

@@ -68,7 +68,7 @@ metadata:
     boss-part-of: traefik-ingress
 spec:
   # DISABLED # replicas: 2
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       k8s-app: traefik-ingress
@@ -205,13 +205,15 @@ spec:
   - protocol: TCP
     port: 443
     name: https
-  # - protocol: TCP
-  #   port: 8080
-  #   name: admin
+  - protocol: TCP
+    port: 8080
+    name: admin
   # type: LoadBalancer
   type: NodePort
 
+# ----------------------------------------------------------------------
 # BEGIN: Create dashboard ui
+# ----------------------------------------------------------------------
 ---
 kind: Service
 apiVersion: v1
@@ -223,7 +225,8 @@ spec:
   selector:
     k8s-app: traefik-ingress
   ports:
-  - port: 8080
+  # FIXME: NOTE THIS IS THE ORIGINAL # - port: 8080
+  - port: 80
     name: dashboard
     targetPort: 8080
 ---

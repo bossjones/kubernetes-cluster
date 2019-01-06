@@ -1042,3 +1042,6 @@ allow-scheduling-on-master:
 # NOTE: This is the ip of the master node
 add-etc-hosts-cheeses:
 	@echo "192.168.205.10 stilton.scarlettlab.com cheddar.scarlettlab.com wensleydale.scarlettlab.com" | sudo tee -a /etc/hosts
+
+show-node-labels:
+	kubectl get nodes --show-labels | highlight

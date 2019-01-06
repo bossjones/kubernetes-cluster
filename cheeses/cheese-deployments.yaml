@@ -1,4 +1,4 @@
-# STEP 3: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik-examples/cheese-deployments.yaml
+# STEP 3: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik2/cheese-deployments.yaml
 # Verification: kubectl --namespace=kube-system get pods | highlight
 ---
 kind: Deployment

@@ -1,4 +1,4 @@
-# STEP 3: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik-examples/cheese-default-ingress.yaml
+# STEP 3: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik2/cheese-default-ingress.yaml
 # Verification: kubectl get ingress -n=kube-system -o yaml | highlight
 apiVersion: extensions/v1beta1
 kind: Ingress

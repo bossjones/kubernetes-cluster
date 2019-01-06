@@ -1,4 +1,4 @@
-# STEP 2: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik-examples/traefik-ds.yaml
+# STEP 2: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik2/traefik-ds.yaml
 # Verification: kubectl --namespace=kube-system get pods | highlight
 ---
 apiVersion: v1

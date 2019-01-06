@@ -1,4 +1,4 @@
-# STEP 1: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik-examples/traefik-rbac.yaml
+# STEP 1: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik2/traefik-rbac.yaml
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1

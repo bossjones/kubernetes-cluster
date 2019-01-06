@@ -6,8 +6,8 @@
 # metadata:
 #   name: traefik
 ---
-apiVersion: v1
 kind: ServiceAccount
+apiVersion: v1
 metadata:
   name: traefik-ingress-controller
   # namespace: traefik
@@ -65,8 +65,10 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: traefik-ingress
+    boss-part-of: traefik-ingress
 spec:
-  replicas: 2
+  # DISABLED # replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       k8s-app: traefik-ingress
@@ -75,7 +77,11 @@ spec:
       labels:
         k8s-app: traefik-ingress
         name: traefik-ingress
+        boss-part-of: traefik-ingress
     spec:
+      # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+      nodeSelector:
+        kubernetes.io/hostname: "k8s-head"
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 35
       volumes:
@@ -96,21 +102,22 @@ spec:
           requests:
             cpu: 25m
             memory: 128Mi
-        livenessProbe:
-          failureThreshold: 2
-          httpGet:
-            path: /ping
-            port: 80
-            scheme: HTTP
-          initialDelaySeconds: 10
-          periodSeconds: 5
-        readinessProbe:
-          failureThreshold: 2
-          httpGet:
-            path: /ping
-            port: 80
-            scheme: HTTP
-          periodSeconds: 5
+        # TODO: Re-enable this when we're ready. This means each application will need to specify /ping as an endpoint
+        # livenessProbe:
+        #   failureThreshold: 2
+        #   httpGet:
+        #     path: /ping
+        #     port: 80
+        #     scheme: HTTP
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 5
+        # readinessProbe:
+        #   failureThreshold: 2
+        #   httpGet:
+        #     path: /ping
+        #     port: 80
+        #     scheme: HTTP
+        #   periodSeconds: 5
         volumeMounts:
           - mountPath: "/ssl"
             name: "traefik-ui-tls-cert"
@@ -127,8 +134,8 @@ spec:
         - --logLevel=INFO
         - --configfile=/config/traefik.toml
 ---
-apiVersion: v1
 kind: ConfigMap
+apiVersion: v1
 metadata:
   name: traefik-configmap
   # namespace: traefik
@@ -180,8 +187,8 @@ data:
 #  tls.crt: #cat cert | base64 -w0
 #  tls.key: #cat key | base64 -w0
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: traefik
   # namespace: traefik
@@ -198,10 +205,16 @@ spec:
   - protocol: TCP
     port: 443
     name: https
-  type: LoadBalancer
+  # - protocol: TCP
+  #   port: 8080
+  #   name: admin
+  # type: LoadBalancer
+  type: NodePort
+
+# BEGIN: Create dashboard ui
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: traefik-dashboard
   # namespace: traefik
@@ -214,8 +227,8 @@ spec:
     name: dashboard
     targetPort: 8080
 ---
-apiVersion: extensions/v1beta1
 kind: Ingress
+apiVersion: extensions/v1beta1
 metadata:
   name: traefik-dashboard-ingress
   # namespace: traefik

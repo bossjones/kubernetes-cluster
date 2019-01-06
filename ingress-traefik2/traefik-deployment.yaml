@@ -1,5 +1,5 @@
 # NOTE: only use deamon set OR deployment, don't try to use both
-# # STEP 2: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik-examples/traefik-deployment.yaml
+# # STEP 2: kubectl create -f ~/dev/bossjones/kubernetes-cluster/ingress-traefik2/traefik-deployment.yaml
 # # Verification: kubectl --namespace=kube-system get pods | highlight
 # ---
 # apiVersion: v1

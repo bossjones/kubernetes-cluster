@@ -1011,6 +1011,27 @@ create-ingress-traefik:
 	@echo ""
 	-kubectl -n kube-system create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
 
+redeploy-ingress-traefik:
+	@printf "=======================================\n"
+	@printf "$$GREEN RUNNING - redeploy-ingress-traefik$$NC\n"
+	@printf "=======================================\n"
+	@printf "delete-ingress-traefik:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN delete ingress-traefik$$NC\n"
+	@printf "=======================================\n"
+	@echo ""
+	@echo ""
+	-kubectl delete -f ./ingress-traefik/
+	@printf "create-ingress-traefik:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN create ingress-traefik$$NC\n"
+	@printf "=======================================\n"
+	-kubectl create -f ./ingress-traefik/
+	@echo ""
+	@echo ""
+	-kubectl -n kube-system create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
+
+
 # kubectl get pods --all-namespaces -l app=ingress-traefik --watch | highlight
 
 apply-ingress-traefik:

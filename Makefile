@@ -1093,3 +1093,32 @@ describe-nfs-server:
 
 debug-nfs-server: describe-nfs-server
 	kubectl -n kube-system get pod -l app=nfs-server --output=yaml | highlight
+
+
+
+create-nfs-client:
+	@printf "create-nfs-client:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy nfs-client$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./nfs-client/
+	@echo ""
+	@echo ""
+
+apply-nfs-client:
+	@printf "create-nfs-client:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy nfs-client$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./nfs-client/
+	@echo ""
+	@echo ""
+
+delete-nfs-client:
+	kubectl delete -f ./nfs-client/
+
+describe-nfs-client:
+	kubectl describe -f ./nfs-client/ | highlight
+
+debug-nfs-client: describe-nfs-client
+	kubectl -n kube-system get pod -l app=nfs-client --output=yaml | highlight

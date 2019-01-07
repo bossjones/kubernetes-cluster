@@ -1066,3 +1066,30 @@ add-etc-hosts-cheeses:
 
 show-node-labels:
 	kubectl get nodes --show-labels | highlight
+
+create-nfs-server:
+	@printf "create-nfs-server:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy nfs-server$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./nfs-server/
+	@echo ""
+	@echo ""
+
+apply-nfs-server:
+	@printf "create-nfs-server:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy nfs-server$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./nfs-server/
+	@echo ""
+	@echo ""
+
+delete-nfs-server:
+	kubectl delete -f ./nfs-server/
+
+describe-nfs-server:
+	kubectl describe -f ./nfs-server/ | highlight
+
+debug-nfs-server: describe-nfs-server
+	kubectl -n kube-system get pod -l app=nfs-server --output=yaml | highlight

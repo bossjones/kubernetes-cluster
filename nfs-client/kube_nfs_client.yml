@@ -115,3 +115,12 @@ spec:
 # provisioner: com.scarlettlab.nfs # or choose another name, must match deployment's env PROVISIONER_NAME'
 # parameters:
 #   archiveOnDelete: "false"
+
+# SOURCE: https://github.com/xiongraorao/Athena/blob/7c78b1636d1989ed1961b501f1870d981edbbad2/yaml/nfs-provisioner/nfs-client-provisioner.yaml
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-dynamic-class
+#此处引用nfs-client-provisioner里面的 com.scarlettlab.nfs
+provisioner: com.scarlettlab.nfs

@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: extensions/v1beta1
 kind: Deployment
+apiVersion: extensions/v1beta1
 metadata:
   name: default-http-backend
   namespace: kube-system
@@ -93,6 +93,9 @@ spec:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
     spec:
+      # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+      nodeSelector:
+        kubernetes.io/hostname: "k8s-head"
       serviceAccountName: nginx-ingress
       terminationGracePeriodSeconds: 60
       containers:

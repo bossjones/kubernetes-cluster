@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+kind: ConfigMap
 apiVersion: v1
 data:
   # see https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/configmap.md for all possible options and their description
   map-hash-bucket-size: "128"
   hsts: "false"
-kind: ConfigMap
 metadata:
   name: nginx-load-balancer-conf
   namespace: kube-system
@@ -26,8 +26,8 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 ---
-apiVersion: v1
 kind: ConfigMap
+apiVersion: v1
 metadata:
   name: tcp-services
   namespace: kube-system
@@ -36,8 +36,8 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 ---
-apiVersion: v1
 kind: ConfigMap
+apiVersion: v1
 metadata:
   name: udp-services
   namespace: kube-system

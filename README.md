@@ -77,6 +77,7 @@ kubectl apply -f /vagrant/addon/traefik-ingress/
 * make create-ingress-nginx
 * make create-echoserver
 * make create-npd
+* make create-ingress-traefik
 
 # Git Issues to keep track of
 ---

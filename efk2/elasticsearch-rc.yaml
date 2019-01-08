@@ -20,8 +20,10 @@ metadata:
   labels:
     k8s-app: elasticsearch-logging
     # kubernetes.io/minikube-addons: efk
+    kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
+  serviceName: elasticsearch-logging
   replicas: 1
   selector:
     k8s-app: elasticsearch-logging

@@ -88,3 +88,7 @@ kubectl apply -f /vagrant/addon/traefik-ingress/
 # Git Issues to keep track of
 ---
 * https://github.com/kubernetes/dashboard/issues/2723
+* https://superuser.com/questions/1356984/why-does-my-linux-system-stutter-unless-i-continuously-drop-caches
+
+# Why does my Linux system stutter unless I continuously drop caches?
+SOURCE: https://superuser.com/questions/1356984/why-does-my-linux-system-stutter-unless-i-continuously-drop-caches

@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
       - args:
+        - --log.level=debug
         - --kubelet-service=kube-system/kubelet
         - --logtostderr=true
         - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1

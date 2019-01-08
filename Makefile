@@ -1217,3 +1217,34 @@ describe-metrics-server:
 
 debug-metrics-server: describe-metrics-server
 	kubectl -n kube-system get pod -l app=metrics-server --output=yaml | highlight
+
+
+create-efk:
+	@printf "create-efk:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy efk$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./efk2/
+	@echo ""
+	@echo ""
+	kubectl describe storageclass | highlight
+
+# https://github.com/kubernetes/kubernetes/blob/3d7d35ee8f099f4611dca06de4453f958b4b8492/cluster/addons/storage-class/local/default.yaml
+apply-efk:
+	@printf "create-efk:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy efk$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./efk2/
+	@echo ""
+	@echo ""
+	kubectl describe storageclass | highlight
+
+delete-efk:
+	kubectl delete -f ./efk2/
+
+describe-efk:
+	kubectl describe -f ./efk2/ | highlight
+
+debug-efk: describe-efk
+	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight

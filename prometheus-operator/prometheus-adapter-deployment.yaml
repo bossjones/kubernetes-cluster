@@ -38,10 +38,17 @@ spec:
           readOnly: false
       serviceAccountName: prometheus-adapter
       volumes:
-      - emptyDir: {}
-        name: tmpfs
-      - emptyDir: {}
-        name: volume-serving-cert
+      - name: tmpfs
+        persistentVolumeClaim:
+          claimName: prometheus-adapter-tmpfs-pvc
+      - name: volume-serving-cert
+        persistentVolumeClaim:
+          claimName: prometheus-adapter-volume-serving-cert-pvc
+      # NON nfs4 version:
+      # - emptyDir: {}
+      #   name: tmpfs
+      # - emptyDir: {}
+      #   name: volume-serving-cert
       - configMap:
           name: adapter-config
         name: config

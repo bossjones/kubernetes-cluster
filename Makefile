@@ -1171,3 +1171,35 @@ describe-registry:
 
 debug-registry: describe-registry
 	kubectl -n kube-system get pod -l app=registry --output=yaml | highlight
+
+
+
+create-metrics-server:
+	@printf "create-metrics-server:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy metrics-server$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./metrics-server/
+	@echo ""
+	@echo ""
+	kubectl describe storageclass | highlight
+
+# https://github.com/kubernetes/kubernetes/blob/3d7d35ee8f099f4611dca06de4453f958b4b8492/cluster/addons/storage-class/local/default.yaml
+apply-metrics-server:
+	@printf "create-metrics-server:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy metrics-server$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./metrics-server/
+	@echo ""
+	@echo ""
+	kubectl describe storageclass | highlight
+
+delete-metrics-server:
+	kubectl delete -f ./metrics-server/
+
+describe-metrics-server:
+	kubectl describe -f ./metrics-server/ | highlight
+
+debug-metrics-server: describe-metrics-server
+	kubectl -n kube-system get pod -l app=metrics-server --output=yaml | highlight

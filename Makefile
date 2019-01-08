@@ -338,6 +338,11 @@ graph-inventory-view:
 pip-install-pygments:
 	pip install Pygments
 
+multi-ssh-vagrant:
+	i2cssh -XF=~/dev/bossjones/kubernetes-cluster/ssh_config -Xi=~/.ssh/vagrant_id_rsa vagrant-kube
+
+i2cssh-vagrant: multi-ssh-vagrant
+
 # open-netdata-registry:
 # 	./scripts/open-browser.py $(URL_PATH_NETDATA_REGISTRY)
 

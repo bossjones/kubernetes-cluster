@@ -973,6 +973,20 @@ debug-cluster:
 	@kubectl get po --all-namespaces --field-selector status.phase!=Running | highlight
 	@echo ""
 	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN List pv,pvc 'Running':$$NC\n"
+	@printf "=======================================\n"
+	kubectl get pv,pvc | highlight
+	@echo ""
+	@echo ""
+	@printf "=======================================\n"
+	@printf "$$GREEN List pv,pvc -n kube-system 'Running':$$NC\n"
+	kubectl -n kube-system get pv,pvc | highlight
+	@echo ""
+	@echo ""
+
+
+	kubectl get pv,pvc
 
 debug: debug-cluster
 

@@ -127,6 +127,34 @@ metadata:
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
 ---
+# SOURCE: https://github.com/kubernetes/kubernetes/blob/v1.13.1/cluster/addons/cluster-monitoring/influxdb/heapster-controller.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: heapster-config
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: EnsureExists
+data:
+  NannyConfiguration: |-
+    apiVersion: nannyconfig/v1alpha1
+    kind: NannyConfiguration
+---
+# SOURCE: https://github.com/kubernetes/kubernetes/blob/v1.13.1/cluster/addons/cluster-monitoring/influxdb/heapster-controller.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eventer-config
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: EnsureExists
+data:
+  NannyConfiguration: |-
+    apiVersion: nannyconfig/v1alpha1
+    kind: NannyConfiguration
+---
 # FIXME: kubectl create serviceaccount heapster --namespace=kube-system
 # FIXME: kubectl create clusterrolebinding heapster-role --clusterrole=system:heapster --serviceaccount=kube-system:heapster --namespace=heapster
 # Source: heapster/templates/heapster-crb.yaml
@@ -244,6 +272,7 @@ spec:
   selector:
     app: heapster
 ---
+# SOURCE: https://github.com/kubernetes/kubernetes/blob/v1.13.1/cluster/addons/cluster-monitoring/influxdb/heapster-controller.yaml
 # Source: heapster/templates/deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -256,7 +285,9 @@ metadata:
       seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
 
   labels:
+    k8s-app: heapster
     chart: "heapster-0.3.2"
+    version: v1.5.4
 spec:
   replicas: 1
   template:
@@ -264,6 +295,7 @@ spec:
       # annotations:
       #   {}
       annotations:
+        # scheduler.alpha.kubernetes.io/critical-pod: ''
         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
 
       labels:
@@ -271,6 +303,9 @@ spec:
         k8s-app: heapster
     spec:
       serviceAccountName: heapster
+      # securityContext:
+      #   supplementalGroups: [ 65534 ]
+      #   fsGroup: 65534
       containers:
       - name: heapster
         # DISABLED: 1/5/2018 # image: "k8s.gcr.io/heapster:v1.5.2"

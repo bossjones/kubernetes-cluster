@@ -125,6 +125,7 @@ metadata:
     heritage: Tiller
     release: heapster
     kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
 ---
 # FIXME: kubectl create serviceaccount heapster --namespace=kube-system
 # FIXME: kubectl create clusterrolebinding heapster-role --clusterrole=system:heapster --serviceaccount=kube-system:heapster --namespace=heapster

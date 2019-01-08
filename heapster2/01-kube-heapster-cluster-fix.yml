@@ -45,7 +45,7 @@ subjects:
   name: heapster-custom-fix
   namespace: kube-system
 
-
+# THIS SECTION COMES FROM SOMEWHERE ELSE:
 # SOURCE: https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/cluster-monitoring/heapster-rbac.yaml
 # NOTE: https://github.com/kubernetes-retired/heapster/issues/1595
 ---

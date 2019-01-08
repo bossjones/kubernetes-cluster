@@ -69,8 +69,11 @@ roleRef:
 # SOURCE: https://github.com/kubernetes-incubator/external-storage/blob/master/nfs-client/deploy/deployment.yaml
 kind: Deployment
 apiVersion: extensions/v1beta1
+# apiVersion: apps/v1
 metadata:
   name: nfs-client-provisioner
+  labels:
+    app: nfs-client-provisioner
   namespace: kube-system
 spec:
   replicas: 1
@@ -117,10 +120,14 @@ spec:
 #   archiveOnDelete: "false"
 
 # SOURCE: https://github.com/xiongraorao/Athena/blob/7c78b1636d1989ed1961b501f1870d981edbbad2/yaml/nfs-provisioner/nfs-client-provisioner.yaml
+# SOURCE: https://github.com/kubernetes/kubernetes/blob/214efa9cc4f909254d8eab1025b1f0549615bb41/cluster/juju/layers/kubernetes-worker/templates/nfs-provisioner.yaml
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: nfs-dynamic-class
+  namespace: kube-system
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
 #此处引用nfs-client-provisioner里面的 com.scarlettlab.nfs
 provisioner: com.scarlettlab.nfs

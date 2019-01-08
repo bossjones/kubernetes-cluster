@@ -1121,7 +1121,9 @@ create-nfs-client:
 	kubectl create -f ./nfs-client/
 	@echo ""
 	@echo ""
+	kubectl describe storageclass | highlight
 
+# https://github.com/kubernetes/kubernetes/blob/3d7d35ee8f099f4611dca06de4453f958b4b8492/cluster/addons/storage-class/local/default.yaml
 apply-nfs-client:
 	@printf "create-nfs-client:\n"
 	@printf "=======================================\n"
@@ -1130,6 +1132,7 @@ apply-nfs-client:
 	kubectl apply -f ./nfs-client/
 	@echo ""
 	@echo ""
+	kubectl describe storageclass | highlight
 
 delete-nfs-client:
 	kubectl delete -f ./nfs-client/

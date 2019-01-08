@@ -45,7 +45,12 @@ EOF
     # FIXME: ORIG - 1/5/2018
     # FIXME: sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR" /etc/default/kubelet
     # NOTE: This is my modified version SOURCE: https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet-authentication-authorization/
-    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true" /etc/default/kubelet
+    # SOURCE: https://github.com/DataDog/integrations-core/issues/1829
+    # NOTE: Feature GATES
+    # SOURCE: https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
+    # Environment="KUBELET_EXTRA_ARGS=--feature-gates=VolumeScheduling=true"
+    # Environment="KUBELET_EXTRA_ARGS=--feature-gates=PersistentLocalVolumes=true"
+    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true --read-only-port=10255" /etc/default/kubelet
     sudo systemctl restart kubelet
     sudo systemctl enable kubelet
     sudo apt-get -y install python-minimal python-apt

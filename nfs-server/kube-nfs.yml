@@ -195,7 +195,8 @@ metadata:
   annotations:
     # storageclass.beta.kubernetes.io/is-default-class: "{{ nfs_k8s.is_default_class | default('true') }}"
     # INFO: https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/
-    storageclass.beta.kubernetes.io/is-default-class: "true"
+    # storageclass.beta.kubernetes.io/is-default-class: "true"
+    storageclass.kubernetes.io/is-default-class: "true"
   labels:
     kubernetes.io/cluster-service: "true"
 # FIXME: Use ansible/jinja2 to have this rendered dynamically # provisioner: {{ nfs_k8s.provisioner }}

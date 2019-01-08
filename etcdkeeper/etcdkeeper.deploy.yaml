@@ -1,4 +1,4 @@
-# https://medium.com/@awkwardferny/getting-started-with-kubernetes-ingress-nginx-on-minikube-d75e58f52b6c
+# https://medium.com/@awkwardferny/getting-started-with-kubernetes-ingress-etcdkeeper-on-minikube-d75e58f52b6c
 
 # USAGE: kubectl apply -f etcdkeeper.deploy.yaml
 # kubectl get deploy
@@ -7,20 +7,20 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: etcdkeeper
-  namespace: etcdkeeper
+  namespace: kube-system
   labels:
-    run: nginx
+    run: etcdkeeper
 spec:
   replicas: 2
   selector:
     matchLabels:
       # app: etcdkeeper
-      run: nginx
+      run: etcdkeeper
   template:
     metadata:
       labels:
         # app: etcdkeeper
-        run: nginx
+        run: etcdkeeper
     spec:
       containers:
       - name: etcdkeeper

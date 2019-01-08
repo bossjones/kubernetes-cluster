@@ -674,7 +674,11 @@ get-bearer-token: get-token
 
 # SOURCE: https://github.com/coreos/prometheus-operator/tree/7f34279e7c69124a80248cc54cadef93fd1b2387/contrib/kube-prometheus
 addon-prometheus-operator:
-	kubectl create -f ./addon/prometheus-operator/ || true
+	@printf "addon-prometheus-operator:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy prometheus-operator$$NC\n"
+	@printf "=======================================\n"
+	-kubectl create -f ./prometheus-operator/
 	@echo
 	@echo "It can take a few seconds for the above 'create manifests' command to fully create the following resources, so verify the resources are ready before proceeding."
 	until kubectl get customresourcedefinitions servicemonitors.monitoring.coreos.com ; do date; sleep 1; echo ""; done
@@ -682,13 +686,26 @@ addon-prometheus-operator:
 	until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
 	@echo
 
+create-prometheus-operator: addon-prometheus-operator
 
-debug-prometheus-operator:
-	@echo
-	kubectl describe -f ./addon/prometheus-operator/
+apply-prometheus-operator:
+	@printf "create-prometheus-operator:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy prometheus-operator$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./prometheus-operator/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=prometheus-operator --watch
 
 delete-prometheus-operator:
-	kubectl delete -f ./addon/prometheus-operator || true
+	kubectl delete -f ./prometheus-operator/
+
+describe-prometheus-operator:
+	kubectl describe -f ./prometheus-operator/ | highlight
+
+debug-prometheus-operator: describe-prometheus-operator
+	kubectl -n kube-system get pod -l app=prometheus-operator --output=yaml | highlight
 
 
 open-dashboard:

@@ -1122,3 +1122,32 @@ describe-nfs-client:
 
 debug-nfs-client: describe-nfs-client
 	kubectl -n kube-system get pod -l app=nfs-client --output=yaml | highlight
+
+create-registry:
+	@printf "create-registry:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy registry$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./registry/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=registry --watch | highlight
+
+apply-registry:
+	@printf "create-registry:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy registry$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./registry/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=registry --watch
+
+delete-registry:
+	kubectl delete -f ./registry/
+
+describe-registry:
+	kubectl describe -f ./registry/ | highlight
+
+debug-registry: describe-registry
+	kubectl -n kube-system get pod -l app=registry --output=yaml | highlight

@@ -16,7 +16,7 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   name: kibana-logging
-  # namespace: kube-system
+  namespace: kube-system
   labels:
     k8s-app: kibana-logging
     # kubernetes.io/minikube-addons: efk
@@ -48,7 +48,7 @@ spec:
         #     cpu: 100m
         env:
           - name: ELASTICSEARCH_URL
-            value: http://elasticsearch-logging:9200
+            value: http://elasticsearch-logging.kube-system:9200
           - name: XPACK_MONITORING_ENABLED
             value: "false"
           - name: XPACK_SECURITY_ENABLED

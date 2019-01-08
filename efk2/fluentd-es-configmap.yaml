@@ -16,7 +16,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: fluentd-es-config
-  # namespace: kube-system
+  namespace: kube-system
   labels:
     k8s-app: fluentd-es
     # kubernetes.io/minikube-addons: efk

@@ -16,7 +16,7 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   name: fluentd-es
-  # namespace: kube-system
+  namespace: kube-system
   labels:
     k8s-app: fluentd-es
     # kubernetes.io/minikube-addons: efk

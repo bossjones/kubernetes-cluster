@@ -1,6 +1,6 @@
 ---
-apiVersion: apps/v1
 kind: ReplicaSet
+apiVersion: apps/v1
 metadata:
   name: registry-v2.6
   namespace: "kube-system"

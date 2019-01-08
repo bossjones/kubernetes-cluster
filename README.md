@@ -73,10 +73,16 @@ kubectl apply -f /vagrant/addon/traefik-ingress/
 * make create-dashboard
 * make describe-dashboard
 * make debug-cluster
+* make create-nfs-client
 * make create-heapster
+* make create-metrics-server
 * make create-ingress-nginx
 * make create-echoserver
 * make create-npd
+* make create-prometheus-operator
+* make create-efk
+
+
 * make create-ingress-traefik
 
 # Git Issues to keep track of

@@ -215,7 +215,7 @@ run-ansible-ruby: run-ansible-rvm
 
 # For performance tuning/measuring
 run-ansible-netdata:
-	@ansible-playbook -i inventory.ini netdata.yml -v
+	@ansible-playbook -i inventory.ini playbooks/vagrant_netdata.yml -v
 
 # For performance tuning/measuring
 run-ansible-tuning:
@@ -1248,3 +1248,12 @@ describe-efk:
 
 debug-efk: describe-efk
 	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight
+
+# SOURCE: https://serverfault.com/questions/77300/tools-to-install-after-a-minimal-linux-install
+# TODO: Install these somewhere
+# more-ubuntu-tools:
+# 	apt-get install openssh-server sudo screen iproute resolvconf \
+# 	build-essential tcpdump vlan mii-diag firehol \
+# 	apticron atsar ethtool denyhosts rdist bzip2 xclip \
+# 	etckeeper git-core less unzip mtr-tiny curl gdebi-core \
+# 	xbase-clients rsync psmisc iperf lshw wget pastebinit

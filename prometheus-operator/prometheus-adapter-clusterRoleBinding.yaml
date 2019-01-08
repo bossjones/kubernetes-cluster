@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus-adapter
-  namespace: monitoring
+  namespace: kube-system
   # namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -11,5 +11,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-adapter
-  namespace: monitoring
+  namespace: kube-system
   # namespace: default

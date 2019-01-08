@@ -12,7 +12,7 @@ items:
   subjects:
   - kind: ServiceAccount
     name: prometheus-k8s
-    namespace: monitoring
+    namespace: kube-system
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
   metadata:
@@ -25,12 +25,12 @@ items:
   subjects:
   - kind: ServiceAccount
     name: prometheus-k8s
-    namespace: monitoring
+    namespace: kube-system
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
   metadata:
     name: prometheus-k8s
-    namespace: monitoring
+    namespace: kube-system
   roleRef:
     apiGroup: rbac.authorization.k8s.io
     kind: Role
@@ -38,5 +38,5 @@ items:
   subjects:
   - kind: ServiceAccount
     name: prometheus-k8s
-    namespace: monitoring
+    namespace: kube-system
 kind: RoleBindingList

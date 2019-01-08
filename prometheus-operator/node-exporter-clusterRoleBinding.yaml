@@ -9,5 +9,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: node-exporter
-  namespace: monitoring
+  namespace: kube-system
   # namespace: default

@@ -4,7 +4,7 @@ metadata:
   labels:
     k8s-app: alertmanager
   name: alertmanager
-  namespace: monitoring
+  namespace: kube-system
 spec:
   endpoints:
   - interval: 30s

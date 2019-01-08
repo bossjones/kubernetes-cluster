@@ -8,7 +8,7 @@ spec:
   insecureSkipTLSVerify: true
   service:
     name: prometheus-adapter
-    namespace: monitoring
+    namespace: kube-system
     # namespace: default
   version: v1beta1
   versionPriority: 100

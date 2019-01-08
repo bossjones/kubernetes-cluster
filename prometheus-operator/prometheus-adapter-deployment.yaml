@@ -2,7 +2,7 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: prometheus-adapter
-  namespace: monitoring
+  namespace: kube-system
 spec:
   replicas: 1
   selector:

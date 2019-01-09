@@ -5,6 +5,7 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: es-curator
+    boss-part-of: efk
 spec:
   replicas: 1
   selector:

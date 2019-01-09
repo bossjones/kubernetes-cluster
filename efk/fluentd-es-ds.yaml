@@ -8,6 +8,7 @@ metadata:
     k8s-app: fluentd-es
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -17,6 +18,7 @@ metadata:
     k8s-app: fluentd-es
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 rules:
 - apiGroups:
   - ""
@@ -36,6 +38,7 @@ metadata:
     k8s-app: fluentd-es
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 subjects:
 - kind: ServiceAccount
   name: fluentd-es
@@ -56,6 +59,7 @@ metadata:
     version: v2.0.1
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 spec:
   template:
     metadata:
@@ -63,6 +67,7 @@ spec:
         k8s-app: fluentd-es
         kubernetes.io/cluster-service: "true"
         version: v2.0.1
+        boss-part-of: efk
       # This annotation ensures that fluentd does not get evicted if the node
       # supports critical pod annotation based priority scheme.
       # Note that this does not guarantee admission on the nodes (#40573).

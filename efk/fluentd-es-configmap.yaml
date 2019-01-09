@@ -367,3 +367,4 @@ metadata:
   namespace: kube-system
   labels:
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk

@@ -9,6 +9,7 @@ metadata:
     k8s-app: elasticsearch-logging
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -18,6 +19,7 @@ metadata:
     k8s-app: elasticsearch-logging
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 rules:
 - apiGroups:
   - ""
@@ -37,6 +39,7 @@ metadata:
     k8s-app: elasticsearch-logging
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 subjects:
 - kind: ServiceAccount
   name: elasticsearch-logging
@@ -58,6 +61,7 @@ metadata:
     version: v5.6.2
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: efk
 spec:
   serviceName: elasticsearch-logging
   # ORIG # replicas: 2
@@ -73,6 +77,9 @@ spec:
         version: v5.6.2
         kubernetes.io/cluster-service: "true"
     spec:
+      # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+      nodeSelector:
+        kubernetes.io/hostname: "k8s-node-2"
       serviceAccountName: elasticsearch-logging
       containers:
       - image: gcr.io/google-containers/elasticsearch:v5.6.2
@@ -81,8 +88,10 @@ spec:
           # need more cpu upon initialization, therefore burstable class
           limits:
             cpu: 1000m
+            memory: 2400Mi
           requests:
             cpu: 100m
+            memory: 2350Mi
         ports:
         - containerPort: 9200
           name: db

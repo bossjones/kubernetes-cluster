@@ -1,10 +1,10 @@
 username := bossjones
-container_name := jenkins
+container_name := elasticsearch
 
 GIT_BRANCH  = $(shell git rev-parse --abbrev-ref HEAD)
 GIT_SHA     = $(shell git rev-parse HEAD)
 BUILD_DATE  = $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-VERSION  = $(shell grep "jenkins/jenkins" Dockerfile | head -1 | cut -d":" -f2)
+VERSION  = $(shell grep "k8s.gcr.io/elasticsearch" Dockerfile | head -1 | cut -d":" -f2)
 
 TAG ?= $(VERSION)
 ifeq ($(TAG),@branch)

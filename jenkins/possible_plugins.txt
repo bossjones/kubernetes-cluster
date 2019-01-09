@@ -1,0 +1,278 @@
+bossjones/vagrant-cluster-ubuntu
+
+
+workflow-aggregator
+
+jenkins_plugins:
+- git
+- log-parser
+- copyartifact
+- workflow-aggregator
+- workflow-multibranch
+- docker-workflow
+- template-project
+- ec2
+
+
+
+
+
+behance_plugins:
+- github-branch-source
+- pipeline-github-lib
+- workflow-multibranch
+- docker-workflow
+- maven-plugin
+- pipeline-stage-tags-metadata
+- slack
+- git-client
+- scm-api
+- join
+- pipeline-stage-step
+- github
+- windows-slaves
+- build-timeout
+- parameterized-trigger
+- mailer
+- xunit
+- workflow-scm-step
+- ws-cleanup
+- token-macro
+- thinBackup
+- run-condition
+- aws-java-sdk
+- momentjs
+- pipeline-build-step
+- pipeline-stage-view
+- pipeline-model-definition
+- extra-columns
+- sauce-ondemand
+- bouncycastle-api
+- build-user-vars-plugin
+- javadoc
+- pam-auth
+- docker-commons
+- jquery-detached
+- ace-editor
+- icon-shim
+- workflow-durable-task-step
+- ssh-credentials
+- datadog
+- workflow-job
+- workflow-basic-steps
+- jsch
+- github-api
+- cvs
+- matrix-reloaded
+- workflow-cps
+- matrix-auth
+- script-security
+- external-monitor-job
+- nodelabelparameter
+- Hudson
+- pipeline-milestone-step
+- scriptler
+- notification
+- ldap
+- handlebars
+- build-blocker-plugin
+- pipeline-model-extensions
+- aws-credentials
+- workflow-cps-global-lib
+- workflow-support
+- antisamy-markup-formatter
+- pipeline-rest-api
+- conditional-buildstep
+- pipeline-model-api
+- template-project
+- pipeline-input-step
+- git-server
+- ssh-agent
+- build-environment
+- matrix-combinations-parameter
+- credentials-binding
+- ghprb
+- workflow-aggregator
+- credentials
+- greenballs
+- workflow-step-api
+- plain-credentials
+- command-launcher
+- jquery
+- matrix-project
+- text-finder-run-condition
+- mesos
+- git
+- authentication-tokens
+- cloudbees-folder
+- durable-task
+- timestamper
+- junit
+- pipeline-graph-analysis
+- structs
+- ant
+- mapdb-api
+- ssh-slaves
+- ansicolor
+- github-organization-folder
+- node-iterator-api
+- envinject
+- subversion
+- copy-to-slave
+- display-url-api
+- translation
+- envinject-api
+- pipeline-model-declarative-agent
+- branch-api
+- workflow-api
+
+
+
+
+
+Some extras
+
+ace-editor
+all-changes
+amazon-ecr
+amazon-ecs
+ansible
+ansicolor
+ant
+antisamy-markup-formatter
+audit-trail
+authentication-tokens
+aws-codepipeline
+aws-credentials
+aws-java-sdk
+bouncycastle-api
+branch-api
+build-name-setter
+build-pipeline-plugin
+build-timeout
+build-token-root
+build-user-vars-plugin
+changes-since-last-success
+cloudbees-folder
+conditional-buildstep
+copyartifact
+credentials
+credentials-binding
+dashboard-view
+datadog
+deploy
+disk-usage
+display-upstream-changes
+display-url-api
+docker-build-step
+docker-commons
+docker-plugin
+docker-workflow
+durable-task
+ec2
+email-ext
+envinject
+environment-dashboard
+extended-choice-parameter
+extensible-choice-parameter
+external-monitor-job
+favorite
+ghprb
+git
+git-client
+github
+github-api
+github-branch-source
+github-oauth
+github-organization-folder
+git-server
+git-tag-message
+global-build-stats
+gradle
+http_request
+handlebars
+hudson-wsclean-plugin
+icon-shim
+jackson2-api
+javadoc
+jenkins-cloudformation-plugin
+jobConfigHistory
+jobgenerator
+jquery
+jquery-detached
+jquery-ui
+junit
+last-changes
+ldap
+mailer
+mapdb-api
+mask-passwords
+matrix-auth
+matrix-project
+maven-plugin
+metrics
+momentjs
+multiple-scms
+node-iterator-api
+notification
+pam-auth
+parameterized-trigger
+pipeline-build-step
+pipeline-github-lib
+pipeline-graph-analysis
+pipeline-input-step
+pipeline-milestone-step
+pipeline-model-api
+pipeline-model-declarative-agent
+pipeline-model-definition
+pipeline-rest-api
+pipeline-stage-step
+pipeline-stage-tags-metadata
+pipeline-stage-view
+plain-credentials
+pubsub-light
+rebuild
+release
+remote-terminal-access
+resource-disposer
+role-strategy
+run-condition
+s3
+scalable-amazon-ecs
+scm-api
+scriptler
+script-security
+slack
+slack-uploader
+sse-gateway
+ssh-agent
+ssh-credentials
+ssh-slaves
+statistics-gatherer
+structs
+subversion
+swarm
+template-workflows
+terminal
+text-file-operations
+thinBackup
+throttle-concurrents
+timestamper
+token-macro
+uno-choice
+variant
+versionnumber
+windows-slaves
+workflow-aggregator
+workflow-api
+workflow-basic-steps
+workflow-cps
+workflow-cps-global-lib
+workflow-durable-task-step
+workflow-job
+workflow-multibranch
+workflow-scm-step
+workflow-step-api
+workflow-support
+ws-cleanup
+swarm

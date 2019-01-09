@@ -16,7 +16,7 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
     boss-part-of: efk
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       # app: elasticsearch-head

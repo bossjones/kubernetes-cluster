@@ -82,7 +82,7 @@ spec:
         kubernetes.io/hostname: "k8s-node-2"
       serviceAccountName: elasticsearch-logging
       containers:
-      - image: gcr.io/google-containers/elasticsearch:v5.6.2
+      - image: k8s.gcr.io/elasticsearch:v5.6.2
         name: elasticsearch-logging
         resources:
           # need more cpu upon initialization, therefore burstable class

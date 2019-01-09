@@ -23,7 +23,7 @@ ENV MEMORY_LOCK false
 
 RUN groupmod -g ${ELASTICSEARCH_USER_ID} elasticsearch
 RUN usermod -u ${ELASTICSEARCH_USER_ID} -g ${ELASTICSEARCH_GROUP_ID} elasticsearch
-RUN chown -R elasticsearch ${ELASTICSEARCH_HOME}
+RUN chown -Rv elasticsearch:elasticsearch ${ELASTICSEARCH_HOME}
 # RUN sed -i -e 's/--userspec=1000/--userspec=${ELASTICSEARCH_USER_ID}/g' \
 #            -e 's/UID 1000/UID ${ELASTICSEARCH_USER_ID}/' \
 #            -e 's/chown -R 1000/chown -R ${ELASTICSEARCH_USER_ID}/' /usr/local/bin/docker-entrypoint.sh

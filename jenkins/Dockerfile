@@ -7,23 +7,6 @@ ENV DOCKER_VERSION=docker-ce_17.03.0~ce-0~debian-stretch_amd64.deb
 ENV docker_version=17.03.0~ce-0~debian
 ENV KUBERNETES_VERSION=v1.13.1
 
-# Ballerina runtime distribution filename.
-ARG BUILD_DATE
-ARG VCS_REF
-ARG BUILD_VERSION
-
-# Labels.
-LABEL org.label-schema.schema-version="1.0"
-LABEL org.label-schema.build-date=$BUILD_DATE
-LABEL org.label-schema.name="bossjones/jenkins"
-LABEL org.label-schema.description="Jenkins"
-LABEL org.label-schema.url="https://jenkins.io/"
-LABEL org.label-schema.vcs-url="https://github.com/jenkinsci/docker/blob/master/Dockerfile"
-LABEL org.label-schema.vcs-ref=$VCS_REF
-LABEL org.label-schema.vendor="TonyDark Industries"
-LABEL org.label-schema.version=$BUILD_VERSION
-LABEL org.label-schema.docker.cmd="docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home bossjones/jenkins:latest"
-
 USER root
 
 # Install prerequisites for Docker
@@ -162,3 +145,20 @@ ENV GID_JENKINS=1000
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
+
+# Ballerina runtime distribution filename.
+ARG BUILD_DATE
+ARG VCS_REF
+ARG BUILD_VERSION
+
+# Labels.
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.build-date=$BUILD_DATE
+LABEL org.label-schema.name="bossjones/jenkins"
+LABEL org.label-schema.description="Jenkins"
+LABEL org.label-schema.url="https://jenkins.io/"
+LABEL org.label-schema.vcs-url="https://github.com/jenkinsci/docker/blob/master/Dockerfile"
+LABEL org.label-schema.vcs-ref=$VCS_REF
+LABEL org.label-schema.vendor="TonyDark Industries"
+LABEL org.label-schema.version=$BUILD_VERSION
+LABEL org.label-schema.docker.cmd="docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home bossjones/jenkins:latest"

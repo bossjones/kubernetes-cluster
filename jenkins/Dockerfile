@@ -3,6 +3,10 @@ MAINTAINER TonyDark Jarvis <jarvis@theblacktonystark.com>
 
 LABEL maintainer="jarvis@theblacktonystark.com"
 
+ENV DOCKER_VERSION=docker-ce_17.03.0~ce-0~debian-stretch_amd64.deb
+ENV docker_version=17.03.0~ce-0~debian
+ENV KUBERNETES_VERSION=v1.13.1
+
 # Ballerina runtime distribution filename.
 ARG BUILD_DATE
 ARG VCS_REF
@@ -22,15 +26,27 @@ LABEL org.label-schema.docker.cmd="docker run -p 8080:8080 -p 50000:50000 -v jen
 
 USER root
 
-ENV DOCKER_VERSION=docker-ce_17.03.0~ce-0~debian-stretch_amd64.deb
-ENV KUBERNETES_VERSION=v1.13.1
-
 # Install prerequisites for Docker
 RUN apt-get update && apt-get install -y sudo maven iptables libsystemd-dev libsystemd0 init-system-helpers libapparmor1 libltdl7 libseccomp2 libdevmapper1.02.1 && rm -rf /var/lib/apt/lists/*
 # Set up Docker
 
-RUN wget https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/$DOCKER_VERSION
-RUN dpkg -i $DOCKER_VERSION
+RUN apt-get update && apt-get -y install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common \
+    && curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > \
+    /tmp/dkey; apt-key add /tmp/dkey \
+    && add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+    $(lsb_release -cs) \
+    stable" \
+    && apt-get update && apt-get -y install \
+    docker-ce=${docker_version}
+
+# RUN wget https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/$DOCKER_VERSION
+# RUN dpkg -i $DOCKER_VERSION
 # Set up Kubernetes
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$KUBERNETES_VERSION/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl; chown ${user}:${user} ./kubectl
@@ -138,7 +154,11 @@ RUN /usr/local/bin/install-plugins.sh workflow-support
 RUN /usr/local/bin/install-plugins.sh ws-cleanup
 RUN /usr/local/bin/install-plugins.sh xunit
 
+# USER jenkins
 
+ENV UID_JENKINS=1000
+ENV GID_JENKINS=1000
 
-USER jenkins
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]

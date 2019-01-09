@@ -77,9 +77,13 @@ spec:
         version: v5.6.2
         kubernetes.io/cluster-service: "true"
     spec:
+      volumes:
+      - name: elasticsearch-logging
+        persistentVolumeClaim:
+          claimName: elasticsearch-pvc
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
-      nodeSelector:
-        kubernetes.io/hostname: "k8s-node-2"
+      # nodeSelector:
+      #   kubernetes.io/hostname: "k8s-node-2"
       serviceAccountName: elasticsearch-logging
       containers:
       - image: k8s.gcr.io/elasticsearch:v5.6.2
@@ -91,8 +95,8 @@ spec:
             memory: 2400Mi
           requests:
             cpu: 100m
-            # memory: 2350Mi
-            memory: 2000Mi
+            memory: 2350Mi
+            # memory: 2000Mi
         ports:
         - containerPort: 9200
           name: db
@@ -122,10 +126,6 @@ spec:
         name: elasticsearch-logging-init
         securityContext:
           privileged: true
-      volumes:
-      - name: elasticsearch-logging
-        persistentVolumeClaim:
-          claimName: elasticsearch-pvc
   # volumeClaimTemplates:
   # - metadata:
   #     name: elasticsearch-logging

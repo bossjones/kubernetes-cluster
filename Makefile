@@ -1229,7 +1229,7 @@ create-efk:
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy efk$$NC\n"
 	@printf "=======================================\n"
-	kubectl create -f ./efk2/
+	kubectl create -f ./efk/
 	@echo ""
 	@echo ""
 	kubectl describe storageclass | highlight
@@ -1240,16 +1240,16 @@ apply-efk:
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy efk$$NC\n"
 	@printf "=======================================\n"
-	kubectl apply -f ./efk2/
+	kubectl apply -f ./efk/
 	@echo ""
 	@echo ""
 	kubectl describe storageclass | highlight
 
 delete-efk:
-	kubectl delete -f ./efk2/
+	kubectl delete -f ./efk/
 
 describe-efk:
-	kubectl describe -f ./efk2/ | highlight
+	kubectl describe -f ./efk/ | highlight
 
 debug-efk: describe-efk
 	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight
@@ -1262,3 +1262,34 @@ debug-efk: describe-efk
 # 	apticron atsar ethtool denyhosts rdist bzip2 xclip \
 # 	etckeeper git-core less unzip mtr-tiny curl gdebi-core \
 # 	xbase-clients rsync psmisc iperf lshw wget pastebinit
+
+
+create-efk2:
+	@printf "create-efk:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy efk$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./efk2/
+	@echo ""
+	@echo ""
+	kubectl describe storageclass | highlight
+
+# https://github.com/kubernetes/kubernetes/blob/3d7d35ee8f099f4611dca06de4453f958b4b8492/cluster/addons/storage-class/local/default.yaml
+apply-efk2:
+	@printf "create-efk:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy efk$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./efk2/
+	@echo ""
+	@echo ""
+	kubectl describe storageclass | highlight
+
+delete-efk2:
+	kubectl delete -f ./efk2/
+
+describe-efk2:
+	kubectl describe -f ./efk2/ | highlight
+
+debug-efk2: describe-efk2
+	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight

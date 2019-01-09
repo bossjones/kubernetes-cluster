@@ -34,6 +34,9 @@ spec:
         k8s-app: elasticsearch-logging
         addonmanager.kubernetes.io/mode: Reconcile
     spec:
+      # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+      nodeSelector:
+        kubernetes.io/hostname: "k8s-node-2"
       containers:
       - name: elasticsearch-logging
         image: k8s.gcr.io/elasticsearch:v5.6.2

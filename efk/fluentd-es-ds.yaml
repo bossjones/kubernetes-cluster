@@ -34,6 +34,7 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: fluentd-es
+  # FIXME: DON'T WE NEED THIS?? # namespace: kube-system
   labels:
     k8s-app: fluentd-es
     kubernetes.io/cluster-service: "true"

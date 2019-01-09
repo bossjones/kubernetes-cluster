@@ -88,8 +88,9 @@ spec:
       containers:
       - image: k8s.gcr.io/elasticsearch:v5.6.2
         securityContext:
-          runAsNonRoot: true
-          runAsUser: 65534
+          # runAsNonRoot: true
+          # runAsUser: 65534
+          privileged: true
         name: elasticsearch-logging
         resources:
           # need more cpu upon initialization, therefore burstable class

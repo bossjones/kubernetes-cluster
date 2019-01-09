@@ -5,6 +5,12 @@ kind: ServiceAccount
 metadata:
   name: metrics-server
   namespace: kube-system
+  labels:
+    k8s-app: metrics-server
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    kubernetes.io/name: "metrics-server"
+    boss-part-of: metrics-server
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -13,6 +19,10 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: metrics-server
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    kubernetes.io/name: "metrics-server"
+    boss-part-of: metrics-server
 spec:
   selector:
     matchLabels:
@@ -22,6 +32,10 @@ spec:
       name: metrics-server
       labels:
         k8s-app: metrics-server
+        kubernetes.io/cluster-service: "true"
+        addonmanager.kubernetes.io/mode: Reconcile
+        kubernetes.io/name: "metrics-server"
+        boss-part-of: metrics-server
     spec:
       serviceAccountName: metrics-server
       volumes:
@@ -38,6 +52,11 @@ spec:
       containers:
       - name: metrics-server
         image: k8s.gcr.io/metrics-server-amd64:v0.3.1
+        # image: k8s.gcr.io/metrics-server-amd64:v0.3.0
+        securityContext:
+          # runAsNonRoot: true
+          # runAsUser: 65534
+          privileged: true
         imagePullPolicy: Always
         volumeMounts:
         - name: tmp-dir

@@ -6,7 +6,11 @@ metadata:
   name: metrics-server
   namespace: kube-system
   labels:
-    kubernetes.io/name: "Metrics-server"
+    k8s-app: metrics-server
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    kubernetes.io/name: "metrics-server"
+    boss-part-of: metrics-server
 spec:
   selector:
     k8s-app: metrics-server

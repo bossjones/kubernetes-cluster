@@ -28,3 +28,7 @@ xpack.monitoring.enabled: false
 # bootstrap.memory_lock: true
 
 bootstrap.memory_lock: ${MEMORY_LOCK}
+
+# https://github.com/mobz/elasticsearch-head#running-with-built-in-server
+http.cors.enabled: true
+http.cors.allow-origin: "*"

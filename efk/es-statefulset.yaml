@@ -86,7 +86,8 @@ spec:
       #   kubernetes.io/hostname: "k8s-node-2"
       serviceAccountName: elasticsearch-logging
       containers:
-      - image: k8s.gcr.io/elasticsearch:v5.6.2
+      # - image: k8s.gcr.io/elasticsearch:v5.6.2
+      - image: bossjones/elasticsearch:v5.6.2
         securityContext:
           # runAsNonRoot: true
           # runAsUser: 65534
@@ -107,6 +108,9 @@ spec:
           protocol: TCP
         - containerPort: 9300
           name: transport
+          protocol: TCP
+        - containerPort: 9100
+          name: jmx
           protocol: TCP
         volumeMounts:
         - name: elasticsearch-logging

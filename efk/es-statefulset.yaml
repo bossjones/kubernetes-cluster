@@ -91,7 +91,8 @@ spec:
             memory: 2400Mi
           requests:
             cpu: 100m
-            memory: 2350Mi
+            # memory: 2350Mi
+            memory: 2000Mi
         ports:
         - containerPort: 9200
           name: db
@@ -110,8 +111,11 @@ spec:
         - name: MINIMUM_MASTER_NODES
           value: "1"
         - name: ES_JAVA_OPTS
+          value: "-Xms1024m -Xmx1024m"
+          # value: "-Xms256m -Xmx256m"
+        - name: ES_HEAP_SIZE
           # value: "-Xms1024m -Xmx1024m"
-          value: "-Xms256m -Xmx256m"
+          value: "1g"
       initContainers:
       - image: alpine:3.6
         command: ["/sbin/sysctl", "-w", "vm.max_map_count=262144"]

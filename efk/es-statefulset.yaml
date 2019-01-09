@@ -125,11 +125,11 @@ spec:
         - name: ES_JAVA_OPTS
           value: "-Xms1024m -Xmx1024m"
           # value: "-Xms256m -Xmx256m"
-        - name: ES_HEAP_SIZE
-          # value: "-Xms1024m -Xmx1024m"
-          value: "1g"
-          # chmod g+rwx esdatadir
-          # chgrp 1000 esdatadir
+        # - name: ES_HEAP_SIZE
+        #   # value: "-Xms1024m -Xmx1024m"
+        #   value: "1g"
+        #   # chmod g+rwx esdatadir
+        #   # chgrp 1000 esdatadir
       initContainers:
       - image: alpine:3.6
         command: ["/sbin/sysctl", "-w", "vm.max_map_count=262144"]

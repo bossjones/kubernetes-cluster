@@ -4,127 +4,128 @@ bossjones/vagrant-cluster-ubuntu
 workflow-aggregator
 
 jenkins_plugins:
-- git
-- log-parser
-- copyartifact
-- workflow-aggregator
-- workflow-multibranch
-- docker-workflow
-- template-project
-- ec2
+RUN /usr/local/bin/install-plugins.sh git
+RUN /usr/local/bin/install-plugins.sh log-parser
+RUN /usr/local/bin/install-plugins.sh copyartifact
+RUN /usr/local/bin/install-plugins.sh workflow-aggregator
+RUN /usr/local/bin/install-plugins.sh workflow-multibranch
+RUN /usr/local/bin/install-plugins.sh docker-workflow
+RUN /usr/local/bin/install-plugins.sh template-project
+RUN /usr/local/bin/install-plugins.sh ec2
+RUN /usr/local/bin/install-plugins.sh blueocean
 
 
 
 
 
 behance_plugins:
-- github-branch-source
-- pipeline-github-lib
-- workflow-multibranch
-- docker-workflow
-- maven-plugin
-- pipeline-stage-tags-metadata
-- slack
-- git-client
-- scm-api
-- join
-- pipeline-stage-step
-- github
-- windows-slaves
-- build-timeout
-- parameterized-trigger
-- mailer
-- xunit
-- workflow-scm-step
-- ws-cleanup
-- token-macro
-- thinBackup
-- run-condition
-- aws-java-sdk
-- momentjs
-- pipeline-build-step
-- pipeline-stage-view
-- pipeline-model-definition
-- extra-columns
-- sauce-ondemand
-- bouncycastle-api
-- build-user-vars-plugin
-- javadoc
-- pam-auth
-- docker-commons
-- jquery-detached
-- ace-editor
-- icon-shim
-- workflow-durable-task-step
-- ssh-credentials
-- datadog
-- workflow-job
-- workflow-basic-steps
-- jsch
-- github-api
-- cvs
-- matrix-reloaded
-- workflow-cps
-- matrix-auth
-- script-security
-- external-monitor-job
-- nodelabelparameter
-- Hudson
-- pipeline-milestone-step
-- scriptler
-- notification
-- ldap
-- handlebars
-- build-blocker-plugin
-- pipeline-model-extensions
-- aws-credentials
-- workflow-cps-global-lib
-- workflow-support
-- antisamy-markup-formatter
-- pipeline-rest-api
-- conditional-buildstep
-- pipeline-model-api
-- template-project
-- pipeline-input-step
-- git-server
-- ssh-agent
-- build-environment
-- matrix-combinations-parameter
-- credentials-binding
-- ghprb
-- workflow-aggregator
-- credentials
-- greenballs
-- workflow-step-api
-- plain-credentials
-- command-launcher
-- jquery
-- matrix-project
-- text-finder-run-condition
-- mesos
-- git
-- authentication-tokens
-- cloudbees-folder
-- durable-task
-- timestamper
-- junit
-- pipeline-graph-analysis
-- structs
-- ant
-- mapdb-api
-- ssh-slaves
-- ansicolor
-- github-organization-folder
-- node-iterator-api
-- envinject
-- subversion
-- copy-to-slave
-- display-url-api
-- translation
-- envinject-api
-- pipeline-model-declarative-agent
-- branch-api
-- workflow-api
+RUN /usr/local/bin/install-plugins.sh github-branch-source
+RUN /usr/local/bin/install-plugins.sh pipeline-github-lib
+RUN /usr/local/bin/install-plugins.sh workflow-multibranch
+RUN /usr/local/bin/install-plugins.sh docker-workflow
+RUN /usr/local/bin/install-plugins.sh maven-plugin
+RUN /usr/local/bin/install-plugins.sh pipeline-stage-tags-metadata
+RUN /usr/local/bin/install-plugins.sh slack
+RUN /usr/local/bin/install-plugins.sh git-client
+RUN /usr/local/bin/install-plugins.sh scm-api
+RUN /usr/local/bin/install-plugins.sh join
+RUN /usr/local/bin/install-plugins.sh pipeline-stage-step
+RUN /usr/local/bin/install-plugins.sh github
+RUN /usr/local/bin/install-plugins.sh windows-slaves
+RUN /usr/local/bin/install-plugins.sh build-timeout
+RUN /usr/local/bin/install-plugins.sh parameterized-trigger
+RUN /usr/local/bin/install-plugins.sh mailer
+RUN /usr/local/bin/install-plugins.sh xunit
+RUN /usr/local/bin/install-plugins.sh workflow-scm-step
+RUN /usr/local/bin/install-plugins.sh ws-cleanup
+RUN /usr/local/bin/install-plugins.sh token-macro
+RUN /usr/local/bin/install-plugins.sh thinBackup
+RUN /usr/local/bin/install-plugins.sh run-condition
+RUN /usr/local/bin/install-plugins.sh aws-java-sdk
+RUN /usr/local/bin/install-plugins.sh momentjs
+RUN /usr/local/bin/install-plugins.sh pipeline-build-step
+RUN /usr/local/bin/install-plugins.sh pipeline-stage-view
+RUN /usr/local/bin/install-plugins.sh pipeline-model-definition
+RUN /usr/local/bin/install-plugins.sh extra-columns
+RUN /usr/local/bin/install-plugins.sh sauce-ondemand
+RUN /usr/local/bin/install-plugins.sh bouncycastle-api
+RUN /usr/local/bin/install-plugins.sh build-user-vars-plugin
+RUN /usr/local/bin/install-plugins.sh javadoc
+RUN /usr/local/bin/install-plugins.sh pam-auth
+RUN /usr/local/bin/install-plugins.sh docker-commons
+RUN /usr/local/bin/install-plugins.sh jquery-detached
+RUN /usr/local/bin/install-plugins.sh ace-editor
+RUN /usr/local/bin/install-plugins.sh icon-shim
+RUN /usr/local/bin/install-plugins.sh workflow-durable-task-step
+RUN /usr/local/bin/install-plugins.sh ssh-credentials
+RUN /usr/local/bin/install-plugins.sh datadog
+RUN /usr/local/bin/install-plugins.sh workflow-job
+RUN /usr/local/bin/install-plugins.sh workflow-basic-steps
+RUN /usr/local/bin/install-plugins.sh jsch
+RUN /usr/local/bin/install-plugins.sh github-api
+RUN /usr/local/bin/install-plugins.sh cvs
+RUN /usr/local/bin/install-plugins.sh matrix-reloaded
+RUN /usr/local/bin/install-plugins.sh workflow-cps
+RUN /usr/local/bin/install-plugins.sh matrix-auth
+RUN /usr/local/bin/install-plugins.sh script-security
+RUN /usr/local/bin/install-plugins.sh external-monitor-job
+RUN /usr/local/bin/install-plugins.sh nodelabelparameter
+RUN /usr/local/bin/install-plugins.sh Hudson
+RUN /usr/local/bin/install-plugins.sh pipeline-milestone-step
+RUN /usr/local/bin/install-plugins.sh scriptler
+RUN /usr/local/bin/install-plugins.sh notification
+RUN /usr/local/bin/install-plugins.sh ldap
+RUN /usr/local/bin/install-plugins.sh handlebars
+RUN /usr/local/bin/install-plugins.sh build-blocker-plugin
+RUN /usr/local/bin/install-plugins.sh pipeline-model-extensions
+RUN /usr/local/bin/install-plugins.sh aws-credentials
+RUN /usr/local/bin/install-plugins.sh workflow-cps-global-lib
+RUN /usr/local/bin/install-plugins.sh workflow-support
+RUN /usr/local/bin/install-plugins.sh antisamy-markup-formatter
+RUN /usr/local/bin/install-plugins.sh pipeline-rest-api
+RUN /usr/local/bin/install-plugins.sh conditional-buildstep
+RUN /usr/local/bin/install-plugins.sh pipeline-model-api
+RUN /usr/local/bin/install-plugins.sh template-project
+RUN /usr/local/bin/install-plugins.sh pipeline-input-step
+RUN /usr/local/bin/install-plugins.sh git-server
+RUN /usr/local/bin/install-plugins.sh ssh-agent
+RUN /usr/local/bin/install-plugins.sh build-environment
+RUN /usr/local/bin/install-plugins.sh matrix-combinations-parameter
+RUN /usr/local/bin/install-plugins.sh credentials-binding
+RUN /usr/local/bin/install-plugins.sh ghprb
+RUN /usr/local/bin/install-plugins.sh workflow-aggregator
+RUN /usr/local/bin/install-plugins.sh credentials
+RUN /usr/local/bin/install-plugins.sh greenballs
+RUN /usr/local/bin/install-plugins.sh workflow-step-api
+RUN /usr/local/bin/install-plugins.sh plain-credentials
+RUN /usr/local/bin/install-plugins.sh command-launcher
+RUN /usr/local/bin/install-plugins.sh jquery
+RUN /usr/local/bin/install-plugins.sh matrix-project
+RUN /usr/local/bin/install-plugins.sh text-finder-run-condition
+RUN /usr/local/bin/install-plugins.sh mesos
+RUN /usr/local/bin/install-plugins.sh git
+RUN /usr/local/bin/install-plugins.sh authentication-tokens
+RUN /usr/local/bin/install-plugins.sh cloudbees-folder
+RUN /usr/local/bin/install-plugins.sh durable-task
+RUN /usr/local/bin/install-plugins.sh timestamper
+RUN /usr/local/bin/install-plugins.sh junit
+RUN /usr/local/bin/install-plugins.sh pipeline-graph-analysis
+RUN /usr/local/bin/install-plugins.sh structs
+RUN /usr/local/bin/install-plugins.sh ant
+RUN /usr/local/bin/install-plugins.sh mapdb-api
+RUN /usr/local/bin/install-plugins.sh ssh-slaves
+RUN /usr/local/bin/install-plugins.sh ansicolor
+RUN /usr/local/bin/install-plugins.sh github-organization-folder
+RUN /usr/local/bin/install-plugins.sh node-iterator-api
+RUN /usr/local/bin/install-plugins.sh envinject
+RUN /usr/local/bin/install-plugins.sh subversion
+RUN /usr/local/bin/install-plugins.sh copy-to-slave
+RUN /usr/local/bin/install-plugins.sh display-url-api
+RUN /usr/local/bin/install-plugins.sh translation
+RUN /usr/local/bin/install-plugins.sh envinject-api
+RUN /usr/local/bin/install-plugins.sh pipeline-model-declarative-agent
+RUN /usr/local/bin/install-plugins.sh branch-api
+RUN /usr/local/bin/install-plugins.sh workflow-api
 
 
 

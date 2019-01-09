@@ -88,6 +88,7 @@ EOF
     # TODO: Put into playbook
     echo "65535" | sudo tee /proc/sys/fs/file-max
     echo "session required pam_limits.so" | sudo tee -a /etc/pam.d/common-session
+
     sudo sysctl -w vm.min_free_kbytes=1024000
     sudo sync; sudo sysctl -w vm.drop_caches=3; sudo sync
 SCRIPT

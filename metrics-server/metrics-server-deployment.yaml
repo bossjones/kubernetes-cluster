@@ -52,6 +52,12 @@ spec:
       containers:
       - name: metrics-server
         image: k8s.gcr.io/metrics-server-amd64:v0.3.1
+        command:
+        - /metrics-server
+        - --kubelet-preferred-address-types=InternalIP
+        - --kubelet-insecure-tls
+        - --logtostderr
+        - --v=2
         # image: k8s.gcr.io/metrics-server-amd64:v0.3.0
         securityContext:
           # runAsNonRoot: true

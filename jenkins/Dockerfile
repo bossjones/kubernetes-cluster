@@ -4,7 +4,7 @@ MAINTAINER TonyDark Jarvis <jarvis@theblacktonystark.com>
 LABEL maintainer="jarvis@theblacktonystark.com"
 
 ENV DOCKER_VERSION=docker-ce_17.03.0~ce-0~debian-stretch_amd64.deb
-ENV docker_version=17.03.0~ce-0~debian
+ENV docker_version=17.03.0~ce-0~debian-stretch
 ENV KUBERNETES_VERSION=v1.13.1
 
 USER root
@@ -25,8 +25,8 @@ RUN apt-get update && apt-get -y install \
     "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
     $(lsb_release -cs) \
     stable" \
-    && apt-get update && apt-get -y install \
-    docker-ce=${docker_version}
+    && apt-get update && apt-cache madison docker-ce && \
+    apt-get -y install docker-ce=${docker_version}
 
 # RUN wget https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/$DOCKER_VERSION
 # RUN dpkg -i $DOCKER_VERSION

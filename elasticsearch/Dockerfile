@@ -17,8 +17,8 @@ ELASTICSEARCH_USER_ID="65534" \
 ELASTICSEARCH_GROUP_ID="65534" \
 MEMORY_LOCK=false
 
-# Kubernetes requires swap is turned off, so memory lock is redundant
-ENV MEMORY_LOCK false
+# # Kubernetes requires swap is turned off, so memory lock is redundant
+# ENV MEMORY_LOCK false
 # nobody:x:99:
 
 RUN groupmod -g ${ELASTICSEARCH_USER_ID} elasticsearch

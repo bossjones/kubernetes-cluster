@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Run kibana and allow setting default settings via env vars
+#
+# e.g. Setting the env var kibana.index=.mykibanaindex
+#
+# will cause Kibana to be invoked with --kibana.index=.mykibanaindex
+#
+# see https://www.elastic.co/guide/en/kibana/current/settings.html
+
+declare -a kibana_opts
+
+while IFS='=' read -r envvar_key envvar_value
+do
+    # Kibana env vars need to have at least two dot separated lowercase words, e.g. `kibana.index`
+    if [[ "$envvar_key" =~ ^[a-z_]+\.[a-z_]+ ]]
+    then
+        if [[ ! -z $envvar_value ]]; then
+          kibana_opt="--${envvar_key}=${envvar_value}"
+          kibana_opts+=("${kibana_opt}")
+        fi
+    fi
+done < <(env)
+
+exec bin/kibana "${kibana_opts[@]}"

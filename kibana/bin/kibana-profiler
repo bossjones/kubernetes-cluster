@@ -1,0 +1,8 @@
+#!/bin/bash
+
+npm install -g stackvis
+npm install -g ctrace
+
+# https://nodejs.org/en/blog/uncategorized/profiling-node-js/
+
+# https://github.com/automation-stack/ctrace

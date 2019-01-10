@@ -23,6 +23,7 @@ spec:
         kubernetes.io/hostname: "k8s-node-1"
       containers:
       - name: kibana-logging
+        imagePullPolicy: Always
         # image: docker.elastic.co/kibana/kibana:5.6.2
         image: bossjones/kibana:5.6.2
         resources:

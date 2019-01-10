@@ -40,6 +40,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: heapster
+  namespace: kube-system
+  labels:
+    k8s-app: heapster
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    boss-part-of: heapster
 rules:
 - apiGroups:
   - ""
@@ -120,12 +126,14 @@ metadata:
   name: heapster
   namespace: kube-system
   labels:
+    addonmanager.kubernetes.io/mode: Reconcile
     app: heapster
+    boss-part-of: heapster
     chart: heapster-0.3.2
     heritage: Tiller
-    release: heapster
+    k8s-app: heapster
     kubernetes.io/cluster-service: "true"
-    addonmanager.kubernetes.io/mode: Reconcile
+    release: heapsters
 ---
 # SOURCE: https://github.com/kubernetes/kubernetes/blob/v1.13.1/cluster/addons/cluster-monitoring/influxdb/heapster-controller.yaml
 apiVersion: v1
@@ -134,8 +142,10 @@ metadata:
   name: heapster-config
   namespace: kube-system
   labels:
+    k8s-app: heapster
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: EnsureExists
+    boss-part-of: heapster
 data:
   NannyConfiguration: |-
     apiVersion: nannyconfig/v1alpha1
@@ -147,9 +157,14 @@ kind: ConfigMap
 metadata:
   name: eventer-config
   namespace: kube-system
+  # labels:
+  #   kubernetes.io/cluster-service: "true"
+  #   addonmanager.kubernetes.io/mode: Reconcile
   labels:
+    k8s-app: heapster
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: EnsureExists
+    boss-part-of: heapster
 data:
   NannyConfiguration: |-
     apiVersion: nannyconfig/v1alpha1
@@ -162,12 +177,16 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: heapster
+  namespace: kube-system
   labels:
+    addonmanager.kubernetes.io/mode: Reconcile
     app: heapster
+    boss-part-of: heapster
     chart: heapster-0.3.2
     heritage: Tiller
-    release: heapster
+    k8s-app: heapster
     kubernetes.io/cluster-service: "true"
+    release: heapsters
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -184,10 +203,14 @@ metadata:
   name: heapster-pod-nanny
   namespace: kube-system
   labels:
+    addonmanager.kubernetes.io/mode: Reconcile
     app: heapster
+    boss-part-of: heapster
     chart: heapster-0.3.2
     heritage: Tiller
-    release: heapster
+    k8s-app: heapster
+    kubernetes.io/cluster-service: "true"
+    release: heapsters
 rules:
 - apiGroups:
   - ""
@@ -223,10 +246,14 @@ metadata:
   name: heapster-pod-nanny
   namespace: kube-system
   labels:
+    addonmanager.kubernetes.io/mode: Reconcile
     app: heapster
+    boss-part-of: heapster
     chart: heapster-0.3.2
     heritage: Tiller
-    release: heapster
+    k8s-app: heapster
+    kubernetes.io/cluster-service: "true"
+    release: heapsters
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -241,6 +268,15 @@ kind: RoleBinding
 metadata:
   name: heapster
   namespace: kube-system
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+    app: heapster
+    boss-part-of: heapster
+    chart: heapster-0.3.2
+    heritage: Tiller
+    k8s-app: heapster
+    kubernetes.io/cluster-service: "true"
+    release: heapsters
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -258,10 +294,14 @@ metadata:
   namespace: kube-system
   labels:
     kubernetes.io/name: Heapster
-    chart: "heapster-0.3.2"
+    addonmanager.kubernetes.io/mode: Reconcile
     app: heapster
-    heritage: "Tiller"
-    release: "heapster"
+    boss-part-of: heapster
+    chart: heapster-0.3.2
+    heritage: Tiller
+    k8s-app: heapster
+    kubernetes.io/cluster-service: "true"
+    release: heapsters
 spec:
   type: ClusterIP
   ports:
@@ -283,10 +323,16 @@ metadata:
   #   {}
   annotations:
       seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
-
   labels:
-    k8s-app: heapster
+    addonmanager.kubernetes.io/mode: Reconcile
+    app: heapster
+    boss-part-of: heapster
     chart: "heapster-0.3.2"
+    heritage: Tiller
+    k8s-app: heapster
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: Heapster
+    release: heapsters
     version: v1.5.4
 spec:
   replicas: 1
@@ -297,10 +343,17 @@ spec:
       annotations:
         # scheduler.alpha.kubernetes.io/critical-pod: ''
         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
-
       labels:
+        addonmanager.kubernetes.io/mode: Reconcile
         app: heapster
+        boss-part-of: heapster
+        chart: "heapster-0.3.2"
+        heritage: Tiller
         k8s-app: heapster
+        kubernetes.io/cluster-service: "true"
+        kubernetes.io/name: Heapster
+        release: heapsters
+        version: v1.5.4
     spec:
       serviceAccountName: heapster
       # securityContext:
@@ -311,6 +364,10 @@ spec:
         # DISABLED: 1/5/2018 # image: "k8s.gcr.io/heapster:v1.5.2"
         image: "k8s.gcr.io/heapster-amd64:v1.5.4"
         imagePullPolicy: IfNotPresent
+        securityContext:
+          # runAsNonRoot: true
+          # runAsUser: 65534
+          privileged: true
         ports:
         - containerPort: 8082
         livenessProbe:
@@ -341,6 +398,10 @@ spec:
 
         image: "k8s.gcr.io/addon-resizer:1.7"
         imagePullPolicy: IfNotPresent
+        securityContext:
+          # runAsNonRoot: true
+          # runAsUser: 65534
+          privileged: true
         resources:
             limits:
               cpu: 50m

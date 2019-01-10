@@ -70,6 +70,8 @@ kubectl apply -f /vagrant/addon/traefik-ingress/
 # Official CLI Order ( tested )
 ---
 * make allow-scheduling-on-master
+* make generate-certs-dashboard
+* make apply-certs-dashboard
 * make create-dashboard
 * make describe-dashboard
 * make debug-cluster

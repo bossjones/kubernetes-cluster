@@ -1037,7 +1037,18 @@ generate-certs-traefik:
 # SOURCE: https://github.com/kubernetes/dashboard/wiki/Installation#recommended-setup
 generate-certs-dashboard:
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard-ssl/certs/tls.key -out dashboard-ssl/certs/tls.crt -subj "/CN=*.scarlettlab.com"
-	kubectl create secret generic kubernetes-dashboard-certs --from-file=dashboard-ssl/certs -n kube-system
+
+apply-certs-dashboard:
+	@printf "kubectl apply secret generic kubernetes-dashboard-certs:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN kubectl apply secret generic kubernetes-dashboard-certs --from-file=dashboard-ssl/certs -n kube-system $$NC\n"
+	@printf "=======================================\n"
+	kubectl apply secret generic kubernetes-dashboard-certs --from-file=dashboard-ssl/certs -n kube-system | highlight
+	@printf "apply-certs-dashboard:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN apply-certs-dashboard role $$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./dashboard-ssl/ | highlight
 
 generate-htpasswd:
 	@htpasswd -nb ${_HTPASSWD_USER} ${_HTPASSWD_PASS}

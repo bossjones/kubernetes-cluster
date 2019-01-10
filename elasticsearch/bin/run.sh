@@ -36,10 +36,14 @@ export DEFAULT_ES_JAVA_INITIAL_HEAP_SIZE=${DEFAULT_ES_JAVA_INITIAL_HEAP_SIZE:--X
 export DEFAULT_ES_JAVA_MAX_HEAP_SIZE=${DEFAULT_ES_JAVA_MAX_HEAP_SIZE:--Xmx2g}
 export ELASTICSEARCH_HOME=${ELASTICSEARCH_HOME:-/usr/share/elasticsearch}
 
-chown -R elasticsearch:elasticsearch /data
+chown -Rv elasticsearch:elasticsearch /data
 
 sed -i -e "s@\\-Xms2g@${DEFAULT_ES_JAVA_INITIAL_HEAP_SIZE}@g" $ELASTICSEARCH_HOME/config/jvm.options
 sed -i -e "s@\\-Xmx2g@${DEFAULT_ES_JAVA_INITIAL_HEAP_SIZE}@g" $ELASTICSEARCH_HOME/config/jvm.options
 
 ./bin/elasticsearch_logging_discovery >> ./config/elasticsearch.yml
+chown -Rv elasticsearch:elasticsearch ./config/elasticsearch.yml
+
+tree
+
 exec su elasticsearch -c ./bin/es-docker

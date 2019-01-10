@@ -4,6 +4,7 @@
 
 # source: https://botleg.com/stories/log-management-of-docker-swarm-with-elk-stack/
 
+export DNS_DOMAIN=${DNS_DOMAIN:-scarlettlab.com}
 export DNS_KIBANA="kibana.${DNS_DOMAIN}"
 export URL_BASE="http://${DNS_KIBANA}/api/kibana/dashboards/import?force=true"
 

@@ -88,6 +88,7 @@ spec:
       containers:
       # - image: k8s.gcr.io/elasticsearch:v5.6.2
       - image: bossjones/elasticsearch:v5.6.2
+        imagePullPolicy: Always
         securityContext:
           # runAsNonRoot: true
           # runAsUser: 65534

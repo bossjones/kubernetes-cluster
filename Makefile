@@ -1034,6 +1034,11 @@ generate-certs-traefik:
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-traefik/certs/tls.key -out ingress-traefik/certs/tls.crt -subj "/CN=*.scarlettlab.com"
 # kubectl -n traefik create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
 
+# SOURCE: https://github.com/kubernetes/dashboard/wiki/Installation#recommended-setup
+generate-certs-dashboard:
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard-ssl/certs/tls.key -out dashboard-ssl/certs/tls.crt -subj "/CN=*.scarlettlab.com"
+	kubectl create secret generic kubernetes-dashboard-certs --from-file=dashboard-ssl/certs -n kube-system
+
 generate-htpasswd:
 	@htpasswd -nb ${_HTPASSWD_USER} ${_HTPASSWD_PASS}
 

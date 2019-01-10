@@ -19,40 +19,21 @@
 # Note that fluentd is run with root permssion to allow access to
 # log files with root only access under /var/log/containers/*
 
-FROM debian:stretch-slim
+# FROM debian:stretch-slim
+FROM gcr.io/google-containers/fluentd-elasticsearch:v2.0.1
 
-ARG DEBIAN_FRONTEND=noninteractive
+ENV RBSPY_RELEASE="https://github.com/rbspy/rbspy/releases/download/v0.3.3/rbspy-v0.3.3-x86_64-unknown-linux-musl.tar.gz"
 
-COPY clean-apt /usr/bin
-COPY clean-install /usr/bin
-COPY Gemfile /Gemfile
+RUN apt-get install -y sudo vim tar wget \
+    && clean-apt && \
+    wget -O /tmp/rbspy.tar.gz "${RBSPY_RELEASE}" \
+    && mkdir -p /opt/rbspy \
+    && tar -xvzf /tmp/rbspy.tar.gz -C /opt/rbspy
 
-# 1. Install & configure dependencies.
-# 2. Install fluentd via ruby.
-# 3. Remove build dependencies.
-# 4. Cleanup leftover caches & files.
-RUN BUILD_DEPS="make gcc g++ libc6-dev ruby-dev libffi-dev" \
-    && clean-install $BUILD_DEPS \
-                     ca-certificates \
-                     libjemalloc1 \
-                     ruby \
-    && echo 'gem: --no-document' >> /etc/gemrc \
-    && gem install --file Gemfile \
-    && apt-get purge -y --auto-remove \
-                     -o APT::AutoRemove::RecommendsImportant=false \
-                     $BUILD_DEPS \
-    && clean-apt \
-    # Ensure fluent has enough file descriptors
-    && ulimit -n 65536
+# RUN https://github.com/rbspy/rbspy/releases/download/v0.3.3/rbspy-v0.3.3-x86_64-unknown-linux-musl.tar.gz
 
-# Copy the Fluentd configuration file for logging Docker container logs.
-COPY fluent.conf /etc/fluent/fluent.conf
-COPY run.sh /run.sh
+# RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh
 
-# Expose prometheus metrics.
-EXPOSE 80
-
-ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.1
-
-# Start Fluentd to pick up our config that watches Docker container logs.
-CMD /run.sh $FLUENTD_ARGS
+# git clone https://github.com/rbspy/rbspy
+# cd rbspy
+# cargo install

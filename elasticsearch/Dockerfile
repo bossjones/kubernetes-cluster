@@ -36,7 +36,7 @@ RUN chown -Rv elasticsearch:elasticsearch ${ELASTICSEARCH_HOME}
 # bootstrap:
 #     memory_lock: ${MEMORY_LOCK}
 
-RUN yum install sudo vim wget tar -y; yum clean all; yum clean metadata
+RUN yum install sudo vim wget tar tree -y; yum clean all; yum clean metadata
 
 # Install jvmtop
 RUN wget -O /tmp/jvmtop.gz "${JVMTOP_RELEASE}" \

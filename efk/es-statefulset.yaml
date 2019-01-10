@@ -110,7 +110,7 @@ spec:
         - containerPort: 9300
           name: transport
           protocol: TCP
-        - containerPort: 9100
+        - containerPort: 1099
           name: jmx
           protocol: TCP
         volumeMounts:

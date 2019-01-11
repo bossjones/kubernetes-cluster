@@ -338,10 +338,17 @@ graph-inventory-view:
 pip-install-pygments:
 	pip install Pygments
 
+multi-ssh-homelab:
+	i2cssh -XF=~/dev/bossjones/kubernetes-cluster/ssh_config.borg -Xi=~/.ssh/vagrant_id_rsa borg-homelab
+
 multi-ssh-vagrant:
 	i2cssh -XF=~/dev/bossjones/kubernetes-cluster/ssh_config -Xi=~/.ssh/vagrant_id_rsa vagrant-kube
 
 i2cssh-vagrant: multi-ssh-vagrant
+
+i2cssh-borg: multi-ssh-homelab
+
+borg-ssh: multi-ssh-homelab
 
 # open-netdata-registry:
 # 	./scripts/open-browser.py $(URL_PATH_NETDATA_REGISTRY)

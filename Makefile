@@ -1031,6 +1031,12 @@ kail-no-calico:
 	@printf "=======================================\n"
 	kail --ns kube-system --ignore k8s-app=calico-node | pv -pterbTCB 20k | ccze -A
 
+kail:
+	@printf "=======================================\n"
+	@printf "$$GREEN Add a big buffer to a pipe between two commands - https://stackoverflow.com/questions/8554568/add-a-big-buffer-to-a-pipe-between-two-commands:$$NC\n"
+	@printf "=======================================\n"
+	kail --ns kube-system | pv -pterbTCB 20k | ccze -A
+
 export:
 	-rm -rfv dump/
 	-rm -rfv dump_json_exports/
@@ -1323,6 +1329,8 @@ describe-efk2:
 debug-efk2: describe-efk2
 	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight
 
+# SOURCE: https://github.com/projectcalico/calico/blob/v3.1.3/v3.1/getting-started/kubernetes/tutorials/stars-policy/index.md
+#
 create-calico-ui:
 	@printf "create-calico-ui:\n"
 	@printf "=======================================\n"
@@ -1351,3 +1359,34 @@ describe-calico-ui:
 
 debug-calico-ui: describe-calico-ui
 	kubectl -n kube-system get pod -l app=calico-ui --output=yaml | highlight
+
+# SOURCE: https://github.com/projectcalico/calico/blob/v3.1.3/v3.1/getting-started/kubernetes/tutorials/stars-policy/index.md
+#
+create-calico:
+	@printf "create-calico:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./calico/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico --watch | highlight
+
+apply-calico:
+	@printf "create-calico:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./calico/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico --watch
+
+delete-calico:
+	kubectl delete -f ./calico/
+
+describe-calico:
+	kubectl describe -f ./calico/ | highlight
+
+debug-calico: describe-calico
+	kubectl -n kube-system get pod -l app=calico --output=yaml | highlight

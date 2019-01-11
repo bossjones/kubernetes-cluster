@@ -75,6 +75,12 @@ MAKE := make
 
 list_allowed_args := product ip command role tier
 
+ifeq (${OS}, Windows_NT)
+    DETECTED_OS := Windows
+else
+    DETECTED_OS := $(shell uname -s)
+endif
+
 default: all
 
 all: galaxy
@@ -1316,3 +1322,32 @@ describe-efk2:
 
 debug-efk2: describe-efk2
 	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight
+
+create-calico-ui:
+	@printf "create-calico-ui:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico-ui$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./calico-ui/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico-ui --watch | highlight
+
+apply-calico-ui:
+	@printf "create-calico-ui:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico-ui$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./calico-ui/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico-ui --watch
+
+delete-calico-ui:
+	kubectl delete -f ./calico-ui/
+
+describe-calico-ui:
+	kubectl describe -f ./calico-ui/ | highlight
+
+debug-calico-ui: describe-calico-ui
+	kubectl -n kube-system get pod -l app=calico-ui --output=yaml | highlight

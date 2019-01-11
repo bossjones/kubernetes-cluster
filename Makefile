@@ -2,7 +2,7 @@
 MAKEFLAGS += --warn-undefined-variables
 # .SHELLFLAGS := -eu -o pipefail
 
-DNSMASQ_DOMAIN         := scarlettlab.com
+DNSMASQ_DOMAIN         := hyenaclan.org
 # URL_PATH_MONGO_EXPRESS := 8081
 # URL_PATH_FLASK_APP     := 8888
 # URL_PATH_UWSGI_STATS   := 9191
@@ -11,9 +11,9 @@ DNSMASQ_DOMAIN         := scarlettlab.com
 # URL_PATH_TRAEFIK       := 80
 # URL_PATH_TRAEFIK_API   := 8080
 URL_PATH_ARA              := "http://127.0.0.1:9191"
-URL_PATH_NETDATA_MASTER1  := "http://k8s-head.hyenalab.home:19999"
-URL_PATH_NETDATA_WORKER1  := "http://k8s-node-1.hyenalab.home:19999"
-URL_PATH_NETDATA_WORKER2  := "http://k8s-node-2.hyenalab.home:19999"
+URL_PATH_NETDATA_MASTER1  := "http://borg-queen-01.scarlettlab.home:19999"
+URL_PATH_NETDATA_WORKER1  := "http://borg-worker-01.scarlettlab.home:19999"
+URL_PATH_NETDATA_WORKER2  := "http://borg-worker-02.scarlettlab.home:19999"
 
 URL_PATH_NETDATA_REGISTRY  := "http://rsyslogd-master-01.$(DNSMASQ_DOMAIN):19999"
 URL_PATH_NETDATA_NODE      := "http://rsyslogd-worker-01.$(DNSMASQ_DOMAIN):19999"
@@ -172,7 +172,7 @@ provision:
 	@bash ./scripts/up.sh
 	vagrant sandbox commit
 	vagrant reload
-	ansible-playbook -i inventory.ini vagrant_playbook.yml -v
+	time ansible-playbook -i inventory.ini vagrant_playbook.yml -v
 
 up:
 	@bash ./scripts/up.sh
@@ -191,66 +191,66 @@ destroy:
 	@vagrant destroy -f
 
 run-ansible:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v
 
 run-ansible-nfs:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_nfs.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_nfs.yml -v
 
 run-ansible-influxdb:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_influxdb_opentsdb.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_influxdb_opentsdb.yml -v
 
 run-ansible-list-tags:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --list-tasks
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --list-tasks
 
 run-ansible-rsyslogd:
-	@ansible-playbook -i inventory.ini rsyslogd_playbook.yml -v
+	@time ansible-playbook -i inventory.ini rsyslogd_playbook.yml -v
 
 run-ansible-etckeeper:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags etckeeper
+	@time ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags etckeeper
 
 run-ansible-rvm:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags 'ruby'
+	@time ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags 'ruby'
 
 run-ansible-ruby: run-ansible-rvm
 
 # For performance tuning/measuring
 run-ansible-netdata:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_netdata.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_netdata.yml -v
 
 # For performance tuning/measuring
 run-ansible-tuning:
-	@ansible-playbook -i inventory.ini tuning.yml -v
+	@time ansible-playbook -i inventory.ini tuning.yml -v
 
 run-ansible-perf: run-ansible-tuning
 
 run-ansible-tools:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_tools.yml -f 10 -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_tools.yml -f 10 -v
 
 run-ansible-repos:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_repos.yml -f 10 -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_repos.yml -f 10 -v
 
 run-ansible-modprobe:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_modprode.yml -f 10 -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_modprode.yml -f 10 -v
 
 run-ansible-goss:
-	@ansible-playbook -i inventory.ini tools.yml -v -f 10 --tags goss
+	@time ansible-playbook -i inventory.ini tools.yml -v -f 10 --tags goss
 
 run-ansible-docker:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --tags docker-provision --flush-cache
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --tags docker-provision --flush-cache
 
 run-ansible-master:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v --tags primary_master
+	@time ansible-playbook -i inventory.ini vagrant_playbook.yml -v --tags primary_master
 
 run-ansible-timezone:
-	@ansible-playbook -i inventory.ini timezone.yml -v
+	@time ansible-playbook -i inventory.ini timezone.yml -v
 
 converge: up run-ansible-modprobe run-ansible run-ansible-tools
 
 ping:
-	@ansible-playbook -v -i inventory.ini ping.yml -v
+	@time ansible-playbook -v -i inventory.ini ping.yml -v
 
 ansible-run-dynamic-debug:
-	@ansible-playbook -v -i inventory.ini dynamic_vars.yml
+	@time ansible-playbook -v -i inventory.ini dynamic_vars.yml
 
 # [ANSIBLE0013] Use shell only when shell functionality is required
 ansible-lint-role:
@@ -284,28 +284,28 @@ ssh-bridge-worker:
 	ssh -vvvv -F ./ssh_config rsyslogd-worker-01.scarlettlab.home
 
 ping-bridge:
-	@ansible-playbook -v -i hosts ping.yml
+	@time ansible-playbook -v -i hosts ping.yml
 
 run-bridge-ansible:
-	@ansible-playbook -i hosts vagrant_playbook.yml -v
+	@time ansible-playbook -i hosts vagrant_playbook.yml -v
 
 run-bridge-test-ansible:
-	@ansible-playbook -i hosts test.yml -v
+	@time ansible-playbook -i hosts test.yml -v
 
 run-bridge-tools-ansible:
-	@ansible-playbook -i hosts tools.yml -v
+	@time ansible-playbook -i hosts tools.yml -v
 
 run-bridge-ping-ansible:
-	@ansible-playbook -i hosts ping.yml -v
+	@time ansible-playbook -i hosts ping.yml -v
 
 run-bridge-log-iptables-ansible:
-	@ansible-playbook -i hosts log_iptables.yml -v
+	@time ansible-playbook -i hosts log_iptables.yml -v
 
 run-bridge-ansible-no-slow:
-	@ansible-playbook -i hosts vagrant_playbook.yml -v --skip-tags "slow"
+	@time ansible-playbook -i hosts vagrant_playbook.yml -v --skip-tags "slow"
 
 run-bridge-debug-ansible:
-	@ansible-playbook -i hosts debug.yml -v
+	@time ansible-playbook -i hosts debug.yml -v
 
 dummy-web-server:
 	python dummy-web-server.py
@@ -314,11 +314,11 @@ rebuild: destroy flush-cache bridge-up sleep ping-bridge run-bridge-ansible run-
 
 # pip install graphviz
 graph-inventory:
-	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" k8s-head.hyenalab.home
+	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" borg-queen-01.scarlettlab.home
 # for f in static/graphs/bosslab/*.dot ; do dot -Tpng -o static/graphs/bosslab/`basename $f .dot`.png $f; done
 
 graph-inventory-view:
-	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" k8s-head.hyenalab.home |prod-web-server-1a | dot -Tpng | display png:-
+	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" borg-queen-01.scarlettlab.home |prod-web-server-1a | dot -Tpng | display png:-
 
 # nvm-install:
 # 	nvm install stable ;
@@ -1031,12 +1031,12 @@ route:
 	ip route list
 
 generate-certs-traefik:
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-traefik/certs/tls.key -out ingress-traefik/certs/tls.crt -subj "/CN=*.scarlettlab.com"
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-traefik/certs/tls.key -out ingress-traefik/certs/tls.crt -subj "/CN=*.hyenaclan.org"
 # kubectl -n traefik create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
 
 # SOURCE: https://github.com/kubernetes/dashboard/wiki/Installation#recommended-setup
 generate-certs-dashboard:
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard-ssl/certs/tls.key -out dashboard-ssl/certs/tls.crt -subj "/CN=*.scarlettlab.com"
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard-ssl/certs/tls.key -out dashboard-ssl/certs/tls.crt -subj "/CN=*.hyenaclan.org"
 
 apply-certs-dashboard:
 	@printf "kubectl apply secret generic kubernetes-dashboard-certs:\n"
@@ -1106,7 +1106,7 @@ debug-ingress-traefik: describe-ingress-traefik
 	kubectl -n kube-system get pod -l app=ingress-traefik --output=yaml | highlight
 
 allow-scheduling-on-master:
-	kubectl taint node k8s-head node-role.kubernetes.io/master:NoSchedule-
+	kubectl taint node borg-queen-01 node-role.kubernetes.io/master:NoSchedule-
 
 # apk --no-cache add curl
 # How to test traefik
@@ -1114,7 +1114,7 @@ allow-scheduling-on-master:
 
 # NOTE: This is the ip of the master node
 add-etc-hosts-cheeses:
-	@echo "192.168.205.10 stilton.scarlettlab.com cheddar.scarlettlab.com wensleydale.scarlettlab.com" | sudo tee -a /etc/hosts
+	@echo "192.168.1.172 stilton.hyenaclan.org cheddar.hyenaclan.org wensleydale.hyenaclan.org" | sudo tee -a /etc/hosts
 
 show-node-labels:
 	kubectl get nodes --show-labels | highlight

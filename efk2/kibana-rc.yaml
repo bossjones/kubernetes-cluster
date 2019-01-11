@@ -34,7 +34,7 @@ spec:
     spec:
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
       nodeSelector:
-        kubernetes.io/hostname: "k8s-node-2"
+        kubernetes.io/hostname: "borg-worker-02"
       containers:
       - name: kibana-logging
         image: docker.elastic.co/kibana/kibana:5.6.2

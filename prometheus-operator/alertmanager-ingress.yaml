@@ -34,7 +34,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: alertmanager.scarlettlab.com
+  - host: alertmanager.hyenaclan.org
     http:
       paths:
       - path: /

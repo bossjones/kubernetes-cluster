@@ -48,7 +48,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: kibana.scarlettlab.com
+  - host: kibana.hyenaclan.org
     http:
       paths:
       - path: /

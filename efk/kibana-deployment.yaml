@@ -20,7 +20,7 @@ spec:
     spec:
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
       nodeSelector:
-        kubernetes.io/hostname: "k8s-node-1"
+        kubernetes.io/hostname: "borg-worker-01"
       containers:
       - name: kibana-logging
         imagePullPolicy: Always

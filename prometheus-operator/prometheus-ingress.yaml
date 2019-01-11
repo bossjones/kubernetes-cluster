@@ -34,7 +34,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: prometheus.scarlettlab.com
+  - host: prometheus.hyenaclan.org
     http:
       paths:
       - path: /

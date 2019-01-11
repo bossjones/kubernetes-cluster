@@ -1,9 +1,9 @@
 # https://gist.github.com/gnarf/b103e77f37236ca72d8e
 # SOURCE: \cat roles/*/vagrant-config.yml | pbcopy
 :vms:
-  k8s-head:
-    :hostname: "k8s-head"
-    :name: "k8s-head"
+  borg-queen-01:
+    :hostname: "borg-queen-01"
+    :name: "borg-queen-01"
     :type: "master"
     :box: "ubuntu/xenial64"
     :eth1: "192.168.205.10"
@@ -13,9 +13,9 @@
     :cpu: 2
     :id: 10
 
-  k8s-node-1:
-    :hostname: "k8s-node-1"
-    :name: "k8s-node-1"
+  borg-worker-01:
+    :hostname: "borg-worker-01"
+    :name: "borg-worker-01"
     :type: "node"
     :box: "ubuntu/xenial64"
     :eth1: "192.168.205.11"
@@ -25,9 +25,9 @@
     :cpu: 4
     :id: 10
 
-  k8s-node-2:
-    :hostname: "k8s-node-2"
-    :name: "k8s-node-2"
+  borg-worker-02:
+    :hostname: "borg-worker-02"
+    :name: "borg-worker-02"
     :type: "node"
     :box: "ubuntu/xenial64"
     :eth1: "192.168.205.12"

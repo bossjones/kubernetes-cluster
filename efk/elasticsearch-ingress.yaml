@@ -48,7 +48,7 @@ spec:
   #     serviceName: default-http-backend
   #     servicePort: 80
   rules:
-  - host: elasticsearch.scarlettlab.com
+  - host: elasticsearch.hyenaclan.org
     http:
       paths:
       - path: /

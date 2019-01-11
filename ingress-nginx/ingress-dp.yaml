@@ -95,7 +95,7 @@ spec:
     spec:
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
       nodeSelector:
-        kubernetes.io/hostname: "k8s-head"
+        kubernetes.io/hostname: "borg-queen-01"
       serviceAccountName: nginx-ingress
       terminationGracePeriodSeconds: 60
       containers:

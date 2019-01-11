@@ -3,7 +3,7 @@
 set -x
 
 # source: https://botleg.com/stories/log-management-of-docker-swarm-with-elk-stack/
-export DNS_DOMAIN=${DNS_DOMAIN:-scarlettlab.com}
+export DNS_DOMAIN=${DNS_DOMAIN:-hyenaclan.org}
 export ES_IP="elasticsearch.${DNS_DOMAIN}"
 export URL_BASE="http://${ES_IP}/.kibana"
 

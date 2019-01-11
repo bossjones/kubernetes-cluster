@@ -30,7 +30,7 @@ metadata:
     boss-part-of: efk
 spec:
   rules:
-  - host: elasticsearch-head.scarlettlab.com
+  - host: elasticsearch-head.hyenaclan.org
     http:
       paths:
       # - path: /elasticsearch-head

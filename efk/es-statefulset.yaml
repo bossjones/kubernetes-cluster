@@ -83,7 +83,7 @@ spec:
           claimName: elasticsearch-pvc
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
       # nodeSelector:
-      #   kubernetes.io/hostname: "k8s-node-2"
+      #   kubernetes.io/hostname: "borg-worker-02"
       serviceAccountName: elasticsearch-logging
       containers:
       # - image: k8s.gcr.io/elasticsearch:v5.6.2

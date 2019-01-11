@@ -9,7 +9,7 @@
 #     traefik.frontend.rule.type: PathPrefixStrip
 # spec:
 #   rules:
-#   - host: cheeses.scarlettlab.com
+#   - host: cheeses.hyenaclan.org
 #     http:
 #       paths:
 #       - path: /stilton

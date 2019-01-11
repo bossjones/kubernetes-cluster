@@ -23,7 +23,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: traefik-ui.scarlettlab.com
+  - host: traefik-ui.hyenaclan.org
     http:
       paths:
       - path: /

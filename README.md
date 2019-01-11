@@ -14,7 +14,7 @@ Execute the following vagrant command to start a new Kubernetes cluster, this wi
 vagrant up
 ```
 
-You can also start invidual machines by vagrant up k8s-head, vagrant up k8s-node-1 and vagrant up k8s-node-2
+You can also start invidual machines by vagrant up borg-queen-01, vagrant up borg-worker-01 and vagrant up borg-worker-02
 
 If more than two nodes are required, you can edit the servers array in the Vagrantfile
 
@@ -41,7 +41,7 @@ Execute the following command to remove the virtual machines created for the Kub
 vagrant destroy -f
 ```
 
-You can destroy individual machines by vagrant destroy k8s-node-1 -f
+You can destroy individual machines by vagrant destroy borg-worker-01 -f
 
 ## Licensing
 

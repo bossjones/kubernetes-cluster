@@ -96,13 +96,13 @@ spec:
               # value: fuseim.pri/ifs
               value: com.scarlettlab.nfs
             - name: NFS_SERVER
-              value: 192.168.205.12
+              value: 192.168.1.174
             - name: NFS_PATH
               value: /mnt/publicdata
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 192.168.205.12
+            server: 192.168.1.174
             path: /mnt/publicdata
 
 

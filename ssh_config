@@ -1,4 +1,4 @@
-Host k8s-head*
+Host borg-queen-01*
   User vagrant
   Port 22
   UserKnownHostsFile /dev/null
@@ -8,7 +8,7 @@ Host k8s-head*
   IdentitiesOnly yes
   LogLevel FATAL
 
-Host k8s-node-1*
+Host borg-worker-01*
   User vagrant
   Port 22
   UserKnownHostsFile /dev/null
@@ -18,7 +18,7 @@ Host k8s-node-1*
   IdentitiesOnly yes
   LogLevel FATAL
 
-Host k8s-node-2*
+Host borg-worker-02*
   User vagrant
   Port 22
   UserKnownHostsFile /dev/null

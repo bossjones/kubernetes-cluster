@@ -9,21 +9,21 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: stilton.scarlettlab.com
+  - host: stilton.hyenaclan.org
     http:
       paths:
       - path: /
         backend:
           serviceName: stilton
           servicePort: http
-  - host: cheddar.scarlettlab.com
+  - host: cheddar.hyenaclan.org
     http:
       paths:
       - path: /
         backend:
           serviceName: cheddar
           servicePort: http
-  - host: wensleydale.scarlettlab.com
+  - host: wensleydale.hyenaclan.org
     http:
       paths:
       - path: /

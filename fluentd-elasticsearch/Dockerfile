@@ -20,7 +20,7 @@
 # log files with root only access under /var/log/containers/*
 
 # FROM debian:stretch-slim
-FROM gcr.io/google-containers/fluentd-elasticsearch:v2.0.1
+FROM k8s.gcr.io/fluentd-elasticsearch:v2.2.0
 
 ENV RBSPY_RELEASE="https://github.com/rbspy/rbspy/releases/download/v0.3.3/rbspy-v0.3.3-x86_64-unknown-linux-musl.tar.gz"
 

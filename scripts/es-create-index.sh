@@ -13,6 +13,11 @@ CreateElasticsearchIndex() {
         -H 'Content-Type: application/json' \
         -d '{"title" : "logstash-*", "timeFieldName": "@timestamp", "notExpandable": true}'
 
+    # Run this command to create a Logstash index pattern:
+    curl -XPUT -D- ${URL_BASE}'/index-pattern/fluentd-*' \
+        -H 'Content-Type: application/json' \
+        -d '{"title" : "fluentd-*", "timeFieldName": "@timestamp", "notExpandable": true}'
+
     # This command will mark the Logstash index pattern as the default index pattern:
     curl -XPUT -D- ${URL_BASE}'/config/5.6.2' \
         -H 'Content-Type: application/json' \

@@ -1,4 +1,4 @@
-FROM node
+FROM index.docker.io/node:10.15.0-stretch-slim
 MAINTAINER TonyDark Jarvis <jarvis@theblacktonystark.com>
 
 ENV \

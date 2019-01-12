@@ -17,8 +17,8 @@ network.host: 0.0.0.0
 
 discovery.zen.minimum_master_nodes: ${MINIMUM_MASTER_NODES}
 
-xpack.security.enabled: false
-xpack.monitoring.enabled: false
+# xpack.security.enabled: false
+# xpack.monitoring.enabled: false
 # ---------------------------------------------------------------------
 
 # It is vitally important to the health of your node that none of the JVM is ever swapped out to disk. One way of achieving that is set the bootstrap.memory_lock setting to true.

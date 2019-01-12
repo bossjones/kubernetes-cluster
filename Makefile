@@ -372,6 +372,8 @@ open-netdata-vagrant:
 	./scripts/open-browser.py $(URL_PATH_NETDATA_WORKER1)
 	./scripts/open-browser.py $(URL_PATH_NETDATA_WORKER2)
 
+open-netdata: open-netdata-vagrant
+
 # open: open-netdata-registry open-netdata-node
 
 open-vagrant: open-netdata-vagrant

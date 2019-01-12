@@ -62,6 +62,13 @@ RUN kibana-plugin remove x-pack && \
 
 # RUN kibana-plugin install file:///usr/share/kibana/local_plugins/logtrail-5.6.2-0.1.21.zip
 
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y gosu; \
+	rm -rf /var/lib/apt/lists/*; \
+# verify that the binary works
+	gosu nobody true
+
 # Ballerina runtime distribution filename.
 ARG BUILD_DATE
 ARG VCS_REF

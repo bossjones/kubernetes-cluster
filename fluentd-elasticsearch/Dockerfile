@@ -30,6 +30,12 @@ ENV RBSPY_RELEASE="https://github.com/rbspy/rbspy/releases/download/v0.3.3/rbspy
 #     && mkdir -p /opt/rbspy \
 #     && tar -xvzf /tmp/rbspy.tar.gz -C /opt/rbspy
 
+ARG DEBIAN_FRONTEND=noninteractive
+
+# COPY clean-apt /usr/bin
+# COPY clean-install /usr/bin
+COPY Gemfile /Gemfile
+
 # 1. Install & configure dependencies.
 # 2. Install fluentd via ruby.
 # 3. Remove build dependencies.

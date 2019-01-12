@@ -19,7 +19,7 @@ WORKDIR /opt
 RUN mkdir /opt/app && \
     curl -L 'https://github.com/mobz/elasticsearch-head/archive/master.zip' > /usr/local/src/master.zip && \
     unzip /usr/local/src/master.zip -d /opt/ && \
-    mv /opt/elasticsearch-head-master /opt/app
+    mv -fv /opt/elasticsearch-head-master /opt/app
 
 # unzip -d "$dest" "$zip" && f=("$dest"/*) && mv "$dest"/*/* "$dest" && rmdir "${f[@]}"
 

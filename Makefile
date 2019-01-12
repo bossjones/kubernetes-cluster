@@ -1472,3 +1472,29 @@ create-elasticsearch-index:
 	bash scripts/es-create-index.sh
 
 create-index: create-elasticsearch-index
+
+query-es-list-indicies:
+	curl -L -XGET 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cat/indices?v&pretty' | highlight
+
+
+# https://github.com/mobz/elasticsearch-head/archive/v5.0.0.zip
+# https://github.com/mobz/elasticsearch-head/archive/master.zip
+# 1  mkdir -p /usr/src/app
+# 	2  cd /usr/src/app
+# 	3  npm install -g grunt
+# 	4  apt-get update; apt-get install curl -y
+# 	5  curl -L 'https://github.com/mobz/elasticsearch-head/archive/master.zip' > master.zip
+# 	6  file master.zip
+# 	7  apt-get install unzip -y
+# 	8  unzip master.zip
+# 	9  ls
+# 10  cd elasticsearch-head-master/
+# 11  ls
+# 12  apt-get install vim -y
+# 13  npm install
+# 14  npm audit fix
+# 15  grunt server
+# 16  npm audit fix --force
+# 17  grunt server
+# 18  history
+# find . -type f -exec sed -i 's/localhost:9200/elasticsearch-logging:9200/g' {} +

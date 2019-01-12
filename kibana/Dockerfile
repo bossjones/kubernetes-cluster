@@ -63,8 +63,8 @@ RUN kibana-plugin remove x-pack && \
 # RUN kibana-plugin install file:///usr/share/kibana/local_plugins/logtrail-5.6.2-0.1.21.zip
 
 RUN set -eux; \
-    curl -L 'https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64' > /usr/local/bin/gosu \
-	chmod +x /usr/local/bin/gosu; \
+    curl -L 'https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64' > /usr/local/bin/gosu && \
+	chmod +x /usr/local/bin/gosu; && \
 # verify that the binary works
 	gosu nobody true
 

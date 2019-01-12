@@ -1458,3 +1458,10 @@ describe-elasticsearch-head:
 
 debug-elasticsearch-head: describe-elasticsearch-head
 	kubectl -n kube-system get pod -l app=elasticsearch-head --output=yaml | highlight
+
+fluentd-bootstrap:
+	bash scripts/label-k8-nodes-for-fluentd.sh
+
+label-workers: fluentd-bootstrap
+
+label-nodes: fluentd-bootstrap

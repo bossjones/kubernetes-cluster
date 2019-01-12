@@ -98,10 +98,12 @@ spec:
           # need more cpu upon initialization, therefore burstable class
           limits:
             cpu: 1000m
-            memory: 2400Mi
+            memory: 4048Mi
+            # memory: 2400Mi
           requests:
             cpu: 100m
             memory: 2350Mi
+            # memory: 2350Mi
             # memory: 2000Mi
         ports:
         - containerPort: 9200
@@ -124,7 +126,9 @@ spec:
         - name: MINIMUM_MASTER_NODES
           value: "1"
         - name: ES_JAVA_OPTS
-          value: "-Xms1024m -Xmx1024m"
+          # value: "-Xms1024m -Xmx1024m"
+          # value: "-Xms4048m -Xmx4048m"
+          value: "-Xms2048m -Xmx2048m"
           # value: "-Xms256m -Xmx256m"
         # - name: ES_HEAP_SIZE
         #   # value: "-Xms1024m -Xmx1024m"

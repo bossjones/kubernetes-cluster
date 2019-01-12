@@ -66,7 +66,7 @@ RUN set -eux; \
     curl -L 'https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64' > /usr/local/bin/gosu && \
 	chmod +x /usr/local/bin/gosu; && \
 # verify that the binary works
-	gosu nobody true
+	gosu kibana true
 
 # Ballerina runtime distribution filename.
 ARG BUILD_DATE

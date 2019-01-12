@@ -51,7 +51,8 @@ spec:
         #     cpu: 100m
         env:
           - name: ELASTICSEARCH_URL
-            value: http://elasticsearch-logging.kube-system:9200
+            # value: http://elasticsearch-logging.kube-system:9200
+            value: http://elasticsearch-logging:9200
           - name: XPACK_MONITORING_ENABLED
             value: "false"
           - name: XPACK_SECURITY_ENABLED

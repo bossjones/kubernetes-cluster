@@ -60,7 +60,7 @@ EXPOSE 1099
 COPY --chown=elasticsearch:elasticsearch ./config ./config
 COPY --chown=elasticsearch:elasticsearch ./bin ./bin
 
-RUN elasticsearch-plugin remove x-pack --purge
+# RUN elasticsearch-plugin remove x-pack --purge
 
 # Ballerina runtime distribution filename.
 ARG BUILD_DATE

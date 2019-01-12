@@ -20,6 +20,7 @@ MEMORY_LOCK=false
 # # Kubernetes requires swap is turned off, so memory lock is redundant
 # ENV MEMORY_LOCK false
 # nobody:x:99:
+# RUN elasticsearch-plugin remove x-pack
 
 RUN groupmod -g ${ELASTICSEARCH_USER_ID} elasticsearch
 RUN usermod -u ${ELASTICSEARCH_USER_ID} -g ${ELASTICSEARCH_GROUP_ID} elasticsearch

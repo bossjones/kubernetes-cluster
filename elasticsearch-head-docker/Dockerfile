@@ -4,7 +4,7 @@ MAINTAINER TonyDark Jarvis <jarvis@theblacktonystark.com>
 ENV \
 LANG=C.UTF-8
 
-RUN apt-get update; apt-get install sudo vim wget tar tree curl -y; apt-get clean -y && \
+RUN apt-get update; apt-get install sudo vim wget tar tree curl unzip -y; apt-get clean -y && \
     rm -rf \
         /var/cache/debconf/* \
         /var/lib/apt/lists/* \

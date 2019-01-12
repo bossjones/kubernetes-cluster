@@ -15,7 +15,25 @@ spec:
   resources:
     requests:
       storage: "2Gi"
-
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-pv
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    k8s-app: prometheus-operator
+    boss-part-of: prometheus-operator
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 192.168.1.174
+    path: "/mnt/publicdata/grafana"
 
 ---
 kind: PersistentVolumeClaim
@@ -34,6 +52,25 @@ spec:
   resources:
     requests:
       storage: "2Gi"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-adapter-tmpfs-pv
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    k8s-app: prometheus-operator
+    boss-part-of: prometheus-operator
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 192.168.1.174
+    path: "/mnt/publicdata/prometheus-adapter-tmpfs"
 
 
 ---
@@ -53,3 +90,22 @@ spec:
   resources:
     requests:
       storage: "2Gi"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-adapter-volume-serving-cert-pv
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    k8s-app: prometheus-operator
+    boss-part-of: prometheus-operator
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 192.168.1.174
+    path: "/mnt/publicdata/prometheus-adapter-volume-serving-cert"

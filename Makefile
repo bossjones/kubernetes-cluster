@@ -1390,3 +1390,63 @@ describe-calico:
 
 debug-calico: describe-calico
 	kubectl -n kube-system get pod -l app=calico --output=yaml | highlight
+
+
+create-elasticsearch-hq:
+	@printf "create-elasticsearch-hq:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-hq$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./elasticsearch-hq/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-hq --watch | highlight
+
+apply-elasticsearch-hq:
+	@printf "create-elasticsearch-hq:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-hq$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./elasticsearch-hq/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-hq --watch
+
+delete-elasticsearch-hq:
+	kubectl delete -f ./elasticsearch-hq/
+
+describe-elasticsearch-hq:
+	kubectl describe -f ./elasticsearch-hq/ | highlight
+
+debug-elasticsearch-hq: describe-elasticsearch-hq
+	kubectl -n kube-system get pod -l app=elasticsearch-hq --output=yaml | highlight
+
+
+create-elasticsearch-head:
+	@printf "create-elasticsearch-head:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-head$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./elasticsearch-head/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-head --watch | highlight
+
+apply-elasticsearch-head:
+	@printf "create-elasticsearch-head:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-head$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./elasticsearch-head/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-head --watch
+
+delete-elasticsearch-head:
+	kubectl delete -f ./elasticsearch-head/
+
+describe-elasticsearch-head:
+	kubectl describe -f ./elasticsearch-head/ | highlight
+
+debug-elasticsearch-head: describe-elasticsearch-head
+	kubectl -n kube-system get pod -l app=elasticsearch-head --output=yaml | highlight

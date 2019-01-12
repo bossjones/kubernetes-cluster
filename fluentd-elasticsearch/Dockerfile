@@ -30,6 +30,25 @@ RUN apt-get install -y sudo vim tar wget \
     && mkdir -p /opt/rbspy \
     && tar -xvzf /tmp/rbspy.tar.gz -C /opt/rbspy
 
+# 1. Install & configure dependencies.
+# 2. Install fluentd via ruby.
+# 3. Remove build dependencies.
+# 4. Cleanup leftover caches & files.
+RUN BUILD_DEPS="make gcc g++ libc6-dev ruby-dev libffi-dev" \
+    && clean-install $BUILD_DEPS \
+                     ca-certificates \
+                     libjemalloc1 \
+                     ruby \
+    && echo 'gem: --no-document' >> /etc/gemrc \
+    && gem install --file Gemfile \
+    && apt-get purge -y --auto-remove \
+                     -o APT::AutoRemove::RecommendsImportant=false \
+                     $BUILD_DEPS \
+    && clean-apt \
+    # Ensure fluent has enough file descriptors
+    && ulimit -n 65536
+
+
 # RUN https://github.com/rbspy/rbspy/releases/download/v0.3.3/rbspy-v0.3.3-x86_64-unknown-linux-musl.tar.gz
 
 # RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh

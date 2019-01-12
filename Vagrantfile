@@ -50,7 +50,7 @@ EOF
     # SOURCE: https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
     # Environment="KUBELET_EXTRA_ARGS=--feature-gates=VolumeScheduling=true"
     # Environment="KUBELET_EXTRA_ARGS=--feature-gates=PersistentLocalVolumes=true"
-    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true --read-only-port=10255" /etc/default/kubelet
+    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true --authorization-mode=Webhook --read-only-port=10255" /etc/default/kubelet
     sudo systemctl restart kubelet
     sudo systemctl enable kubelet
     sudo apt-get -y install python-minimal python-apt

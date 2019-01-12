@@ -374,7 +374,7 @@ open-netdata-vagrant:
 
 open-netdata: open-netdata-vagrant
 
-# open: open-netdata-registry open-netdata-node
+# open: open-netdata
 
 open-vagrant: open-netdata-vagrant
 
@@ -761,7 +761,7 @@ open-alertmanager:
 	./scripts/open-browser.py $(URL_PATH_ALERTMANAGER)
 
 # open: open-mongo-express open-flask-app open-uwsgi-stats open-locust-master open-consul open-traefik open-traefik-api open-whoami
-open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager
+open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager open-netdata
 
 create-heapster:
 	@printf "create-heapster:\n"

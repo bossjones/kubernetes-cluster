@@ -1467,3 +1467,8 @@ fluentd-bootstrap:
 label-workers: fluentd-bootstrap
 
 label-nodes: fluentd-bootstrap
+
+create-elasticsearch-index:
+	bash scripts/es-create-index.sh
+
+create-index: create-elasticsearch-index

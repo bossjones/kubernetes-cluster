@@ -20,6 +20,8 @@ URL_PATH_NETDATA_NODE      := "http://rsyslogd-worker-01.$(DNSMASQ_DOMAIN):19999
 URL_PATH_WHOAMI            := "http://whoami.$(DNSMASQ_DOMAIN)"
 URL_PATH_ECHOSERVER        := "http://echoserver.$(DNSMASQ_DOMAIN)"
 URL_PATH_ELASTICSEARCH     := "http://elasticsearch.$(DNSMASQ_DOMAIN)"
+URL_PATH_ELASTICSEARCH_HEAD     := "http://elasticsearch-head.$(DNSMASQ_DOMAIN)"
+URL_PATH_ELASTICSEARCH_HQ     := "http://elasticsearch-hq.$(DNSMASQ_DOMAIN)"
 URL_PATH_KIBANA            := "http://kibana.$(DNSMASQ_DOMAIN)"
 URL_PATH_PROMETHEUS        := "http://prometheus.$(DNSMASQ_DOMAIN)"
 URL_PATH_GRAFANA           := "http://grafana.$(DNSMASQ_DOMAIN)"
@@ -737,6 +739,12 @@ open-echoserver:
 
 open-elasticsearch:
 	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH)
+
+open-elasticsearch-hq:
+	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH_HQ)
+
+open-elasticsearch-head:
+	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH_HEAD)
 
 open-kibana:
 	./scripts/open-browser.py $(URL_PATH_KIBANA)

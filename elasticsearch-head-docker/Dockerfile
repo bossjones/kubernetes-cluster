@@ -14,6 +14,8 @@ RUN apt-get update; apt-get install sudo vim wget tar tree curl unzip -y; apt-ge
 
 EXPOSE 9100
 
+WORKDIR /opt
+
 RUN mkdir /opt/app && \
     curl -L 'https://github.com/mobz/elasticsearch-head/archive/master.zip' > /usr/local/src/master.zip && \
     unzip /usr/local/src/master.zip -d /opt/ && \

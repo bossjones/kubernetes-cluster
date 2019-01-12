@@ -25,5 +25,8 @@ set -ex
 # adding his answer to mine.
 exec 2>&1
 
+export NODE_NAME=${ES_NODE_NAME:-localhost}
+export HTTP_PORT=${HTTP_PORT:-9200}
+export PROTOCOL=${PROTOCOL:-http}
 
 exec grunt server

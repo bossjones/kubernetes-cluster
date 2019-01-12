@@ -1476,6 +1476,12 @@ create-index: create-elasticsearch-index
 query-es-list-indicies:
 	curl -L -XGET 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cat/indices?v&pretty' | highlight
 
+query-es-allocation-explain:
+	curl -L -s -XGET 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cluster/allocation/explain?pretty' | highlight
+
+enable-shard-allocation:
+	curl -XPUT 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cluster/settings' -d \
+	'{ "transient": { "cluster.routing.allocation.enable" : "all" } }'
 
 # https://github.com/mobz/elasticsearch-head/archive/v5.0.0.zip
 # https://github.com/mobz/elasticsearch-head/archive/master.zip

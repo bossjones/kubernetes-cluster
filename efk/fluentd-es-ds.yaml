@@ -109,6 +109,7 @@ spec:
         # image: gcr.io/google-containers/fluentd-elasticsearch:v2.2.1
         # image: k8s.gcr.io/fluentd-elasticsearch:v2.2.0
         image: bossjones/fluentd-elasticsearch:v2.2.0
+        imagePullPolicy: Always
         # FIXME: Try using this guy instead
         # SOURCE: https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.3/debian-elasticsearch
         # image: fluent/fluentd-kubernetes-daemonset:elasticsearch

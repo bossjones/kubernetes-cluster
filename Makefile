@@ -736,12 +736,12 @@ debug-prometheus-operator: describe-prometheus-operator
 
 # FYI I built all of this using jsonnet and all of that jazz 1/12/2019
 # SOURCE: https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus
-addon-prometheus-operator-v0.27.0:
-	@printf "addon-prometheus-operator-v0.27.0:\n"
+addon-prometheus-operator-v0-27-0:
+	@printf "addon-prometheus-operator-v0-27-0:\n"
 	@printf "=======================================\n"
-	@printf "$$GREEN deploy prometheus-operator-v0.27.0$$NC\n"
+	@printf "$$GREEN deploy prometheus-operator-v0-27-0$$NC\n"
 	@printf "=======================================\n"
-	-kubectl create -f ./prometheus-operator-v0.27.0/ || true
+	-kubectl create -f ./prometheus-operator-v0-27-0/ || true
 	@echo
 	@echo "It can take a few seconds for the above 'create manifests' command to fully create the following resources, so verify the resources are ready before proceeding."
 	until kubectl get customresourcedefinitions servicemonitors.monitoring.coreos.com ; do date; sleep 1; echo ""; done
@@ -749,26 +749,26 @@ addon-prometheus-operator-v0.27.0:
 	until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
 	@echo
 
-create-prometheus-operator-v0.27.0: addon-prometheus-operator-v0.27.0
+create-prometheus-operator-v0-27-0: addon-prometheus-operator-v0-27-0
 
-apply-prometheus-operator-v0.27.0:
-	@printf "create-prometheus-operator-v0.27.0:\n"
+apply-prometheus-operator-v0-27-0:
+	@printf "create-prometheus-operator-v0-27-0:\n"
 	@printf "=======================================\n"
-	@printf "$$GREEN deploy prometheus-operator-v0.27.0$$NC\n"
+	@printf "$$GREEN deploy prometheus-operator-v0-27-0$$NC\n"
 	@printf "=======================================\n"
-	kubectl apply -f ./prometheus-operator-v0.27.0/
+	kubectl apply -f ./prometheus-operator-v0-27-0/
 	@echo ""
 	@echo ""
-# kubectl get pods --all-namespaces -l app=prometheus-operator-v0.27.0 --watch
+# kubectl get pods --all-namespaces -l app=prometheus-operator-v0-27-0 --watch
 
-delete-prometheus-operator-v0.27.0:
-	kubectl delete -f ./prometheus-operator-v0.27.0/
+delete-prometheus-operator-v0-27-0:
+	kubectl delete -f ./prometheus-operator-v0-27-0/
 
-describe-prometheus-operator-v0.27.0:
-	kubectl describe -f ./prometheus-operator-v0.27.0/ | highlight
+describe-prometheus-operator-v0-27-0:
+	kubectl describe -f ./prometheus-operator-v0-27-0/ | highlight
 
-debug-prometheus-operator-v0.27.0: describe-prometheus-operator-v0.27.0
-	kubectl -n kube-system get pod -l app=prometheus-operator-v0.27.0 --output=yaml | highlight
+debug-prometheus-operator-v0-27-0: describe-prometheus-operator-v0-27-0
+	kubectl -n kube-system get pod -l app=prometheus-operator-v0-27-0 --output=yaml | highlight
 
 
 open-dashboard:

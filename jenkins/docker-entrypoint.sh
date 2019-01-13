@@ -7,8 +7,8 @@ if [[ ${UID_JENKINS} != 65534 ]]; then
     usermod -u ${UID_JENKINS} jenkins
     # update ownership of directories
     {
-      chown -R jenkins:jenkins /var/jenkins_home
-      chown -R jenkins:jenkins /usr/share/jenkins/ref
+      chown -Rv jenkins:jenkins /var/jenkins_home
+      chown -Rv jenkins:jenkins /usr/share/jenkins/ref
     } ||
     {
       echo "ERROR: failed chown command"
@@ -30,4 +30,4 @@ chmod 0440 /etc/sudoers.d/jenkins
 
 cd ~jenkins
 
-gosu kibana jenkins /usr/local/bin/jenkins.sh
+gosu jenkins /usr/local/bin/jenkins.sh

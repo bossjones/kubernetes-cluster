@@ -117,3 +117,8 @@ net.core.netdev_budget_usecs = 6000
 * https://github.com/openshift/origin-aggregated-logging/blob/master/elasticsearch/kibana_ui_objects/k8s-visualizations.json
 * https://github.com/openshift/origin-aggregated-logging/blob/master/elasticsearch/index_patterns/com.redhat.viaq-openshift.index-pattern.json
 * https://github.com/gregbkr/kubernetes-kargo-logging-monitoring/blob/master/logging/dashboards/elk-v1.json
+
+
+# To get prometheius-operator to read in nginx pods and scrape correctly
+
+* https://github.com/fromanirh/procwatch/blob/d8e83aebf619ba3088a9a5a2793df1efced11ed3/README.md

@@ -41,6 +41,19 @@ spec:
     runAsNonRoot: true
     runAsUser: 1000
   serviceAccountName: prometheus-k8s
+  # SOURCE: https://github.com/fromanirh/procwatch/blob/d8e83aebf619ba3088a9a5a2793df1efced11ed3/README.md
   serviceMonitorNamespaceSelector: {}
+  # serviceMonitorNamespaceSelector:
+  #  matchLabels:
+  #    vmi.prometheus.kubevirt.io: ""
   serviceMonitorSelector: {}
+  # serviceMonitorSelector:
+  #  matchLabels:
+  #    vmi.prometheus.kubevirt.io: ""
+  # serviceMonitorSelector:
+  #   matchLabels:
+  #     app.kubernetes.io/name: prometheus
+  #     app.kubernetes.io/part-of: ingress-nginx
+  #     prometheus: k8s
+
   version: v2.5.0

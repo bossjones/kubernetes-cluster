@@ -154,6 +154,7 @@ spec:
           hostPort: 18080
         - name: metrics
           containerPort: 10254
+          hostPort: 10254
           protocol: TCP
         args:
         - /nginx-ingress-controller

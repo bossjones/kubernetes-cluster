@@ -201,6 +201,11 @@ destroy:
 run-ansible:
 	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v
 
+prometheus-render-additional-configs:
+	kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --dry-run -oyaml > additional-scrape-configs.yaml
+	cat additional-scrape-configs.yaml | highlight
+	mv -fv additional-scrape-configs.yaml prometheus-operator-v0-27-0/additional-scrape-configs.yaml
+
 .ansible-logs:
 	mkdir .ansible-logs
 

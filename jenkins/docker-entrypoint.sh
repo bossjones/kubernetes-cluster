@@ -2,7 +2,7 @@
 set -e
 
 # update jenkins UID
-if [[ ${UID_JENKINS} != 1000 ]]; then
+if [[ ${UID_JENKINS} != 65534 ]]; then
     echo "INFO: set jenkins UID to ${UID_JENKINS}"
     usermod -u ${UID_JENKINS} jenkins
     # update ownership of directories
@@ -16,7 +16,7 @@ if [[ ${UID_JENKINS} != 1000 ]]; then
 fi
 
 # update jenkins GID
-if [[ ${GID_JENKINS} != 1000 ]]; then
+if [[ ${GID_JENKINS} != 65534 ]]; then
     echo "INFO: set jenkins GID to ${GID_JENKINS}"
     groupmod -g ${GID_JENKINS} jenkins
 fi
@@ -26,4 +26,8 @@ echo "jenkins ALL=(root) NOPASSWD: /usr/bin/docker" > /etc/sudoers.d/jenkins
 chmod 0440 /etc/sudoers.d/jenkins
 
 # run Jenkins as user jenkins
-su jenkins -c 'cd $HOME; /usr/local/bin/jenkins.sh'
+# su jenkins -c 'cd $HOME; /usr/local/bin/jenkins.sh'
+
+cd ~jenkins
+
+gosu kibana jenkins /usr/local/bin/jenkins.sh

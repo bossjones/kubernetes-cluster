@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: nginx
+    # run: nginx
     alertmanager: main
   name: alertmanager-main
   namespace: monitoring
@@ -14,4 +14,4 @@ spec:
   selector:
     alertmanager: main
     app: alertmanager
-    run: nginx
+    # run: nginx

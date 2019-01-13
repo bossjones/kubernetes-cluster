@@ -117,7 +117,7 @@ RUN /usr/local/bin/install-plugins.sh pipeline-stage-tags-metadata
 RUN /usr/local/bin/install-plugins.sh pipeline-stage-view
 RUN /usr/local/bin/install-plugins.sh plain-credentials
 RUN /usr/local/bin/install-plugins.sh run-condition
-RUN /usr/local/bin/install-plugins.sh scm-api
+# RUN /usr/local/bin/install-plugins.sh scm-api
 RUN /usr/local/bin/install-plugins.sh script-security
 RUN /usr/local/bin/install-plugins.sh ssh-agent
 RUN /usr/local/bin/install-plugins.sh ssh-credentials

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+set -x
 
 # update jenkins UID
 if [[ ${UID_JENKINS} != 65534 ]]; then

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 # source: https://botleg.com/stories/log-management-of-docker-swarm-with-elk-stack/
 
@@ -13,11 +13,33 @@ ImportKibanaDashboard() {
     # curl -v -s --connect-timeout 60 \
     # --max-time 60 -XPOST ${URL_BASE} \
     # -H 'kbn-xsrf:true' -H 'Content-type:application/json' \
-    # -d -D- @../fixtures/kibana/k8s-fluentd-elasticsearch.json
-    echo "curl -v -s --connect-timeout 60 \
+    # -d -D- @$(pwd)/fixtures/kibana_dashboards/k8s-fluentd-elasticsearch.json
+
+    # curl -v -s --connect-timeout 60 \
+    # --max-time 60 -XPOST ${URL_BASE} \
+    # -H 'kbn-xsrf:true' -H 'Content-type:application/json' \
+    # -d @$(pwd)/fixtures/kibana_dashboards/k8s-fluentd-elasticsearch.json
+
+
+    # curl -v -s --connect-timeout 60 \
+    # --max-time 60 -XPOST ${URL_BASE} \
+    # -H 'kbn-xsrf:true' -H 'Content-type:application/json' \
+    # -d @$(pwd)/fixtures/kibana_dashboards/k8s-elk.json
+
+    curl -v -s --connect-timeout 60 \
     --max-time 60 -XPOST ${URL_BASE} \
     -H 'kbn-xsrf:true' -H 'Content-type:application/json' \
-    -d -D- @../fixtures/kibana/k8s-fluentd-elasticsearch.json"
+    -d @$(pwd)/fixtures/kubernetes-kargo-logging-monitoring/elk-v1.json
+
+    # curl -v -s --connect-timeout 60 \
+    # --max-time 60 -XPOST ${URL_BASE} \
+    # -H 'kbn-xsrf:true' -H 'Content-type:application/json' \
+    # -d -D- @$(pwd)/fixtures/kibana_dashboards/k8s-elk.json
+
+    # echo "curl -v -s --connect-timeout 60 \
+    # --max-time 60 -XPOST ${URL_BASE} \
+    # -H 'kbn-xsrf:true' -H 'Content-type:application/json' \
+    # -d -D- @../fixtures/kibana/k8s-fluentd-elasticsearch.json"
 
 }
 

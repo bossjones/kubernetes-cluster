@@ -94,3 +94,26 @@ kubectl apply -f /vagrant/addon/traefik-ingress/
 
 # Why does my Linux system stutter unless I continuously drop caches?
 SOURCE: https://superuser.com/questions/1356984/why-does-my-linux-system-stutter-unless-i-continuously-drop-caches
+
+
+# RE: Netdata - Alarm "system.softnet_stat" is very strict. #1076
+
+https://github.com/netdata/netdata/issues/1076#issuecomment-367873913
+
+I have the same problem (lots of squeezed events, not other real problems). I've spent lots of time reading lots of docs over the internet regarding net_dev_budget at linux network stack, until i found the source code responsible for the time_squeeze: torvalds/linux:net/core/dev.c@v4.13#L5572
+
+Turns out, budget isn't the only variable controlling for packet being squeezed out. There is also time frame, during which everything is supposed to be processed. By default at 4.13 Linux kernel it is 2000 us. So changing the budget after certain value does nothing, if processing takes more than 2000 us. After I've increased net.core.netdev_budget_usecs to 5000 just to test it (sudo sysctl -w net.core.netdev_budget_usecs=5000). And all of the time_squeezes has disappeared. By tweaking this value and netdev_budget, I found out that tweaking netdev_budget has 0 effect on amount of time_squeezed events (on my machine and at relatively low load), but netdev_budget_usecs needed to be at least at 4250 for time_squeezed to disappear. I'm far from being a linux expert, so I don't know if setting this value to the double of the original value might cause any problems, but it seems to work for now.
+
+```
+net.ipv4.tcp_rmem = 4096 5242880 33554432
+net.core.netdev_budget = 60000
+net.core.netdev_budget_usecs = 6000
+```
+
+
+# Kibana dashboard sources
+
+* https://github.com/qwe8258/venoodkhatuva12/tree/ea2c169c12e07eec6d7440214179af1122a666d2
+* https://github.com/openshift/origin-aggregated-logging/blob/master/elasticsearch/kibana_ui_objects/k8s-visualizations.json
+* https://github.com/openshift/origin-aggregated-logging/blob/master/elasticsearch/index_patterns/com.redhat.viaq-openshift.index-pattern.json
+* https://github.com/gregbkr/kubernetes-kargo-logging-monitoring/blob/master/logging/dashboards/elk-v1.json

@@ -142,13 +142,19 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
         ports:
-        - containerPort: 80
+        - name: http
+          containerPort: 80
           hostPort: 80
-        - containerPort: 443
+        - name: https
+          containerPort: 443
           hostPort: 443
         # (Optional) we expose 18080 to access nginx stats in url /nginx-status
-        - containerPort: 18080
+        - name: stats
+          containerPort: 18080
           hostPort: 18080
+        - name: metrics
+          containerPort: 10254
+          protocol: TCP
         args:
         - /nginx-ingress-controller
         # Service used to serve HTTP requests not matching any known server name (catch-all). Takes the form "namespace/name". The controller configures NGINX to forward requests to the first port of this Service. If not specified, a 404 page will be returned directly from NGINX.

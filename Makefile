@@ -201,8 +201,10 @@ destroy:
 run-ansible:
 	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v
 
-run-ansible-sysdig-profiler:
-	-mkdir .ansible-logs
+.ansible-logs:
+	mkdir .ansible-logs
+
+run-ansible-sysdig-profiler: .ansible-logs
 	@time ansible-playbook -i inventory.ini playbooks/sysdig_profile.yml --extra-vars "num_seconds=20" -f 10 -v
 
 run-ansible-sysdig-profiler-10s:

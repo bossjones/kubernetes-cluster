@@ -102,6 +102,10 @@
 
 - name: retrieve debug files from server
   hosts: servers
+  strategy: free
+  gather_facts: False
+  become: yes
+  become_method: sudo
   vars:
     debug_folder: '~/.homelab_debugging'
   tasks:
@@ -113,7 +117,7 @@
     changed_when: False
     check_mode: no
 
-  - name: "rm -rfv ~/.homelab_debugging/"
-    shell: "rm -rfv ~/.homelab_debugging/"
+  - name: "rm -rfv {{debug_folder}}"
+    shell: "rm -rfv {{debug_folder}}"
     changed_when: False
     check_mode: no

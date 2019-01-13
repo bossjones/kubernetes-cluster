@@ -94,8 +94,8 @@
       - alert
       - emerg
 
-  - name: "tar cjvf {{debug_folder}}/debug.tar.gz {{debug_folder}}"
-    shell: "tar cjvf {{debug_folder}}/debug.tar.gz {{debug_folder}}"
+  - name: "tar cjvf ~/debug.tar.gz {{debug_folder}}"
+    shell: "tar cjvf ~/debug.tar.gz {{debug_folder}}"
     changed_when: False
     check_mode: no
 ###################################################################################################################
@@ -105,5 +105,15 @@
   vars:
     debug_folder: '~/.homelab_debugging'
   tasks:
-  - name: "src={{debug_folder}}/debug.tar.gz dest=.ansible-logs flat=no fail_on_missing=yes"
-    fetch: src={{debug_folder}}/debug.tar.gz dest=.ansible-logs flat=no fail_on_missing=yes
+  - name: "src=~/debug.tar.gz dest=.ansible-logs flat=no fail_on_missing=yes"
+    fetch: src=~/debug.tar.gz dest=.ansible-logs flat=no fail_on_missing=yes
+
+  - name: "rm -rfv ~/debug.tar.gz"
+    shell: "rm -rfv ~/debug.tar.gz"
+    changed_when: False
+    check_mode: no
+
+  - name: "rm -rfv ~/.homelab_debugging/"
+    shell: "rm -rfv ~/.homelab_debugging/"
+    changed_when: False
+    check_mode: no

@@ -178,3 +178,4 @@ dump_json_exports
 tls.crt
 tls.key
 borg-admin.conf
+playbooks/.ansible-logs/

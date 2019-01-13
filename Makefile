@@ -206,9 +206,12 @@ run-ansible:
 
 run-ansible-sysdig-profiler: .ansible-logs
 	@time ansible-playbook -i inventory.ini playbooks/sysdig_profile.yml --extra-vars "num_seconds=20" -f 10 -v
+	tree playbooks/.ansible-logs/
 
 run-ansible-sysdig-profiler-10s:
 	@time ansible-playbook -i inventory.ini playbooks/sysdig_profile.yml --extra-vars "num_seconds=10" -f 10 -v
+	tree playbooks/.ansible-logs/
+# tar xvf debug.tar.gz --strip 2
 
 run-ansible-nfs:
 	@time ansible-playbook -i inventory.ini playbooks/vagrant_nfs.yml -v

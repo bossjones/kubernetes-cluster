@@ -78,6 +78,11 @@
     changed_when: False
     check_mode: no
 
+  - name: 'sysctl -a > {{debug_folder}}/sysctl_a.log'
+    shell: 'sysctl -a > {{debug_folder}}/sysctl_a.log'
+    changed_when: False
+    check_mode: no
+
   - name: 'systemctl list-units --no-pager > {{debug_folder}}/systemctl_list_units.log'
     shell: 'systemctl list-units --no-pager > {{debug_folder}}/systemctl_list_units.log'
     changed_when: False
@@ -93,6 +98,13 @@
       - crit
       - alert
       - emerg
+
+  - name: 'find . -name "*" -type f| xargs tar cvf ~/debug.tar.gz'
+    shell: 'find . -name "*" -type f| xargs tar cvf ~/debug.tar.gz'
+    args:
+      chdir: "{{debug_folder}}"
+    changed_when: False
+    check_mode: no
 
   - name: "tar cjvf ~/debug.tar.gz {{debug_folder}}"
     shell: "tar cjvf ~/debug.tar.gz {{debug_folder}}"

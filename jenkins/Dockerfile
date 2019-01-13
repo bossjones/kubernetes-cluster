@@ -127,14 +127,14 @@ RUN /usr/local/bin/install-plugins.sh text-finder-run-condition
 RUN /usr/local/bin/install-plugins.sh timestamper
 RUN /usr/local/bin/install-plugins.sh token-macro
 RUN /usr/local/bin/install-plugins.sh translation
-RUN /usr/local/bin/install-plugins.sh workflow-aggregator
-RUN /usr/local/bin/install-plugins.sh workflow-basic-steps
-RUN /usr/local/bin/install-plugins.sh workflow-cps
-RUN /usr/local/bin/install-plugins.sh workflow-job
-RUN /usr/local/bin/install-plugins.sh workflow-multibranch
-RUN /usr/local/bin/install-plugins.sh workflow-scm-step
-RUN /usr/local/bin/install-plugins.sh workflow-step-api
-RUN /usr/local/bin/install-plugins.sh workflow-support
+# RUN /usr/local/bin/install-plugins.sh workflow-aggregator
+# RUN /usr/local/bin/install-plugins.sh workflow-basic-steps
+# RUN /usr/local/bin/install-plugins.sh workflow-cps
+# RUN /usr/local/bin/install-plugins.sh workflow-job
+# RUN /usr/local/bin/install-plugins.sh workflow-multibranch
+# RUN /usr/local/bin/install-plugins.sh workflow-scm-step
+# RUN /usr/local/bin/install-plugins.sh workflow-step-api
+# RUN /usr/local/bin/install-plugins.sh workflow-support
 RUN /usr/local/bin/install-plugins.sh ws-cleanup
 RUN /usr/local/bin/install-plugins.sh xunit
 

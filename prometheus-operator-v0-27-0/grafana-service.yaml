@@ -5,6 +5,7 @@ metadata:
   namespace: monitoring
   labels:
     run: nginx
+    app: grafana
 spec:
   ports:
   - name: http

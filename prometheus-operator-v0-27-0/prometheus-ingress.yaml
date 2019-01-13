@@ -31,6 +31,7 @@ metadata:
     app: prometheus
     prometheus: k8s
     run: nginx
+    k8s-app: prometheus-operator
 spec:
   # IMPORTANT
   # SOURCE: https://medium.com/@Oskarr3/setting-up-ingress-on-minikube-6ae825e98f82

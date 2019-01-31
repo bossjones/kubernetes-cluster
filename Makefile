@@ -1562,3 +1562,34 @@ enable-shard-allocation:
 # 17  grunt server
 # 18  history
 # find . -type f -exec sed -i 's/localhost:9200/elasticsearch-logging:9200/g' {} +
+
+
+
+create-metallb:
+	@printf "create-metallb:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy metallb$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./metallb/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=metallb --watch | highlight
+
+apply-metallb:
+	@printf "create-metallb:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy metallb$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./metallb/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=metallb --watch
+
+delete-metallb:
+	kubectl delete -f ./metallb/
+
+describe-metallb:
+	kubectl describe -f ./metallb/ | highlight
+
+debug-metallb: describe-metallb
+	kubectl -n metallb-system get pod -l app=metallb --output=yaml | highlight

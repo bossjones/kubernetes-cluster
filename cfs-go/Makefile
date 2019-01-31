@@ -37,3 +37,6 @@ push:
 	docker push $(username)/$(container_name):$(TAG)
 
 push-force: build-force push
+
+run:
+	docker run --rm -it --cpu-quota 20000 --cpu-period 100000 bossjones/cfs-go:1.9.2 go run /cfs.go -iterations 100 -sleep 1000ms

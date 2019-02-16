@@ -50,7 +50,7 @@ EOF
     # SOURCE: https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
     # Environment="KUBELET_EXTRA_ARGS=--feature-gates=VolumeScheduling=true"
     # Environment="KUBELET_EXTRA_ARGS=--feature-gates=PersistentLocalVolumes=true"
-    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true --read-only-port=10255" /etc/default/kubelet
+    sudo sed -i "/^[^#]*KUBELET_EXTRA_ARGS=/c\KUBELET_EXTRA_ARGS=--node-ip=$IP_ADDR --authentication-token-webhook=true --authorization-mode=Webhook --read-only-port=10255" /etc/default/kubelet
     sudo systemctl restart kubelet
     sudo systemctl enable kubelet
     sudo apt-get -y install python-minimal python-apt
@@ -100,7 +100,10 @@ $configureMaster = <<-SCRIPT
 
     # install k8s master
     HOST_NAME=$(hostname -s)
-    kubeadm init --apiserver-advertise-address=$IP_ADDR --apiserver-cert-extra-sans=$IP_ADDR  --node-name $HOST_NAME --pod-network-cidr=172.16.0.0/16
+    # NOTE: This is for v3.1 calico
+    # kubeadm init --apiserver-advertise-address=$IP_ADDR --apiserver-cert-extra-sans=$IP_ADDR  --node-name $HOST_NAME --pod-network-cidr=172.16.0.0/16
+    # NOTE: This is for v3.4 calico
+    kubeadm init --apiserver-advertise-address=$IP_ADDR --apiserver-cert-extra-sans=$IP_ADDR  --node-name $HOST_NAME --pod-network-cidr=192.168.0.0/16
 
     #copying credentials to regular user - vagrant
     sudo --user=vagrant mkdir -p /home/vagrant/.kube

@@ -50,6 +50,7 @@ fi
 
 export KIBANA_HOME=${KIBANA_HOME:-/usr/share/kibana}
 
-chown -Rv kibana:kibana /data ${KIBANA_HOME}
+# chown -Rv kibana:kibana /data ${KIBANA_HOME}
 
-exec su kibana -c "${NODE}" -- $NODE_OPTIONS --no-warnings "${DIR}/src/cli" ${@}
+# exec su kibana -c "${NODE}" -- $NODE_OPTIONS --no-warnings "${DIR}/src/cli" ${@}
+gosu kibana "${NODE}" $NODE_OPTIONS --no-warnings "${DIR}/src/cli" ${@}

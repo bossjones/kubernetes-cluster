@@ -36,7 +36,7 @@ spec:
     spec:
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
       nodeSelector:
-        kubernetes.io/hostname: "k8s-node-2"
+        kubernetes.io/hostname: "borg-worker-02"
       containers:
       - name: elasticsearch-logging
         image: k8s.gcr.io/elasticsearch:v5.6.2
@@ -93,7 +93,8 @@ spec:
 
         - name: ES_JAVA_OPTS
           # value: "-Xms1024m -Xmx1024m"
-          value: "-Xms256m -Xmx256m"
+          value: "-Xms2048m -Xmx2048m"
+          # value: "-Xms256m -Xmx256m"
       initContainers:
       - image: registry.hub.docker.com/library/alpine:3.6
         command: ["/sbin/sysctl", "-w", "vm.max_map_count=262144"]

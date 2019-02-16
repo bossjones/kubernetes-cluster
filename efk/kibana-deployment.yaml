@@ -20,7 +20,7 @@ spec:
     spec:
       # SOURCE: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
       nodeSelector:
-        kubernetes.io/hostname: "k8s-node-1"
+        kubernetes.io/hostname: "borg-worker-01"
       containers:
       - name: kibana-logging
         imagePullPolicy: Always
@@ -31,7 +31,7 @@ spec:
           limits:
             cpu: 1000m
           requests:
-            cpu: 100m
+            cpu: 1000m
         env:
           - name: ELASTICSEARCH_URL
             value: http://elasticsearch-logging:9200

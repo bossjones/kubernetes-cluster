@@ -2,7 +2,7 @@
 MAKEFLAGS += --warn-undefined-variables
 # .SHELLFLAGS := -eu -o pipefail
 
-DNSMASQ_DOMAIN         := scarlettlab.com
+DNSMASQ_DOMAIN         := hyenaclan.org
 # URL_PATH_MONGO_EXPRESS := 8081
 # URL_PATH_FLASK_APP     := 8888
 # URL_PATH_UWSGI_STATS   := 9191
@@ -11,15 +11,17 @@ DNSMASQ_DOMAIN         := scarlettlab.com
 # URL_PATH_TRAEFIK       := 80
 # URL_PATH_TRAEFIK_API   := 8080
 URL_PATH_ARA              := "http://127.0.0.1:9191"
-URL_PATH_NETDATA_MASTER1  := "http://k8s-head.hyenalab.home:19999"
-URL_PATH_NETDATA_WORKER1  := "http://k8s-node-1.hyenalab.home:19999"
-URL_PATH_NETDATA_WORKER2  := "http://k8s-node-2.hyenalab.home:19999"
+URL_PATH_NETDATA_MASTER1  := "http://borg-queen-01.scarlettlab.home:19999"
+URL_PATH_NETDATA_WORKER1  := "http://borg-worker-01.scarlettlab.home:19999"
+URL_PATH_NETDATA_WORKER2  := "http://borg-worker-02.scarlettlab.home:19999"
 
 URL_PATH_NETDATA_REGISTRY  := "http://rsyslogd-master-01.$(DNSMASQ_DOMAIN):19999"
 URL_PATH_NETDATA_NODE      := "http://rsyslogd-worker-01.$(DNSMASQ_DOMAIN):19999"
 URL_PATH_WHOAMI            := "http://whoami.$(DNSMASQ_DOMAIN)"
 URL_PATH_ECHOSERVER        := "http://echoserver.$(DNSMASQ_DOMAIN)"
 URL_PATH_ELASTICSEARCH     := "http://elasticsearch.$(DNSMASQ_DOMAIN)"
+URL_PATH_ELASTICSEARCH_HEAD     := "http://elasticsearch-head.$(DNSMASQ_DOMAIN)"
+URL_PATH_ELASTICSEARCH_HQ     := "http://elasticsearch-hq.$(DNSMASQ_DOMAIN)"
 URL_PATH_KIBANA            := "http://kibana.$(DNSMASQ_DOMAIN)"
 URL_PATH_PROMETHEUS        := "http://prometheus.$(DNSMASQ_DOMAIN)"
 URL_PATH_GRAFANA           := "http://grafana.$(DNSMASQ_DOMAIN)"
@@ -74,6 +76,12 @@ current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 MAKE := make
 
 list_allowed_args := product ip command role tier
+
+ifeq (${OS}, Windows_NT)
+    DETECTED_OS := Windows
+else
+    DETECTED_OS := $(shell uname -s)
+endif
 
 default: all
 
@@ -172,7 +180,7 @@ provision:
 	@bash ./scripts/up.sh
 	vagrant sandbox commit
 	vagrant reload
-	ansible-playbook -i inventory.ini vagrant_playbook.yml -v
+	time ansible-playbook -i inventory.ini vagrant_playbook.yml -v
 
 up:
 	@bash ./scripts/up.sh
@@ -191,66 +199,83 @@ destroy:
 	@vagrant destroy -f
 
 run-ansible:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v
+
+prometheus-render-additional-configs:
+	kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --dry-run -oyaml > additional-scrape-configs.yaml
+	cat additional-scrape-configs.yaml | highlight
+	mv -fv additional-scrape-configs.yaml prometheus-operator-v0-27-0/additional-scrape-configs.yaml
+
+.ansible-logs:
+	mkdir .ansible-logs
+
+run-ansible-sysdig-profiler: .ansible-logs
+	@time ansible-playbook -i inventory.ini playbooks/sysdig_profile.yml --extra-vars "num_seconds=20" -f 10 -v
+	tree playbooks/.ansible-logs/
+
+run-ansible-sysdig-profiler-10s:
+	@time ansible-playbook -i inventory.ini playbooks/sysdig_profile.yml --extra-vars "num_seconds=10" -f 10 -v
+	tree playbooks/.ansible-logs/
+# tar xvf debug.tar.gz --strip 2
 
 run-ansible-nfs:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_nfs.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_nfs.yml -v
 
 run-ansible-influxdb:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_influxdb_opentsdb.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_influxdb_opentsdb.yml -v
 
 run-ansible-list-tags:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --list-tasks
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --list-tasks
 
 run-ansible-rsyslogd:
-	@ansible-playbook -i inventory.ini rsyslogd_playbook.yml -v
+	@time ansible-playbook -i inventory.ini rsyslogd_playbook.yml -v
 
 run-ansible-etckeeper:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags etckeeper
+	@time ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags etckeeper
 
 run-ansible-rvm:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags 'ruby'
+	@time ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags 'ruby'
 
 run-ansible-ruby: run-ansible-rvm
 
 # For performance tuning/measuring
 run-ansible-netdata:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_netdata.yml -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_netdata.yml -v
 
 # For performance tuning/measuring
 run-ansible-tuning:
-	@ansible-playbook -i inventory.ini tuning.yml -v
+	@time ansible-playbook -i inventory.ini tuning.yml -v
 
 run-ansible-perf: run-ansible-tuning
 
 run-ansible-tools:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_tools.yml -f 10 -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_tools.yml -f 10 -v
 
 run-ansible-repos:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_repos.yml -f 10 -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_repos.yml -f 10 -v
 
 run-ansible-modprobe:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_modprode.yml -f 10 -v
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_modprode.yml -f 10 -v
 
 run-ansible-goss:
-	@ansible-playbook -i inventory.ini tools.yml -v -f 10 --tags goss
+	@time ansible-playbook -i inventory.ini tools.yml -v -f 10 --tags goss
 
 run-ansible-docker:
-	@ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --tags docker-provision --flush-cache
+	@time ansible-playbook -i inventory.ini playbooks/vagrant_playbook.yml -v --tags docker-provision --flush-cache
 
 run-ansible-master:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v --tags primary_master
+	@time ansible-playbook -i inventory.ini vagrant_playbook.yml -v --tags primary_master
 
 run-ansible-timezone:
-	@ansible-playbook -i inventory.ini timezone.yml -v
+	@time ansible-playbook -i inventory.ini timezone.yml -v
 
 converge: up run-ansible-modprobe run-ansible run-ansible-tools
 
 ping:
-	@ansible-playbook -v -i inventory.ini ping.yml -v
+	@time ansible-playbook -v -i inventory.ini ping.yml -v
 
 ansible-run-dynamic-debug:
-	@ansible-playbook -v -i inventory.ini dynamic_vars.yml
+	@time ansible-playbook -v -i inventory.ini dynamic_vars.yml
 
 # [ANSIBLE0013] Use shell only when shell functionality is required
 ansible-lint-role:
@@ -284,28 +309,28 @@ ssh-bridge-worker:
 	ssh -vvvv -F ./ssh_config rsyslogd-worker-01.scarlettlab.home
 
 ping-bridge:
-	@ansible-playbook -v -i hosts ping.yml
+	@time ansible-playbook -v -i hosts ping.yml
 
 run-bridge-ansible:
-	@ansible-playbook -i hosts vagrant_playbook.yml -v
+	@time ansible-playbook -i hosts vagrant_playbook.yml -v
 
 run-bridge-test-ansible:
-	@ansible-playbook -i hosts test.yml -v
+	@time ansible-playbook -i hosts test.yml -v
 
 run-bridge-tools-ansible:
-	@ansible-playbook -i hosts tools.yml -v
+	@time ansible-playbook -i hosts tools.yml -v
 
 run-bridge-ping-ansible:
-	@ansible-playbook -i hosts ping.yml -v
+	@time ansible-playbook -i hosts ping.yml -v
 
 run-bridge-log-iptables-ansible:
-	@ansible-playbook -i hosts log_iptables.yml -v
+	@time ansible-playbook -i hosts log_iptables.yml -v
 
 run-bridge-ansible-no-slow:
-	@ansible-playbook -i hosts vagrant_playbook.yml -v --skip-tags "slow"
+	@time ansible-playbook -i hosts vagrant_playbook.yml -v --skip-tags "slow"
 
 run-bridge-debug-ansible:
-	@ansible-playbook -i hosts debug.yml -v
+	@time ansible-playbook -i hosts debug.yml -v
 
 dummy-web-server:
 	python dummy-web-server.py
@@ -314,11 +339,11 @@ rebuild: destroy flush-cache bridge-up sleep ping-bridge run-bridge-ansible run-
 
 # pip install graphviz
 graph-inventory:
-	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" k8s-head.hyenalab.home
+	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" borg-queen-01.scarlettlab.home
 # for f in static/graphs/bosslab/*.dot ; do dot -Tpng -o static/graphs/bosslab/`basename $f .dot`.png $f; done
 
 graph-inventory-view:
-	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" k8s-head.hyenalab.home |prod-web-server-1a | dot -Tpng | display png:-
+	ansible-inventory-grapher -i inventory.ini -d static/graphs/bosslab --format "bosslab-{hostname}.dot" -a "rankdir=LR; splines=ortho; ranksep=2; node [ width=5 style=filled fillcolor=lightgrey ]; edge [ dir=back arrowtail=empty ];" borg-queen-01.scarlettlab.home |prod-web-server-1a | dot -Tpng | display png:-
 
 # nvm-install:
 # 	nvm install stable ;
@@ -338,10 +363,17 @@ graph-inventory-view:
 pip-install-pygments:
 	pip install Pygments
 
+multi-ssh-homelab:
+	i2cssh -XF=~/dev/bossjones/kubernetes-cluster/ssh_config.borg -Xi=~/.ssh/vagrant_id_rsa borg-homelab
+
 multi-ssh-vagrant:
 	i2cssh -XF=~/dev/bossjones/kubernetes-cluster/ssh_config -Xi=~/.ssh/vagrant_id_rsa vagrant-kube
 
 i2cssh-vagrant: multi-ssh-vagrant
+
+i2cssh-borg: multi-ssh-homelab
+
+borg-ssh: multi-ssh-homelab
 
 # open-netdata-registry:
 # 	./scripts/open-browser.py $(URL_PATH_NETDATA_REGISTRY)
@@ -357,7 +389,9 @@ open-netdata-vagrant:
 	./scripts/open-browser.py $(URL_PATH_NETDATA_WORKER1)
 	./scripts/open-browser.py $(URL_PATH_NETDATA_WORKER2)
 
-# open: open-netdata-registry open-netdata-node
+open-netdata: open-netdata-vagrant
+
+# open: open-netdata
 
 open-vagrant: open-netdata-vagrant
 
@@ -683,7 +717,7 @@ addon-prometheus-operator:
 	@printf "=======================================\n"
 	@printf "$$GREEN deploy prometheus-operator$$NC\n"
 	@printf "=======================================\n"
-	-kubectl create -f ./prometheus-operator/
+	-kubectl create -f ./prometheus-operator/ || true
 	@echo
 	@echo "It can take a few seconds for the above 'create manifests' command to fully create the following resources, so verify the resources are ready before proceeding."
 	until kubectl get customresourcedefinitions servicemonitors.monitoring.coreos.com ; do date; sleep 1; echo ""; done
@@ -713,6 +747,47 @@ debug-prometheus-operator: describe-prometheus-operator
 	kubectl -n kube-system get pod -l app=prometheus-operator --output=yaml | highlight
 
 
+###########################################################################################################################################
+###########################################################################################################################################
+###########################################################################################################################################
+
+# FYI I built all of this using jsonnet and all of that jazz 1/12/2019
+# SOURCE: https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus
+addon-prometheus-operator-v0-27-0:
+	@printf "addon-prometheus-operator-v0-27-0:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy prometheus-operator-v0-27-0$$NC\n"
+	@printf "=======================================\n"
+	-kubectl create -f ./prometheus-operator-v0-27-0/ || true
+	@echo
+	@echo "It can take a few seconds for the above 'create manifests' command to fully create the following resources, so verify the resources are ready before proceeding."
+	until kubectl get customresourcedefinitions servicemonitors.monitoring.coreos.com ; do date; sleep 1; echo ""; done
+	@echo
+	until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
+	@echo
+
+create-prometheus-operator-v0-27-0: addon-prometheus-operator-v0-27-0
+
+apply-prometheus-operator-v0-27-0:
+	@printf "create-prometheus-operator-v0-27-0:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy prometheus-operator-v0-27-0$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./prometheus-operator-v0-27-0/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=prometheus-operator-v0-27-0 --watch
+
+delete-prometheus-operator-v0-27-0:
+	kubectl delete -f ./prometheus-operator-v0-27-0/
+
+describe-prometheus-operator-v0-27-0:
+	kubectl describe -f ./prometheus-operator-v0-27-0/ | highlight
+
+debug-prometheus-operator-v0-27-0: describe-prometheus-operator-v0-27-0
+	kubectl -n kube-system get pod -l app=prometheus-operator-v0-27-0 --output=yaml | highlight
+
+
 open-dashboard:
 	./scripts/open-browser.py $(URL_PATH_DASHBOARD)
 
@@ -724,6 +799,12 @@ open-echoserver:
 
 open-elasticsearch:
 	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH)
+
+open-elasticsearch-hq:
+	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH_HQ)
+
+open-elasticsearch-head:
+	./scripts/open-browser.py $(URL_PATH_ELASTICSEARCH_HEAD)
 
 open-kibana:
 	./scripts/open-browser.py $(URL_PATH_KIBANA)
@@ -738,7 +819,7 @@ open-alertmanager:
 	./scripts/open-browser.py $(URL_PATH_ALERTMANAGER)
 
 # open: open-mongo-express open-flask-app open-uwsgi-stats open-locust-master open-consul open-traefik open-traefik-api open-whoami
-open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager
+open: open-whoami open-dashboard open-echoserver open-elasticsearch open-kibana open-prometheus open-grafana open-alertmanager open-netdata
 
 create-heapster:
 	@printf "create-heapster:\n"
@@ -1018,6 +1099,12 @@ kail-no-calico:
 	@printf "=======================================\n"
 	kail --ns kube-system --ignore k8s-app=calico-node | pv -pterbTCB 20k | ccze -A
 
+kail:
+	@printf "=======================================\n"
+	@printf "$$GREEN Add a big buffer to a pipe between two commands - https://stackoverflow.com/questions/8554568/add-a-big-buffer-to-a-pipe-between-two-commands:$$NC\n"
+	@printf "=======================================\n"
+	kail --ns kube-system | pv -pterbTCB 20k | ccze -A
+
 export:
 	-rm -rfv dump/
 	-rm -rfv dump_json_exports/
@@ -1031,12 +1118,12 @@ route:
 	ip route list
 
 generate-certs-traefik:
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-traefik/certs/tls.key -out ingress-traefik/certs/tls.crt -subj "/CN=*.scarlettlab.com"
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ingress-traefik/certs/tls.key -out ingress-traefik/certs/tls.crt -subj "/CN=*.hyenaclan.org"
 # kubectl -n traefik create secret tls traefik-ui-tls-cert --key ingress-traefik/certs/tls.key --cert ingress-traefik/certs/tls.crt
 
 # SOURCE: https://github.com/kubernetes/dashboard/wiki/Installation#recommended-setup
 generate-certs-dashboard:
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard-ssl/certs/tls.key -out dashboard-ssl/certs/tls.crt -subj "/CN=*.scarlettlab.com"
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout dashboard-ssl/certs/tls.key -out dashboard-ssl/certs/tls.crt -subj "/CN=*.hyenaclan.org"
 
 apply-certs-dashboard:
 	@printf "kubectl apply secret generic kubernetes-dashboard-certs:\n"
@@ -1106,7 +1193,7 @@ debug-ingress-traefik: describe-ingress-traefik
 	kubectl -n kube-system get pod -l app=ingress-traefik --output=yaml | highlight
 
 allow-scheduling-on-master:
-	kubectl taint node k8s-head node-role.kubernetes.io/master:NoSchedule-
+	kubectl taint node borg-queen-01 node-role.kubernetes.io/master:NoSchedule-
 
 # apk --no-cache add curl
 # How to test traefik
@@ -1114,7 +1201,7 @@ allow-scheduling-on-master:
 
 # NOTE: This is the ip of the master node
 add-etc-hosts-cheeses:
-	@echo "192.168.205.10 stilton.scarlettlab.com cheddar.scarlettlab.com wensleydale.scarlettlab.com" | sudo tee -a /etc/hosts
+	@echo "192.168.1.172 stilton.hyenaclan.org cheddar.hyenaclan.org wensleydale.hyenaclan.org" | sudo tee -a /etc/hosts
 
 show-node-labels:
 	kubectl get nodes --show-labels | highlight
@@ -1309,3 +1396,200 @@ describe-efk2:
 
 debug-efk2: describe-efk2
 	kubectl -n kube-system get pod -l app=efk --output=yaml | highlight
+
+# SOURCE: https://github.com/projectcalico/calico/blob/v3.1.3/v3.1/getting-started/kubernetes/tutorials/stars-policy/index.md
+#
+create-calico-ui:
+	@printf "create-calico-ui:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico-ui$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./calico-ui/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico-ui --watch | highlight
+
+apply-calico-ui:
+	@printf "create-calico-ui:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico-ui$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./calico-ui/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico-ui --watch
+
+delete-calico-ui:
+	kubectl delete -f ./calico-ui/
+
+describe-calico-ui:
+	kubectl describe -f ./calico-ui/ | highlight
+
+debug-calico-ui: describe-calico-ui
+	kubectl -n kube-system get pod -l app=calico-ui --output=yaml | highlight
+
+# SOURCE: https://github.com/projectcalico/calico/blob/v3.1.3/v3.1/getting-started/kubernetes/tutorials/stars-policy/index.md
+#
+create-calico:
+	@printf "create-calico:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./calico/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico --watch | highlight
+
+apply-calico:
+	@printf "create-calico:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy calico$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./calico/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=calico --watch
+
+delete-calico:
+	kubectl delete -f ./calico/
+
+describe-calico:
+	kubectl describe -f ./calico/ | highlight
+
+debug-calico: describe-calico
+	kubectl -n kube-system get pod -l app=calico --output=yaml | highlight
+
+
+create-elasticsearch-hq:
+	@printf "create-elasticsearch-hq:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-hq$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./elasticsearch-hq/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-hq --watch | highlight
+
+apply-elasticsearch-hq:
+	@printf "create-elasticsearch-hq:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-hq$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./elasticsearch-hq/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-hq --watch
+
+delete-elasticsearch-hq:
+	kubectl delete -f ./elasticsearch-hq/
+
+describe-elasticsearch-hq:
+	kubectl describe -f ./elasticsearch-hq/ | highlight
+
+debug-elasticsearch-hq: describe-elasticsearch-hq
+	kubectl -n kube-system get pod -l app=elasticsearch-hq --output=yaml | highlight
+
+
+create-elasticsearch-head:
+	@printf "create-elasticsearch-head:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-head$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./elasticsearch-head/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-head --watch | highlight
+
+apply-elasticsearch-head:
+	@printf "create-elasticsearch-head:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy elasticsearch-head$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./elasticsearch-head/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=elasticsearch-head --watch
+
+delete-elasticsearch-head:
+	kubectl delete -f ./elasticsearch-head/
+
+describe-elasticsearch-head:
+	kubectl describe -f ./elasticsearch-head/ | highlight
+
+debug-elasticsearch-head: describe-elasticsearch-head
+	kubectl -n kube-system get pod -l app=elasticsearch-head --output=yaml | highlight
+
+fluentd-bootstrap:
+	bash scripts/label-k8-nodes-for-fluentd.sh
+
+label-workers: fluentd-bootstrap
+
+label-nodes: fluentd-bootstrap
+
+create-elasticsearch-index:
+	bash scripts/es-create-index.sh
+
+create-index: create-elasticsearch-index
+
+query-es-list-indicies:
+	curl -L -XGET 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cat/indices?v&pretty' | highlight
+
+query-es-allocation-explain:
+	curl -L -s -XGET 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cluster/allocation/explain?pretty' | highlight
+
+enable-shard-allocation:
+	curl -XPUT 'http://elasticsearch.$(DNSMASQ_DOMAIN)/_cluster/settings' -d \
+	'{ "transient": { "cluster.routing.allocation.enable" : "all" } }'
+
+# https://github.com/mobz/elasticsearch-head/archive/v5.0.0.zip
+# https://github.com/mobz/elasticsearch-head/archive/master.zip
+# 1  mkdir -p /usr/src/app
+# 	2  cd /usr/src/app
+# 	3  npm install -g grunt
+# 	4  apt-get update; apt-get install curl -y
+# 	5  curl -L 'https://github.com/mobz/elasticsearch-head/archive/master.zip' > master.zip
+# 	6  file master.zip
+# 	7  apt-get install unzip -y
+# 	8  unzip master.zip
+# 	9  ls
+# 10  cd elasticsearch-head-master/
+# 11  ls
+# 12  apt-get install vim -y
+# 13  npm install
+# 14  npm audit fix
+# 15  grunt server
+# 16  npm audit fix --force
+# 17  grunt server
+# 18  history
+# find . -type f -exec sed -i 's/localhost:9200/elasticsearch-logging:9200/g' {} +
+
+
+
+create-metallb:
+	@printf "create-metallb:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy metallb$$NC\n"
+	@printf "=======================================\n"
+	kubectl create -f ./metallb/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=metallb --watch | highlight
+
+apply-metallb:
+	@printf "create-metallb:\n"
+	@printf "=======================================\n"
+	@printf "$$GREEN deploy metallb$$NC\n"
+	@printf "=======================================\n"
+	kubectl apply -f ./metallb/
+	@echo ""
+	@echo ""
+# kubectl get pods --all-namespaces -l app=metallb --watch
+
+delete-metallb:
+	kubectl delete -f ./metallb/
+
+describe-metallb:
+	kubectl describe -f ./metallb/ | highlight
+
+debug-metallb: describe-metallb
+	kubectl -n metallb-system get pod -l app=metallb --output=yaml | highlight

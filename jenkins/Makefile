@@ -37,3 +37,9 @@ push:
 	docker push $(username)/$(container_name):$(TAG)
 
 push-force: build-force push
+
+bash:
+	docker run -it --rm -p 8081:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home bossjones/jenkins:latest bash
+
+run:
+	docker run -it --rm -p 8081:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home bossjones/jenkins:latest

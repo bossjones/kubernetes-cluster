@@ -10,7 +10,7 @@
   vars:
     bossjones__user: vagrant
     bossjones__group: vagrant
-    timezone: 'America/New_York'
+    timezone: 'UTC'
   environment:
     DEBIAN_FRONTEND: noninteractive
   roles:

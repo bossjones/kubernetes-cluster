@@ -29,14 +29,14 @@
       # graphite_cache_graphite_url: 'http://127.0.0.1:8080'
       # bossjones__user: vagrant
       # bossjones__group: vagrant
-      boss__netdata__netdata_interface: 'enp0s8'
+      boss__netdata__netdata_interface: 'ens192'
 
       netdata_registry_enabled: True
       netdata_registry_to_announce: "http://{{ netdata_stream_master_node }}:{{ netdata_default_port }}"
       pri_domain_name: scarlett-office.local
       netdata_stream_enabled: True
       # You can generate API keys, with the linux command: uuidgen
-      netdata_stream_api_key: 1AC2CC1D-6E62-4116-A5A9-B3938881991F
+      netdata_stream_api_key: 6E6C3CA0-7B78-4115-AE2C-9681032F71D1
       netdata_stream_master_node: "{{boss__netdata__netdata_master_ip}}"
       nginx_listen_port: 8080
       tags:
@@ -108,13 +108,13 @@
     - role: boss-ansible-role-netdata
       boss__netdata__netdata_proxy_enabled: False
       boss__netdata__netdata_nginx_enabled: False
-      boss__netdata__netdata_interface: 'enp0s8'
+      boss__netdata__netdata_interface: 'ens192'
       netdata_registry_enabled: False
       netdata_registry_to_announce: "http://{{ netdata_stream_master_node }}:{{ netdata_default_port }}"
       pri_domain_name: scarlett-office.local
       netdata_stream_enabled: True
       # You can generate API keys, with the linux command: uuidgen
-      netdata_stream_api_key: 1AC2CC1D-6E62-4116-A5A9-B3938881991F
+      netdata_stream_api_key: 6E6C3CA0-7B78-4115-AE2C-9681032F71D1
       netdata_stream_master_node: "{{boss__netdata__netdata_master_ip}}"
       nginx_listen_port: 8080
       tags:

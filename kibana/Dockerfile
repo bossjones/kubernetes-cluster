@@ -52,8 +52,9 @@ COPY --chown=kibana:kibana ./config ./config
 COPY --chown=kibana:kibana ./bin ./bin
 COPY --chown=kibana:kibana ./local_plugins ./local_plugins
 
-RUN kibana-plugin remove x-pack && \
-    kibana-plugin install file:///usr/share/kibana/local_plugins/logtrail-5.6.2-0.1.21.zip \
+# kibana-plugin remove x-pack && \
+
+RUN kibana-plugin install file:///usr/share/kibana/local_plugins/logtrail-5.6.2-0.1.21.zip \
     kibana-plugin install https://github.com/sirensolutions/sentinl/releases/download/tag-5.6.2/sentinl-v5.6.2.zip \
     kibana-plugin install https://github.com/datasweet/kibana-datasweet-formula/releases/download/v1.1.2/datasweet_formula-1.1.2_kibana-5.6.2.zip
 
@@ -61,6 +62,12 @@ RUN kibana-plugin remove x-pack && \
 # env NODE_OPTIONS="--max-old-space-size=3072" kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.7.2_6.5.4.zip
 
 # RUN kibana-plugin install file:///usr/share/kibana/local_plugins/logtrail-5.6.2-0.1.21.zip
+
+RUN set -eux; \
+    curl -L 'https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64' > /usr/local/bin/gosu && \
+	chmod +x /usr/local/bin/gosu
+# # verify that the binary works
+# 	gosu kibana true
 
 # Ballerina runtime distribution filename.
 ARG BUILD_DATE

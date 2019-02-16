@@ -25,7 +25,7 @@ metadata:
     run: nginx
 spec:
   rules:
-  - host: etcdkeeper.scarlettlab.com
+  - host: etcdkeeper.hyenaclan.org
     http:
       paths:
       # - path: /etcdkeeper

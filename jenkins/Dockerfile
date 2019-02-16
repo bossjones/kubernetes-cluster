@@ -1,11 +1,12 @@
 FROM jenkins/jenkins:lts
-MAINTAINER TonyDark Jarvis <jarvis@theblacktonystark.com>
 
-LABEL maintainer="jarvis@theblacktonystark.com"
+ENV DOCKER_VERSION=docker-ce_17.03.0~ce-0~debian-stretch_amd64.deb \
+    docker_version=17.03.0~ce-0~debian-stretch \
+    KUBERNETES_VERSION=v1.13.1
 
-ENV DOCKER_VERSION=docker-ce_17.03.0~ce-0~debian-stretch_amd64.deb
-ENV docker_version=17.03.0~ce-0~debian-stretch
-ENV KUBERNETES_VERSION=v1.13.1
+#  \
+# JENKINS_USER_ID="65534" \
+# JENKINS_GROUP_ID="65534"
 
 USER root
 
@@ -116,7 +117,7 @@ RUN /usr/local/bin/install-plugins.sh pipeline-stage-tags-metadata
 RUN /usr/local/bin/install-plugins.sh pipeline-stage-view
 RUN /usr/local/bin/install-plugins.sh plain-credentials
 RUN /usr/local/bin/install-plugins.sh run-condition
-RUN /usr/local/bin/install-plugins.sh scm-api
+# RUN /usr/local/bin/install-plugins.sh scm-api
 RUN /usr/local/bin/install-plugins.sh script-security
 RUN /usr/local/bin/install-plugins.sh ssh-agent
 RUN /usr/local/bin/install-plugins.sh ssh-credentials
@@ -126,23 +127,29 @@ RUN /usr/local/bin/install-plugins.sh text-finder-run-condition
 RUN /usr/local/bin/install-plugins.sh timestamper
 RUN /usr/local/bin/install-plugins.sh token-macro
 RUN /usr/local/bin/install-plugins.sh translation
-RUN /usr/local/bin/install-plugins.sh workflow-aggregator
-RUN /usr/local/bin/install-plugins.sh workflow-basic-steps
-RUN /usr/local/bin/install-plugins.sh workflow-cps
-RUN /usr/local/bin/install-plugins.sh workflow-job
-RUN /usr/local/bin/install-plugins.sh workflow-multibranch
-RUN /usr/local/bin/install-plugins.sh workflow-scm-step
-RUN /usr/local/bin/install-plugins.sh workflow-step-api
-RUN /usr/local/bin/install-plugins.sh workflow-support
+# RUN /usr/local/bin/install-plugins.sh workflow-aggregator
+# RUN /usr/local/bin/install-plugins.sh workflow-basic-steps
+# RUN /usr/local/bin/install-plugins.sh workflow-cps
+# RUN /usr/local/bin/install-plugins.sh workflow-job
+# RUN /usr/local/bin/install-plugins.sh workflow-multibranch
+# RUN /usr/local/bin/install-plugins.sh workflow-scm-step
+# RUN /usr/local/bin/install-plugins.sh workflow-step-api
+# RUN /usr/local/bin/install-plugins.sh workflow-support
 RUN /usr/local/bin/install-plugins.sh ws-cleanup
 RUN /usr/local/bin/install-plugins.sh xunit
 
 # USER jenkins
 
-ENV UID_JENKINS=1000
-ENV GID_JENKINS=1000
+# ENV UID_JENKINS=1000
+# ENV GID_JENKINS=1000
+ENV UID_JENKINS=65534
+ENV GID_JENKINS=65534
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+RUN set -eux; \
+curl -L 'https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64' > /usr/local/bin/gosu && \
+chmod +x /usr/local/bin/gosu
 
 ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 
@@ -150,6 +157,11 @@ ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 ARG BUILD_DATE
 ARG VCS_REF
 ARG BUILD_VERSION
+
+
+MAINTAINER TonyDark Jarvis <jarvis@theblacktonystark.com>
+
+LABEL maintainer="jarvis@theblacktonystark.com"
 
 # Labels.
 LABEL org.label-schema.schema-version="1.0"
